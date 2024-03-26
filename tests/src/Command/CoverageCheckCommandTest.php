@@ -8,8 +8,9 @@ declare(strict_types=1);
  * (c) Eric Sizemore <admin@secondversion.com>
  * (c) Richard Regeer <rich2309@gmail.com>
  *
- * For the full copyright and license information, please view
- * the LICENSE file that was distributed with this source code.
+ * This source file is subject to the MIT license. For the full copyright,
+ * license information, and credits/acknowledgements, please view the LICENSE
+ * and README files that were distributed with this source code.
  */
 
 namespace Esi\CoverageCheck\Tests\Command;
