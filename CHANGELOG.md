@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [Unreleased]
+## [1.0.0] - 2024-03-26
 
 This intial version is forked from [rregeer/phpunit-coverage-check](https://github.com/richardregeer/phpunit-coverage-check/) by [Richard Regeer](https://github.com/richardregeer). This is the CHANGELOG for changes in comparison to the original library.
 
@@ -37,4 +37,4 @@ This intial version is forked from [rregeer/phpunit-coverage-check](https://gith
   * `coverage-check.php`, `bin/coverage-check`, and `test/run` removed.
 
 
-[Unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/master
+[1.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/1.0.0
