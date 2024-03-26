@@ -1,0 +1,27 @@
+{
+    "output": "bin/phpunit-coverage-check.phar",
+    "compactors": [
+        "KevinGH\\Box\\Compactor\\Php",
+        "KevinGH\\Box\\Compactor\\Json"
+    ],
+    "banner": [
+          "This file is part of PHPUnit Coverage Check.",
+          "",
+          "(c) Eric Sizemore <admin@secondversion.com>",
+          "(c) Richard Regeer <rich2309@gmail.com>",
+          "",
+          "This source file is subject to the MIT license. For the full copyright,",
+          "license information, and credits/acknowledgements, please view the LICENSE",
+          "and README files that were distributed with this source code."
+    ],
+    "files": [
+	    "vendor/composer/installed.php",
+        "LICENSE",
+        "README.md",
+        "SECURITY.md"
+    ],
+    "directories": [
+        "src"
+    ],
+    "force-autodiscovery": true
+}

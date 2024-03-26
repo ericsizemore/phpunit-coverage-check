@@ -1,1 +1,5 @@
-/vendor/
+.idea/
+vendor/
+bin/
+build/
+.php-cs-fixer.cache

@@ -1,23 +1,76 @@
 {
-  "name": "rregeer/phpunit-coverage-check",
-  "description": "Check the code coverage using the clover report of phpunit",
-  "keywords": [
-    "Testing",
-    "PHP",
-    "phpunit",
-    "Unittest",
-    "CI",
-    "Code coverage"
-  ],
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Richard Regeer",
-      "email": "rich2309@gmail.com"
+    "name": "esi/phpunit-coverage-check",
+    "description": "Check the code coverage using the clover report of PHPUnit.",
+    "license": "MIT",
+    "keywords": [
+        "Testing",
+        "PHP",
+        "phpunit",
+        "Unittest",
+        "CI",
+        "Code coverage"
+    ],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Eric Sizemore",
+            "email": "admin@secondversion.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Richard Regeer",
+            "email": "rich2309@gmail.com",
+            "role": "Original Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ericsizemore/phpunit-coverage-check/issues",
+        "forum": "https://github.com/ericsizemore/phpunit-coverage-check/discussions",
+        "source": "https://github.com/ericsizemore/phpunit-coverage-check/tree/master",
+        "security": "https://github.com/ericsizemore/phpunit-coverage-check/security/policy"
+    },
+    "require": {
+        "php": "^8.1 <8.5",
+        "symfony/console": "^6.1 || ^7.0",
+        "ext-simplexml": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "phpstan/phpstan": "^1.11",
+        "phpstan/phpstan-phpunit": "^1.4",
+        "phpstan/phpstan-strict-rules": "^1.6",
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan-symfony": "^1.3.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Esi\\CoverageCheck\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Esi\\CoverageCheck\\Tests\\": "tests/src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.1.0"
+        }
+    },
+    "bin": [
+        "coverage-check"
+    ],
+    "scripts": {
+        "phpcs-fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+        "phpcs-nofix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon",
+        "test": "phpunit"
     }
-  ],
-  "require": {
-    "php": ">=7.0.0"
-  },
-  "bin": ["bin/coverage-check"]
 }
