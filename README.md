@@ -1,5 +1,15 @@
 # PHPUnit Coverage Check
 
+[![Build Status](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/badges/build.png?b=master)](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/?branch=master)
+[![Tests](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/tests.yml/badge.svg)](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/tests.yml)
+[![PHPStan](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/main.yml/badge.svg)](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/main.yml)
+
+[![Latest Stable Version](https://img.shields.io/packagist/v/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
+[![Downloads per Month](https://img.shields.io/packagist/dm/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
+[![License](https://img.shields.io/packagist/l/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
+
 [PHPUnit Coverage Check](http://github.com/ericsizemore/phpunit-coverage-check/) - Check the code coverage using the clover report of PHPUnit.
 
 This php script will read the clover xml report from PHPUnit and calculate the coverage score. Based on the given threshold the script will exit ok if the coverage is higher than the threshold or exit with code 1 if the coverage is lower than the threshold.
@@ -86,9 +96,8 @@ It's also possible to add the coverage report generation to your PHPUnit configu
 ### If installed with Composer
 
 ```bash
-$ cd vendor/esi/phpunit-coverage-check
-$ php coverage-check coverage:check /path/to/clover.xml 100
-$ php coverage-check coverage:check /path/to/clover.xml 100 --only-percentage
+$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100
+$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100 --only-percentage
 ```
 
 You can also use the Api directly if you wish. I created a function called `nonConsoleCall` that will process and return the data, similar to how the console application displays it.
