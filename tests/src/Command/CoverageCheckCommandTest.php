@@ -261,7 +261,7 @@ class CoverageCheckCommandTest extends TestCase
     {
         $output = (string) preg_replace('#\h{2,}#', '', $output);
         $output = (string) preg_replace('#\\n#', ' ', $output);
-        $output = str_replace('  ', ' ', $string);
+        $output = str_replace('  ', ' ', $output);
 
         return trim($output);
     }
