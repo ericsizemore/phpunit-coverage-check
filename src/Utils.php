@@ -20,7 +20,7 @@ use SimpleXMLElement;
 use function file_exists;
 use function sprintf;
 
-final readonly class Utils
+final class Utils
 {
     /**
      * Returns the given number formatted and rounded for percentage.
