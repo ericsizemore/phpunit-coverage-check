@@ -2,9 +2,11 @@ name: Tests
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - "2.x-dev"
   pull_request:
-    branches: [ master ]
+    branches:
+      - "2.x-dev"
 
 jobs:
   test:
@@ -47,7 +49,7 @@ jobs:
       - name: Run test suite
         run: composer run-script test
 
-      - uses: sudo-bot/action-scrutinizer@latest
-        with:
-           cli-args: "--format=php-clover build/logs/clover.xml"
+      #- uses: sudo-bot/action-scrutinizer@latest
+      #  with:
+      #     cli-args: "--format=php-clover build/logs/clover.xml"
 
