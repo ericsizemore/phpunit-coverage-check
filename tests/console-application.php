@@ -12,17 +12,20 @@ declare(strict_types=1);
  * license information, and credits/acknowledgements, please view the LICENSE
  * and README files that were distributed with this source code.
  */
-
 /**
  * @internal
  */
 require __DIR__ . '/../vendor/autoload.php';
 
+// Setup application
+use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
-use Symfony\Component\Console\Application;
 
-$console = new Application('PHPUnit Coverage Check', CoverageCheck::VERSION);
-$console->add(new CoverageCheckCommand(new CoverageCheck()));
+$command     = new CoverageCheckCommand(new CoverageCheck());
+$commandName = $command->getName();
 
-return $console;
+$console = new Application(CoverageCheck::APPLICATION_NAME, CoverageCheck::VERSION);
+$console->add($command);
+$console->setDefaultCommand($commandName, true);
+$console->run();

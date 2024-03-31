@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of PHPUnit Coverage Check.
+ *
+ * (c) Eric Sizemore <admin@secondversion.com>
+ * (c) Richard Regeer <rich2309@gmail.com>
+ *
+ * This source file is subject to the MIT license. For the full copyright,
+ * license information, and credits/acknowledgements, please view the LICENSE
+ * and README files that were distributed with this source code.
+ */
+
+namespace Esi\CoverageCheck\Style;
+
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+class CoverageCheckStyle extends SymfonyStyle
+{
+    /**
+     * @see SymfonyStyle
+     *
+     * @inheritDoc
+     */
+    #[\Override]
+    public function error(string|array $message, bool $onlyPercentage = false)
+    {
+        $this->block($message, ($onlyPercentage ? null : 'ERROR'), 'fg=white;bg=red', ' ', true);
+    }
+    /**
+     * @see SymfonyStyle
+     *
+     * @inheritDoc
+     */
+    #[\Override]
+    public function success(string|array $message, bool $onlyPercentage = false)
+    {
+        $this->block($message, ($onlyPercentage ? null : 'OK'), 'fg=black;bg=green', ' ', true);
+    }
+}

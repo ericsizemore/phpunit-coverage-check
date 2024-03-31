@@ -96,8 +96,10 @@ It's also possible to add the coverage report generation to your PHPUnit configu
 ### If installed with Composer
 
 ```bash
-$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100
-$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100 --only-percentage
+$ php vendor/bin/coverage-check /path/to/clover.xml 100
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 --only-percentage
+# -O for only-percentage works as well
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 -O
 ```
 
 You can also use the Api directly if you wish. I created a function called `nonConsoleCall` that will process and return the data, similar to how the console application displays it.
@@ -120,18 +122,20 @@ use Esi\CoverageCheck\CoverageCheck;
 $check = new CoverageCheck();
 $results = $check->nonConsoleCall(__DIR__ . '/tests/fixtures/clover.xml', 90);
 
-echo $results; // Total code coverage is 90.32 % - OK!
+echo $results; // Total code coverage is 90.32%
 ```
 
 
 ### If using the Phar
 
 ```bash
-$ php phpunit-coverage-check.phar coverage:check /path/to/clover.xml 100
-$ php phpunit-coverage-check.phar coverage:check /path/to/clover.xml 100 --only-percentage
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 --only-percentage
+# -O for only-percentage works as well
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 -O
 ```
 
-With `--only-percentage` enabled, the CLI command will only return the resulting coverage percentage.
+With `--only-percentage` (or `-O`) enabled, the CLI command will only return the resulting coverage percentage.
 
 
 ## About

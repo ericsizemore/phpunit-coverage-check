@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Esi\CoverageCheck\Tests;
 
 use Esi\CoverageCheck\CoverageCheck;
+use Esi\CoverageCheck\Utils;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +27,7 @@ use function dirname;
  * @internal
  */
 #[CoversClass(CoverageCheck::class)]
+#[CoversClass(Utils::class)]
 class CoverageCheckTest extends TestCase
 {
     private CoverageCheck $check;
@@ -35,9 +37,12 @@ class CoverageCheckTest extends TestCase
     {
         $this->check    = new CoverageCheck();
         self::$fixtures = [
-            'valid'   => dirname(__FILE__, 2) . '/fixtures/clover.xml',
-            'invalid' => dirname(__FILE__, 2) . '/fixtures/clovr.xml',
-            'empty'   => dirname(__FILE__, 2) . '/fixtures/empty.xml',
+            'valid'        => dirname(__FILE__, 2) . '/fixtures/clover.xml',
+            'notexist'     => dirname(__FILE__, 2) . '/fixtures/clovr.xml',
+            'empty'        => dirname(__FILE__, 2) . '/fixtures/empty.xml',
+            'invalid_root' => dirname(__FILE__, 2) . '/fixtures/invalid_root_element.xml',
+            'no_children'  => dirname(__FILE__, 2) . '/fixtures/no_children.xml',
+            'no_metrics'   => dirname(__FILE__, 2) . '/fixtures/no_project_metrics.xml',
         ];
     }
 
@@ -71,36 +76,54 @@ class CoverageCheckTest extends TestCase
     public function testNonConsoleCallInvalid(): void
     {
         $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 100);
-        self::assertSame('Total code coverage is 90.32 % which is below the accepted 100 %', $results);
+        self::assertSame('[ERROR] Total code coverage is 90.32% which is below the accepted 100%', $results);
     }
 
     public function testNonConsoleCallInvalidOnlyPercentage(): void
     {
         $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 100, true);
-        self::assertSame('90.32 %', $results);
+        self::assertSame('90.32%', $results);
     }
 
     public function testNonConsoleCallValid(): void
     {
         $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 90);
-        self::assertSame('Total code coverage is 90.32 % - OK!', $results);
+        self::assertSame('[OK] Total code coverage is 90.32%', $results);
     }
 
     public function testNonConsoleCallValidOnlyPercentage(): void
     {
         $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 90, true);
-        self::assertSame('90.32 %', $results);
+        self::assertSame('90.32%', $results);
+    }
+
+    public function testNonConsoleInvalidCloverNoChildren(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $results = $this->check->nonConsoleCall(self::$fixtures['no_children'], 90);
+    }
+
+    public function testNonConsoleInvalidCloverNoProjectMetrics(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $results = $this->check->nonConsoleCall(self::$fixtures['no_metrics'], 90);
+    }
+
+    public function testNonConsoleInvalidCloverNoRootElement(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $results = $this->check->nonConsoleCall(self::$fixtures['invalid_root'], 90);
     }
 
     public function testNonConsoleNotEnoughCode(): void
     {
         $results = $this->check->nonConsoleCall(self::$fixtures['empty'], 90);
-        self::assertSame('Insufficient data for calculation. Please add more code.', $results);
+        self::assertSame('[ERROR] Insufficient data for calculation. Please add more code.', $results);
     }
 
-    public function testSetCloverFileInvalid(): void
+    public function testSetCloverFileThatDoesNotExist(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->check->setCloverFile(self::$fixtures['invalid']);
+        $this->check->setCloverFile(self::$fixtures['notexist']);
     }
 }

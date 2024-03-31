@@ -19,7 +19,6 @@ use Exception;
 use InvalidArgumentException;
 use SimpleXMLElement;
 
-use function file_exists;
 use function file_get_contents;
 use function sprintf;
 
@@ -29,14 +28,19 @@ use function sprintf;
 class CoverageCheck
 {
     /**
-     * Current library version.
+     * Application / library name. (used in the Console Application).
      */
-    public const VERSION = '1.0.0';
+    public const APPLICATION_NAME = 'PHPUnit Coverage Check';
+
+    /**
+     * Current library version. (used in the Console Application).
+     */
+    public const VERSION = '1.1.0';
 
     /**
      * Xpath expression for finding the metrics in a clover file.
      */
-    public const XPATH_METRICS = '//project/metrics';
+    protected const XPATH_METRICS = '//project/metrics';
 
     /**
      * Configurable options.
@@ -53,14 +57,6 @@ class CoverageCheck
      * Constructor. Doesn't need to do anything, at least for the moment.
      */
     public function __construct() {}
-
-    /**
-     * Returns the given number formatted and rounded for percentage.
-     */
-    public static function formatCoverage(float $number): string
-    {
-        return sprintf('%0.2f %%', $number);
-    }
 
     public function getCloverFile(): string
     {
@@ -95,26 +91,22 @@ class CoverageCheck
         $results = $this->process();
 
         if ($results === false) {
-            return 'Insufficient data for calculation. Please add more code.';
+            return '[ERROR] Insufficient data for calculation. Please add more code.';
         }
 
         if ($results < $threshold && !$onlyPercentage) {
             return sprintf(
-                'Total code coverage is %s which is below the accepted %d %%',
-                self::formatCoverage($results),
+                '[ERROR] Total code coverage is %s which is below the accepted %d%%',
+                Utils::formatCoverage($results),
                 $threshold
             );
         }
 
-        if ($results < $threshold && $onlyPercentage) {
-            return self::formatCoverage($results);
-        }
-
         if ($onlyPercentage) {
-            return self::formatCoverage($results);
+            return Utils::formatCoverage($results);
         }
 
-        return sprintf('Total code coverage is %s - OK!', self::formatCoverage($results));
+        return sprintf('[OK] Total code coverage is %s', Utils::formatCoverage($results));
     }
 
     /**
@@ -129,30 +121,14 @@ class CoverageCheck
      */
     public function process(): float | false
     {
-        $conditionals        = 0;
-        $coveredConditionals = 0;
-        $statements          = 0;
-        $coveredStatements   = 0;
-        $methods             = 0;
-        $coveredMethods      = 0;
+        $metrics = (array) $this->loadMetrics()[0];
+        $metrics = \array_map('intval', $metrics['@attributes']);
 
-        foreach ($this->loadMetrics() as $metric) {
-            $conditionals        += (int) $metric['conditionals'];
-            $coveredConditionals += (int) $metric['coveredconditionals'];
-            $statements          += (int) $metric['statements'];
-            $coveredStatements   += (int) $metric['coveredstatements'];
-            $methods             += (int) $metric['methods'];
-            $coveredMethods      += (int) $metric['coveredmethods'];
-        }
-
-        $coveredMetrics = $coveredStatements + $coveredMethods + $coveredConditionals;
-        $totalMetrics   = $statements + $methods + $conditionals;
-
-        if ($totalMetrics === 0) {
+        if ($metrics['elements'] === 0) {
             return false;
         }
 
-        return $coveredMetrics / $totalMetrics * 100;
+        return $metrics['coveredelements'] / $metrics['elements'] * 100;
     }
 
     /**
@@ -160,7 +136,7 @@ class CoverageCheck
      */
     public function setCloverFile(string $cloverFile): CoverageCheck
     {
-        if ($cloverFile === '' || !file_exists($cloverFile)) {
+        if (!Utils::validateCloverFile($cloverFile)) {
             throw new InvalidArgumentException(sprintf('Invalid input file provided. Was given: %s', $cloverFile));
         }
 
@@ -181,7 +157,7 @@ class CoverageCheck
      */
     public function setThreshold(int $threshold): CoverageCheck
     {
-        if ($threshold < 1 || $threshold > 100) {
+        if (!Utils::validateThreshold($threshold)) {
             throw new InvalidArgumentException(sprintf('The threshold must be a minimum of 1 and a maximum of 100, %d given', $threshold));
         }
 
@@ -194,15 +170,28 @@ class CoverageCheck
      * Loads the clover xml data and runs XML Xpath query with self::XPATH_METRICS.
      *
      * @see https://www.php.net/SimpleXMLElement
+     *
      * @internal
+     *
+     * @codeCoverageIgnore
      *
      * @return array<SimpleXMLElement>
      *
-     * @throws Exception If XML data cannot be parsed.
+     * @throws Exception If file_get_contents fails or if XML data cannot be parsed.
      */
     protected function loadMetrics(): array
     {
-        $xml = new SimpleXMLElement((string) file_get_contents($this->cloverFile));
+        $cloverData = file_get_contents($this->cloverFile);
+
+        if ($cloverData === false || $cloverData === '') {
+            throw new Exception(sprintf('Failed to get the contents of %s', $this->cloverFile));
+        }
+
+        $xml = new SimpleXMLElement($cloverData);
+
+        if (!Utils::isPossiblyClover($xml)) {
+            throw new \RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');
+        }
 
         return $xml->xpath(self::XPATH_METRICS);
     }

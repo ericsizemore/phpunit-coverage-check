@@ -1,13 +1,11 @@
 includes:
-    - vendor/phpstan/phpstan-symfony/extension.neon
-    - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
-    level: 9
+    level: max
     paths:
         - ./src
+        - ./tests
 
     symfony:
         constantHassers: false

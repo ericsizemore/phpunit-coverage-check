@@ -25,4 +25,7 @@
             <html outputDirectory="build/logs/coverage" lowUpperBound="50" highLowerBound="90"/>
         </report>
     </coverage>
+    <php>
+        <env name="PHPUNIT_TEST" value="true" force="true" />
+    </php>
 </phpunit>

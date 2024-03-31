@@ -15,7 +15,6 @@
           "and README files that were distributed with this source code."
     ],
     "files": [
-	    "vendor/composer/installed.php",
         "LICENSE",
         "README.md",
         "SECURITY.md"
