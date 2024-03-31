@@ -29,13 +29,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
   * Changed `coverage-check` to use the `coverage:check` command by default, so you no longer have to call the command to start a check.
-    * For example, before:
 ```bash
-php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
-```
-    * After:
-```bash
-php vendor/bin/coverage-check /path/to/clover.xml 90
+# before
+$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
+
+# after
+$ php vendor/bin/coverage-check /path/to/clover.xml 90
 ```
   * Refactored `CoverageCheckCommand::execute`, and a bit of cleanup.
     * Two new functions that handle output instead of `execute` itself (seen above in `Added`)
@@ -92,4 +91,5 @@ This intial version is forked from [rregeer/phpunit-coverage-check](https://gith
   * `coverage-check.php`, `bin/coverage-check`, and `test/run` removed.
 
 
+[unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/tree/2.x-dev
 [1.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/1.0.0
