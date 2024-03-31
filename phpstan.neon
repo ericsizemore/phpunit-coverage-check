@@ -2,11 +2,11 @@ includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-    level: max
+    level: 9
     paths:
         - ./src
         - ./tests
-
+    tmpDir: ./build/phpstan
     symfony:
         constantHassers: false
         consoleApplicationLoader: tests/console-application.php

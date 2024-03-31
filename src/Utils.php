@@ -56,6 +56,7 @@ final class Utils
         if (!isset($hasChildren->project->metrics['elements'], $hasChildren->project->metrics['coveredelements'])) {
             return false;
         }
+
         unset($hasChildren);
 
         return true;

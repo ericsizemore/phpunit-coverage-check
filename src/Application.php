@@ -36,7 +36,7 @@ final class Application extends BaseApplication
     #[\Override]
     protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
-        $output->setDecorated(\getenv('PHPUNIT_TEST') ? false : true);
+        $output->setDecorated(!(bool) \getenv('PHPUNIT_TEST'));
         $input->setInteractive(false);
     }
 

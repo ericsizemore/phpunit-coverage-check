@@ -17,6 +17,7 @@ namespace Esi\CoverageCheck;
 
 use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 use SimpleXMLElement;
 
 use function file_get_contents;
@@ -35,10 +36,15 @@ class CoverageCheck
     /**
      * Current library version. (used in the Console Application).
      */
-    public const VERSION = '1.1.0';
+    public const VERSION = '2.0.0';
 
     /**
-     * Xpath expression for finding the metrics in a clover file.
+     * Xpath expression for getting each file's data in a clover report.
+     */
+    protected const XPATH_FILES = '//file';
+
+    /**
+     * Xpath expression for getting the project total metrics in a clover report.
      */
     protected const XPATH_METRICS = '//project/metrics';
 
@@ -49,14 +55,11 @@ class CoverageCheck
      * @see self::setThreshold()
      * @see self::setOnlyPercentage()
      */
-    protected string $cloverFile   = 'clover.xml';
-    protected bool $onlyPercentage = false;
-    protected int $threshold       = 100;
+    protected string $cloverFile = 'clover.xml';
 
-    /**
-     * Constructor. Doesn't need to do anything, at least for the moment.
-     */
-    public function __construct() {}
+    protected bool $onlyPercentage = false;
+
+    protected int $threshold = 100;
 
     public function getCloverFile(): string
     {
@@ -132,6 +135,45 @@ class CoverageCheck
     }
 
     /**
+     * @return false|array{
+     *     totalCoverage: int,
+     *     fileMetrics: array<string, array{elements: int, coveredElements: int, percentage: int}>
+     * }
+     */
+    public function processByFile(): false | array
+    {
+        $fileMetrics   = [];
+        $totalCoverage = 0;
+
+        foreach ($this->loadMetrics(self::XPATH_FILES) as $file) {
+            if ((int) $file->metrics['elements'] === 0) {
+                continue;
+            }
+
+            $fileMetrics[(string) $file['name']] = [
+                'elements'        => (int) $file->metrics['elements'],
+                'coveredElements' => (int) $file->metrics['coveredelements'],
+                'percentage'      => (int) $file->metrics['coveredelements'] / (int) $file->metrics['elements'] * 100,
+            ];
+
+            $totalCoverage += $fileMetrics[(string) $file['name']]['percentage'];
+        }
+
+        if ($totalCoverage !== 0) {
+            $totalCoverage /= \count($fileMetrics);
+        }
+
+        if (\count($fileMetrics) < 1) {
+            return false;
+        }
+
+        return [
+            'totalCoverage' => $totalCoverage,
+            'fileMetrics'   => $fileMetrics,
+        ];
+    }
+
+    /**
      * @throws InvalidArgumentException If the given file is empty or does not exist.
      */
     public function setCloverFile(string $cloverFile): CoverageCheck
@@ -177,22 +219,23 @@ class CoverageCheck
      *
      * @return array<SimpleXMLElement>
      *
-     * @throws Exception If file_get_contents fails or if XML data cannot be parsed.
+     * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
+     *                          if the given file does not appear to be a valid clover file.
      */
-    protected function loadMetrics(): array
+    protected function loadMetrics(string $xpath = self::XPATH_METRICS): array | false
     {
         $cloverData = file_get_contents($this->cloverFile);
 
         if ($cloverData === false || $cloverData === '') {
-            throw new Exception(sprintf('Failed to get the contents of %s', $this->cloverFile));
+            throw new RuntimeException(sprintf('Failed to get the contents of %s', $this->cloverFile));
         }
 
         $xml = new SimpleXMLElement($cloverData);
 
         if (!Utils::isPossiblyClover($xml)) {
-            throw new \RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');
+            throw new RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');
         }
 
-        return $xml->xpath(self::XPATH_METRICS);
+        return $xml->xpath($xpath);
     }
 }

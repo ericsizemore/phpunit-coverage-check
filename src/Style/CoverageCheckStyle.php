@@ -25,17 +25,18 @@ class CoverageCheckStyle extends SymfonyStyle
      * @inheritDoc
      */
     #[\Override]
-    public function error(string|array $message, bool $onlyPercentage = false)
+    public function error(string|array $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'ERROR'), 'fg=white;bg=red', ' ', true);
     }
+
     /**
      * @see SymfonyStyle
      *
      * @inheritDoc
      */
     #[\Override]
-    public function success(string|array $message, bool $onlyPercentage = false)
+    public function success(string|array $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'OK'), 'fg=black;bg=green', ' ', true);
     }

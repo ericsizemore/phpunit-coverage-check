@@ -30,13 +30,14 @@ use function dirname;
 #[CoversClass(Utils::class)]
 class CoverageCheckTest extends TestCase
 {
-    private CoverageCheck $check;
-    private static $fixtures;
+    private CoverageCheck $coverageCheck;
+
+    private static array $fixtures;
 
     protected function setUp(): void
     {
-        $this->check    = new CoverageCheck();
-        self::$fixtures = [
+        $this->coverageCheck = new CoverageCheck();
+        self::$fixtures      = [
             'valid'        => dirname(__FILE__, 2) . '/fixtures/clover.xml',
             'notexist'     => dirname(__FILE__, 2) . '/fixtures/clovr.xml',
             'empty'        => dirname(__FILE__, 2) . '/fixtures/empty.xml',
@@ -48,82 +49,82 @@ class CoverageCheckTest extends TestCase
 
     public function testGetSetCloverFile(): void
     {
-        $this->check->setCloverFile(self::$fixtures['valid']);
-        self::assertSame(self::$fixtures['valid'], $this->check->getCloverFile());
+        $this->coverageCheck->setCloverFile(self::$fixtures['valid']);
+        self::assertSame(self::$fixtures['valid'], $this->coverageCheck->getCloverFile());
     }
 
     public function testGetSetOnlyPercentage(): void
     {
-        $this->check->setOnlyPercentage(true);
-        self::assertTrue($this->check->getOnlyPercentage());
+        $this->coverageCheck->setOnlyPercentage(true);
+        self::assertTrue($this->coverageCheck->getOnlyPercentage());
 
-        $this->check->setOnlyPercentage(false);
-        self::assertFalse($this->check->getOnlyPercentage());
+        $this->coverageCheck->setOnlyPercentage(false);
+        self::assertFalse($this->coverageCheck->getOnlyPercentage());
     }
 
     public function testGetSetThreshold(): void
     {
-        $this->check->setThreshold(100);
-        self::assertSame(100, $this->check->getThreshold());
+        $this->coverageCheck->setThreshold(100);
+        self::assertSame(100, $this->coverageCheck->getThreshold());
     }
 
     public function testGetSetThresholdInvalid(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->check->setThreshold(101);
+        $this->coverageCheck->setThreshold(101);
     }
 
     public function testNonConsoleCallInvalid(): void
     {
-        $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 100);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 100);
         self::assertSame('[ERROR] Total code coverage is 90.32% which is below the accepted 100%', $results);
     }
 
     public function testNonConsoleCallInvalidOnlyPercentage(): void
     {
-        $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 100, true);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 100, true);
         self::assertSame('90.32%', $results);
     }
 
     public function testNonConsoleCallValid(): void
     {
-        $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 90);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 90);
         self::assertSame('[OK] Total code coverage is 90.32%', $results);
     }
 
     public function testNonConsoleCallValidOnlyPercentage(): void
     {
-        $results = $this->check->nonConsoleCall(self::$fixtures['valid'], 90, true);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 90, true);
         self::assertSame('90.32%', $results);
     }
 
     public function testNonConsoleInvalidCloverNoChildren(): void
     {
         $this->expectException(\RuntimeException::class);
-        $results = $this->check->nonConsoleCall(self::$fixtures['no_children'], 90);
+        $this->coverageCheck->nonConsoleCall(self::$fixtures['no_children'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoProjectMetrics(): void
     {
         $this->expectException(\RuntimeException::class);
-        $results = $this->check->nonConsoleCall(self::$fixtures['no_metrics'], 90);
+        $this->coverageCheck->nonConsoleCall(self::$fixtures['no_metrics'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoRootElement(): void
     {
         $this->expectException(\RuntimeException::class);
-        $results = $this->check->nonConsoleCall(self::$fixtures['invalid_root'], 90);
+        $this->coverageCheck->nonConsoleCall(self::$fixtures['invalid_root'], 90);
     }
 
     public function testNonConsoleNotEnoughCode(): void
     {
-        $results = $this->check->nonConsoleCall(self::$fixtures['empty'], 90);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['empty'], 90);
         self::assertSame('[ERROR] Insufficient data for calculation. Please add more code.', $results);
     }
 
     public function testSetCloverFileThatDoesNotExist(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->check->setCloverFile(self::$fixtures['notexist']);
+        $this->coverageCheck->setCloverFile(self::$fixtures['notexist']);
     }
 }

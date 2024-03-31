@@ -20,6 +20,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Handles checking if threshold is within accepted range.
   * New `Style\CoverageCheckStyle` which extends `Symfony\Console\Style\SymfonyStyle` to format console output.
   * New shortcut for the `--only-percentage` option for the Console. You can use `-O` instead.
+  * New option `--show-files` (shortcut `-F`), to break down metrics by file, and output the results via a table.
+    * This adds a new constant `CoverageCheck::XPATH_FILES`
+    * A new function `CoverageCheck::processByFile()`
+    * A new function `CoverageCheckCommand::getFileTable()`
+    * A new function `CoverageCheckCommand::getResultOutput()`
 
 ### Changed
 
@@ -33,8 +38,10 @@ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
 php vendor/bin/coverage-check /path/to/clover.xml 90
 ```
   * Refactored `CoverageCheckCommand::execute`, and a bit of cleanup.
+    * Two new functions that handle output instead of `execute` itself (seen above in `Added`)
   * Refactored `CoverageCheck::process`. Since we are using `//project/metrics` instead of `//metrics` in `xpath()`, we only need to use `elements` and `coveredelements` for totals.
-  * Refactored `CoverageCheck::loadMetrics`. It will also now throw an `Exception` if `file_get_contents` fails for whatever reason or a `RuntimeException` if the new `isPossiblyClover` returns false.
+  * Refactored `CoverageCheck::loadMetrics`. It will also now throw an `RuntimeException` if `file_get_contents` fails for whatever reason or if the new `isPossiblyClover` returns false.
+    * With the addition of the new `--show-files` option and related additions, the `CoverageCheck::loadMetrics()` now has one parameter: `$xpath`.
   * Class const `XPATH_METRICS` now has `protected` visibility.
   * Use `SymfonyStyle` via our custom `Style\CoverageCheckStyle` class to handle output instead of `writeln` and the `formatter` helper.
   * Changed output message formats for `CoverageCheck::nonConsoleCall` and the Console to match more closely:
@@ -46,6 +53,12 @@ php vendor/bin/coverage-check /path/to/clover.xml 90
       * [ERROR] Insufficient data for calculation. Please add more code.
       * [ERROR] Total code coverage is %s which is below the accepted %d%%
       * [OK] Total code coverage is %s
+  * Unit tests updated accordingly.
+
+### TODO
+
+  * The new `--show-files` option is not yet supported in `CoverageCheck::nonConsoleCall()`.
+  * Cleanup, and add to, documentation throughout.
 
 
 ## [1.0.0] - 2024-03-26
