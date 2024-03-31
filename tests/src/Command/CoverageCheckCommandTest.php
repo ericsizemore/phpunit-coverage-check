@@ -260,7 +260,8 @@ class CoverageCheckCommandTest extends TestCase
     protected static function stripWhitespace(string $output): string
     {
         $output = (string) preg_replace('#\h{2,}#', '', $output);
-        $output = (string) preg_replace('#\\n{2,}#', ' ', $output);
+        $output = (string) preg_replace('#\\n#', ' ', $output);
+        $output = str_replace('  ', ' ', $string);
 
         return trim($output);
     }
