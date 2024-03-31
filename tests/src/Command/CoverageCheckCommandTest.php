@@ -77,7 +77,7 @@ class CoverageCheckCommandTest extends TestCase
 
         self::assertEquals(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
-            trim($this->tester->getDisplay())
+            self::stripWhitespace($this->tester->getDisplay())
         );
         self::assertEquals(Command::INVALID, $this->tester->getStatusCode());
     }
@@ -94,7 +94,7 @@ class CoverageCheckCommandTest extends TestCase
 
         self::assertEquals(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
-            trim($this->tester->getDisplay())
+            self::stripWhitespace($this->tester->getDisplay())
         );
         self::assertEquals(Command::INVALID, $this->tester->getStatusCode());
     }
@@ -111,7 +111,7 @@ class CoverageCheckCommandTest extends TestCase
 
         self::assertEquals(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
-            trim($this->tester->getDisplay())
+            self::stripWhitespace($this->tester->getDisplay())
         );
         self::assertEquals(Command::INVALID, $this->tester->getStatusCode());
     }
@@ -255,5 +255,13 @@ class CoverageCheckCommandTest extends TestCase
             trim($this->tester->getDisplay())
         );
         self::assertEquals(Command::SUCCESS, $this->tester->getStatusCode());
+    }
+
+    protected static function stripWhitespace(string $output): string
+    {
+        $output = (string) preg_replace('#\h{2,}#', '', $output);
+        $output = (string) preg_replace('#\\n{2,}#', ' ', $output);
+
+        return trim($output);
     }
 }
