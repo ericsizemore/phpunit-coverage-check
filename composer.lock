@@ -1261,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "187dc65c5a9e9f9f85645b299d5c83f3405b043a"
+                "reference": "7602d6bbfaa3231f64fcf4c57f0bdf8bbd184645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/187dc65c5a9e9f9f85645b299d5c83f3405b043a",
-                "reference": "187dc65c5a9e9f9f85645b299d5c83f3405b043a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7602d6bbfaa3231f64fcf4c57f0bdf8bbd184645",
+                "reference": "7602d6bbfaa3231f64fcf4c57f0bdf8bbd184645",
                 "shasum": ""
             },
             "require": {
@@ -1316,7 +1316,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-29T13:20:43+00:00"
+            "time": "2024-03-30T14:21:37+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
