@@ -40,4 +40,22 @@ class CoverageCheckStyle extends SymfonyStyle
     {
         $this->block($message, ($onlyPercentage ? null : 'OK'), 'fg=black;bg=green', ' ', true);
     }
+
+    /**
+     * @see SymfonyStyle
+     *
+     * @inheritDoc
+     */
+    #[\Override]
+    public function table(array $headers, array $rows)
+    {
+        $this->createTable()
+            ->setHeaders($headers)
+            ->setRows($rows)
+            ->setColumnMaxWidth(0, 70)
+            ->render()
+        ;
+
+        $this->newLine();
+    }
 }

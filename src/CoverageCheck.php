@@ -15,11 +15,12 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
-use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 use SimpleXMLElement;
 
+use function array_map;
+use function count;
 use function file_get_contents;
 use function sprintf;
 
@@ -119,13 +120,11 @@ class CoverageCheck
      * Calculation: https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
      *
      * @see self::loadMetrics()
-     *
-     * @throws Exception
      */
     public function process(): float | false
     {
         $metrics = (array) $this->loadMetrics()[0];
-        $metrics = \array_map('intval', $metrics['@attributes']);
+        $metrics = array_map('intval', $metrics['@attributes']);
 
         if ($metrics['elements'] === 0) {
             return false;
@@ -160,10 +159,10 @@ class CoverageCheck
         }
 
         if ($totalCoverage !== 0) {
-            $totalCoverage /= \count($fileMetrics);
+            $totalCoverage /= count($fileMetrics);
         }
 
-        if (\count($fileMetrics) < 1) {
+        if (count($fileMetrics) < 1) {
             return false;
         }
 
@@ -230,7 +229,7 @@ class CoverageCheck
             throw new RuntimeException(sprintf('Failed to get the contents of %s', $this->cloverFile));
         }
 
-        $xml = new SimpleXMLElement($cloverData);
+        $xml = Utils::parseXml($cloverData);
 
         if (!Utils::isPossiblyClover($xml)) {
             throw new RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');

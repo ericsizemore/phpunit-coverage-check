@@ -29,6 +29,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
+use function is_array;
 use function sprintf;
 
 /**
@@ -113,7 +114,7 @@ class CoverageCheckCommand extends Command
         }
 
         // --show-files
-        if (\is_array($result)) {
+        if (is_array($result)) {
             return $this->getFileTable($result);
         }
 

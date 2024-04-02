@@ -20,6 +20,7 @@ use Esi\CoverageCheck\Utils;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 use function dirname;
 
@@ -34,6 +35,7 @@ class CoverageCheckTest extends TestCase
 
     private static array $fixtures;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->coverageCheck = new CoverageCheck();
@@ -100,19 +102,19 @@ class CoverageCheckTest extends TestCase
 
     public function testNonConsoleInvalidCloverNoChildren(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['no_children'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoProjectMetrics(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['no_metrics'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoRootElement(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['invalid_root'], 90);
     }
 
@@ -120,6 +122,12 @@ class CoverageCheckTest extends TestCase
     {
         $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['empty'], 90);
         self::assertSame('[ERROR] Insufficient data for calculation. Please add more code.', $results);
+    }
+
+    public function testParseXmlErrors(): void
+    {
+        $this->expectException(RuntimeException::class);
+        Utils::parseXml('<clover></clove>');
     }
 
     public function testSetCloverFileThatDoesNotExist(): void

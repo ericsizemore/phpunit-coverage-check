@@ -21,6 +21,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function getenv;
+
 /**
  * @internal
  */
@@ -36,7 +38,7 @@ final class Application extends BaseApplication
     #[\Override]
     protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
-        $output->setDecorated(!(bool) \getenv('PHPUNIT_TEST'));
+        $output->setDecorated(!(bool) getenv('PHPUNIT_TEST'));
         $input->setInteractive(false);
     }
 

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-$currentYear = \date('Y');
-
-$header = <<<EOF
+$header = <<<'EOF'
     This file is part of PHPUnit Coverage Check.
 
     (c) Eric Sizemore <admin@secondversion.com>
@@ -64,8 +62,8 @@ $config
         'declare_parentheses'         => true,
         'declare_strict_types'        => true,
         //'global_namespace_import'     => ['import_classes' => true, 'import_constants' => true, 'import_functions' => true],
-        'header_comment'         => ['comment_type' => 'PHPDoc', 'header' => $header, 'separate' => 'top'],
-        'ordered_class_elements' => [
+        'header_comment'              => ['comment_type' => 'PHPDoc', 'header' => $header, 'separate' => 'top'],
+        'ordered_class_elements'      => [
             'order' => [
                 'use_trait',
                 'case',
@@ -97,7 +95,7 @@ $config
         PhpCsFixer\Finder::create()
             ->in(__DIR__ . '/src')
             ->in(__DIR__ . '/tests')
-            ->append([__DIR__ . '/coverage-check'])
+            ->append([__DIR__ . '/coverage-check', __DIR__ . '/.php-cs-fixer.dist.php'])
     )
 ;
 

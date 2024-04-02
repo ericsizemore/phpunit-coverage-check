@@ -23,7 +23,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -31,6 +30,8 @@ use function dirname;
 use function preg_replace;
 use function str_replace;
 use function trim;
+
+use const PHP_EOL;
 
 /**
  * @internal
@@ -47,6 +48,7 @@ class CoverageCheckCommandTest extends TestCase
 
     private static array $fixtures;
 
+    #[\Override]
     protected function setUp(): void
     {
         self::$fixtures = [
@@ -62,7 +64,7 @@ class CoverageCheckCommandTest extends TestCase
         $coverageCheckCommand = new CoverageCheckCommand(new CoverageCheck());
         $commandName          = $coverageCheckCommand->getName();
 
-        $this->application = new Application('PHPUnit Coverage Check', CoverageCheck::VERSION);
+        $this->application = new Application(CoverageCheck::APPLICATION_NAME, CoverageCheck::VERSION);
         $this->application->setAutoExit(false);
         $this->application->add($coverageCheckCommand);
         $this->application->setDefaultCommand($commandName, true);
@@ -177,7 +179,7 @@ class CoverageCheckCommandTest extends TestCase
             'cloverfile'        => self::$fixtures['empty'],
             'threshold'         => 90,
             '--only-percentage' => true,
-        ], ['verbosity' => Output::VERBOSITY_NORMAL]);
+        ]);
 
         self::assertEquals(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
@@ -273,7 +275,7 @@ class CoverageCheckCommandTest extends TestCase
         self::assertEquals(self::$fixtures['thisLibrary'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
-        $eol = \PHP_EOL;
+        $eol = PHP_EOL;
 
         $expected = '------------------------------------------------------------------- --------------------------------- ---------- ' . $eol;
         $expected .= '  File                                                                Covered Elements/Total Elements   Coverage  ' . $eol;
@@ -302,7 +304,7 @@ class CoverageCheckCommandTest extends TestCase
         self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
-        $eol = \PHP_EOL;
+        $eol = PHP_EOL;
 
         $expected = '----------------------------- --------------------------------- ---------- ' . $eol;
         $expected .= '  File                          Covered Elements/Total Elements   Coverage  ' . $eol;

@@ -14,21 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Overrides `getDefaultInputDefinition()` and `configureIO()` to cleanup help output.
   * New `Utils` class.
     * Adds a new function `isPossiblyClover()`, which attempts to ensure the provided file is a PHPUnit generated clover file.
-      * If a file does not appear to be a valid clover file, it will return the following message:
-        * [ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?
-    * Handles checking file existence for the clover file.
-    * Handles checking if threshold is within accepted range.
   * New `Style\CoverageCheckStyle` which extends `Symfony\Console\Style\SymfonyStyle` to format console output.
   * New shortcut for the `--only-percentage` option for the Console. You can use `-O` instead.
   * New option `--show-files` (shortcut `-F`), to break down metrics by file, and output the results via a table.
-    * This adds a new constant `CoverageCheck::XPATH_FILES`
-    * A new function `CoverageCheck::processByFile()`
-    * A new function `CoverageCheckCommand::getFileTable()`
-    * A new function `CoverageCheckCommand::getResultOutput()`
+    * This adds a new constant `CoverageCheck::XPATH_FILES` and the following functions:
+      * `CoverageCheck::processByFile()`
+      * `CoverageCheckCommand::getFileTable()`
+      * `CoverageCheckCommand::getResultOutput()`
 
 ### Changed
 
-  * Changed `coverage-check` to use the `coverage:check` command by default, so you no longer have to call the command to start a check.
+  * The use of `coverage:check` when calling the Phar or the bin file is no longer needed.
 ```bash
 # before
 $ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
@@ -36,13 +32,10 @@ $ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
 # after
 $ php vendor/bin/coverage-check /path/to/clover.xml 90
 ```
-  * Refactored `CoverageCheckCommand::execute`, and a bit of cleanup.
-    * Two new functions that handle output instead of `execute` itself (seen above in `Added`)
-  * Refactored `CoverageCheck::process`. Since we are using `//project/metrics` instead of `//metrics` in `xpath()`, we only need to use `elements` and `coveredelements` for totals.
-  * Refactored `CoverageCheck::loadMetrics`. It will also now throw an `RuntimeException` if `file_get_contents` fails for whatever reason or if the new `isPossiblyClover` returns false.
+  * `CoverageCheck::process` now simply relies on `elements` and `coveredelements` for totals.
+  * `CoverageCheck::loadMetrics` can now throw a `RuntimeException` if `file_get_contents` fails for whatever reason or if the new `isPossiblyClover` returns false.
     * With the addition of the new `--show-files` option and related additions, the `CoverageCheck::loadMetrics()` now has one parameter: `$xpath`.
   * Class const `XPATH_METRICS` now has `protected` visibility.
-  * Use `SymfonyStyle` via our custom `Style\CoverageCheckStyle` class to handle output instead of `writeln` and the `formatter` helper.
   * Changed output message formats for `CoverageCheck::nonConsoleCall` and the Console to match more closely:
     * Old messages:
       * Insufficient data for calculation. Please add more code.
@@ -53,6 +46,10 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 90
       * [ERROR] Total code coverage is %s which is below the accepted %d%%
       * [OK] Total code coverage is %s
   * Unit tests updated accordingly.
+
+### Fixed
+
+  * `CoverageCheckCommand` updated to use the `Symfony\Console\Attribute\AsCommand` attribute, as using the static properties is deprecated as of `Symfony\Console` 6.1.
 
 ### TODO
 
@@ -66,10 +63,10 @@ This intial version is forked from [rregeer/phpunit-coverage-check](https://gith
 
 ### Added
 
-  * Created `backward-compatibility.md` for the Backward Compatibility Promise.
-  * Created `CHANGELOG.md` to keep track of changes.
-  * Created `SECURITY.md` for the security policy.
-  * Created testing and analysis workflows based on GitHub actions.
+  * `backward-compatibility.md` for the Backward Compatibility Promise.
+  * `CHANGELOG.md` to keep track of changes.
+  * `SECURITY.md` for the security policy.
+  * Testing and analysis workflows based on GitHub actions.
   * Unit testing via PHPUnit.
   * `box.json` that is used for generating Phar files for the library.
     * Phar file will be added to each new release.

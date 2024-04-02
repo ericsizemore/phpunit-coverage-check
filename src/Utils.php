@@ -15,10 +15,21 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
+use Exception;
+use RuntimeException;
 use SimpleXMLElement;
 
 use function file_exists;
+use function libxml_clear_errors;
+use function libxml_get_errors;
+use function libxml_use_internal_errors;
 use function sprintf;
+use function trim;
+
+use const LIBXML_ERR_ERROR;
+use const LIBXML_ERR_FATAL;
+use const LIBXML_ERR_WARNING;
+use const PHP_EOL;
 
 final class Utils
 {
@@ -60,6 +71,44 @@ final class Utils
         unset($hasChildren);
 
         return true;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public static function parseXml(string $xmlData): SimpleXmlElement
+    {
+        static $errorLevels = [
+            LIBXML_ERR_WARNING => 'Warning',
+            LIBXML_ERR_ERROR   => 'Error',
+            LIBXML_ERR_FATAL   => 'Fatal Error',
+        ];
+
+        libxml_use_internal_errors(true);
+
+        try {
+            $xml = new SimpleXmlElement($xmlData);
+        } catch (Exception $exception) {
+            $errorMessage = PHP_EOL;
+
+            foreach (libxml_get_errors() as $error) {
+                $errorMessage .= sprintf(
+                    '%s %d: %s. Line %d Column %d',
+                    $errorLevels[$error->level],
+                    $error->code,
+                    trim($error->message),
+                    $error->line,
+                    $error->column
+                ) . PHP_EOL;
+            }
+
+            throw new RuntimeException(sprintf('Unable to load Clover XML data. LibXml returned: %s', $errorMessage));
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors(false);
+        }
+
+        return $xml;
     }
 
     /**
