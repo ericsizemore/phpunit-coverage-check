@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22a5835f3bd419b3296e43623c6772c5",
+    "content-hash": "cfce4871e798927a7c6d2ee9337168d8",
     "packages": [
         {
             "name": "psr/container",
@@ -1254,61 +1254,17 @@
             "time": "2022-02-21T01:04:05+00:00"
         },
         {
-            "name": "phpstan/extension-installer",
-            "version": "1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpstan/extension-installer.git",
-                "reference": "f45734bfb9984c6c56c4486b71230355f066a58a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/f45734bfb9984c6c56c4486b71230355f066a58a",
-                "reference": "f45734bfb9984c6c56c4486b71230355f066a58a",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^2.0",
-                "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.9.0"
-            },
-            "require-dev": {
-                "composer/composer": "^2.0",
-                "php-parallel-lint/php-parallel-lint": "^1.2.0",
-                "phpstan/phpstan-strict-rules": "^0.11 || ^0.12 || ^1.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "PHPStan\\ExtensionInstaller\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "PHPStan\\ExtensionInstaller\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Composer plugin for automatic installation of PHPStan extensions",
-            "support": {
-                "issues": "https://github.com/phpstan/extension-installer/issues",
-                "source": "https://github.com/phpstan/extension-installer/tree/1.3.1"
-            },
-            "time": "2023-05-24T08:59:17+00:00"
-        },
-        {
             "name": "phpstan/phpstan",
             "version": "1.11.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "02aea19130cfeb2d947d7cc6854553555895fcac"
+                "reference": "c07eb69fcbf008a0f06fdcfaf2a58a4aa3388dee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/02aea19130cfeb2d947d7cc6854553555895fcac",
-                "reference": "02aea19130cfeb2d947d7cc6854553555895fcac",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c07eb69fcbf008a0f06fdcfaf2a58a4aa3388dee",
+                "reference": "c07eb69fcbf008a0f06fdcfaf2a58a4aa3388dee",
                 "shasum": ""
             },
             "require": {
@@ -1358,7 +1314,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-02T07:23:34+00:00"
+            "time": "2024-04-02T10:25:50+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

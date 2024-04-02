@@ -1,12 +1,16 @@
 includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
     level: 9
     paths:
         - ./src
         - ./tests
-    tmpDir: ./build/phpstan
+
     symfony:
         constantHassers: false
         consoleApplicationLoader: tests/console-application.php

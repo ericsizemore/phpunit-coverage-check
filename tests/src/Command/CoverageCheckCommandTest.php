@@ -46,6 +46,9 @@ class CoverageCheckCommandTest extends TestCase
 
     protected ApplicationTester $tester;
 
+    /**
+     * @var string[]
+     */
     private static array $fixtures;
 
     #[\Override]
