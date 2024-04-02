@@ -194,7 +194,7 @@ class CoverageCheckCommand extends Command
             return Command::SUCCESS;
         }
 
-        // We want the full message..
+        // We want the full message…
         if ($belowThreshold) {
             // ... below the accepted threshold
             $this->coverageCheckStyle->error(

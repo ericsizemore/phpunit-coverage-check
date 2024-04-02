@@ -88,7 +88,7 @@ final class Utils
 
         try {
             $xml = new SimpleXmlElement($xmlData);
-        } catch (Exception $exception) {
+        } catch (Exception) {
             $errorMessage = PHP_EOL;
 
             foreach (libxml_get_errors() as $error) {

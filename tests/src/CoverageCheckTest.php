@@ -33,6 +33,9 @@ class CoverageCheckTest extends TestCase
 {
     private CoverageCheck $coverageCheck;
 
+    /**
+     * @var string[]
+     */
     private static array $fixtures;
 
     #[\Override]

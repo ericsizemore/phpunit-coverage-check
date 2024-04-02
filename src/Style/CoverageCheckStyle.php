@@ -23,6 +23,7 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
     public function error(string|array $message, bool $onlyPercentage = false): void
@@ -34,6 +35,7 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
     public function success(string|array $message, bool $onlyPercentage = false): void
@@ -45,9 +47,10 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     * @phpstan-ignore missingType.iterableValue, missingType.iterableValue
      */
     #[\Override]
-    public function table(array $headers, array $rows)
+    public function table(array $headers, array $rows): void
     {
         $this->createTable()
             ->setHeaders($headers)

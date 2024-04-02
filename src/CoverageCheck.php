@@ -81,7 +81,7 @@ class CoverageCheck
      * Processes the coverage data with the given clover file and threshold, and returns the information
      * similar to how the Console application will.
      *
-     * This is mainly useful for those that may wish to use this library outside of the CLI/Console or PHAR.
+     * This is mainly useful for those that may wish to use this library outside the CLI/Console or PHAR.
      *
      * @throws InvalidArgumentException If the clover file does not exist, or the threshold is not within
      *                                  defined range (>= 1 <= 100).
@@ -123,7 +123,13 @@ class CoverageCheck
      */
     public function process(): float | false
     {
-        $metrics = (array) $this->loadMetrics()[0];
+        $metrics = $this->loadMetrics();
+
+        if ($metrics === null || $metrics === false) {
+            return false;
+        }
+
+        $metrics = (array) $metrics[0];
         $metrics = array_map('intval', $metrics['@attributes']);
 
         if ($metrics['elements'] === 0) {
@@ -135,7 +141,7 @@ class CoverageCheck
 
     /**
      * @return false|array{
-     *     totalCoverage: int,
+     *     totalCoverage: float|int,
      *     fileMetrics: array<string, array{elements: int, coveredElements: int, percentage: int}>
      * }
      */
@@ -144,7 +150,13 @@ class CoverageCheck
         $fileMetrics   = [];
         $totalCoverage = 0;
 
-        foreach ($this->loadMetrics(self::XPATH_FILES) as $file) {
+        $metrics = $this->loadMetrics(self::XPATH_FILES);
+
+        if ($metrics === null || $metrics === false) {
+            return false;
+        }
+
+        foreach ($metrics as $file) {
             if ((int) $file->metrics['elements'] === 0) {
                 continue;
             }
@@ -216,12 +228,12 @@ class CoverageCheck
      *
      * @codeCoverageIgnore
      *
-     * @return array<SimpleXMLElement>
+     * @return array<SimpleXMLElement> | false | null
      *
      * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
      *                          if the given file does not appear to be a valid clover file.
      */
-    protected function loadMetrics(string $xpath = self::XPATH_METRICS): array | false
+    protected function loadMetrics(string $xpath = self::XPATH_METRICS): array | false | null
     {
         $cloverData = file_get_contents($this->cloverFile);
 

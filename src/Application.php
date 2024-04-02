@@ -44,7 +44,7 @@ final class Application extends BaseApplication
 
     /**
      * Override's getDefaultInputDefinition() to clean up the output of the --help option.
-     * By default, (wihout this override) it shows Symfony specific information along with
+     * By default, (without this override) it shows Symfony specific information along with
      * our command's information, much of which is not needed.
      *
      * @see \Symfony\Component\Console\Application::getDefaultInputDefinition()
