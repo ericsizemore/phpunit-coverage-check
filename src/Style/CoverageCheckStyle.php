@@ -23,6 +23,10 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     *
+     * Ignoring for now, may need to create a stub for PhpStan as Symfony's interface does not
+     * specify array shape/iterable types.
+     *
      * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
@@ -35,6 +39,10 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     *
+     * Ignoring for now, may need to create a stub for PhpStan as Symfony's interface does not
+     * specify array shape/iterable types.
+     *
      * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
@@ -47,6 +55,10 @@ class CoverageCheckStyle extends SymfonyStyle
      * @see SymfonyStyle
      *
      * @inheritDoc
+     *
+     * Ignoring for now, may need to create a stub for PhpStan as Symfony's interface does not
+     * specify array shape/iterable types.
+     *
      * @phpstan-ignore missingType.iterableValue, missingType.iterableValue
      */
     #[\Override]

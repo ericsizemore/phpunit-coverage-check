@@ -125,9 +125,12 @@ class CoverageCheck
     {
         $metrics = $this->loadMetrics();
 
+        // Ignoring coverage here as theoretically this should not happen
+        //@codeCoverageIgnoreStart
         if ($metrics === null || $metrics === false) {
             return false;
         }
+        //@codeCoverageIgnoreEnd
 
         $metrics = (array) $metrics[0];
         $metrics = array_map('intval', $metrics['@attributes']);
@@ -152,9 +155,12 @@ class CoverageCheck
 
         $metrics = $this->loadMetrics(self::XPATH_FILES);
 
+        // Ignoring coverage here as theoretically this should not happen
+        //@codeCoverageIgnoreStart
         if ($metrics === null || $metrics === false) {
             return false;
         }
+        //@codeCoverageIgnoreEnd
 
         foreach ($metrics as $file) {
             if ((int) $file->metrics['elements'] === 0) {
