@@ -29,16 +29,6 @@ use function sprintf;
 class CoverageCheck
 {
     /**
-     * Application / library name. (used in the Console Application).
-     */
-    public const APPLICATION_NAME = 'PHPUnit Coverage Check';
-
-    /**
-     * Current library version. (used in the Console Application).
-     */
-    public const VERSION = '2.0.0';
-
-    /**
      * Xpath expression for getting each file's data in a clover report.
      */
     protected const XPATH_FILES = '//file';

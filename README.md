@@ -109,7 +109,7 @@ You can also use the Api directly if you wish. I created a function called `nonC
      * Processes the coverage data with the given clover file and threshold, and returns the information
      * similar to how the Console application will.
      *
-     * This is mainly useful for those that may wish to use this library outside of the CLI/Console or PHAR.
+     * This is mainly useful for those that may wish to use this library outside the CLI/Console or PHAR.
      */
     public function nonConsoleCall(string $cloverFile, int $threshold = 100, bool $onlyPercentage = false): string
 ```

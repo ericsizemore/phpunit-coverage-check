@@ -11,18 +11,17 @@
          colors="true"
 >
     <testsuite name="Test Suite">
-        <directory suffix="Test.php">tests/src</directory>
+        <directory>tests/src</directory>
     </testsuite>
 	<source>
 		<include>
 			<directory>src</directory>
 		</include>
 	</source>
-    <coverage pathCoverage="false"
-              cacheDirectory="build/phpunit/cache">
+    <coverage cacheDirectory="build/phpunit/cache">
         <report>
             <clover outputFile="build/logs/clover.xml"/>
-            <html outputDirectory="build/logs/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <html outputDirectory="build/logs/coverage"/>
         </report>
     </coverage>
     <php>

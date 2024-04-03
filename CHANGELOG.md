@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
   * A new `Esi\CoverageCheck\Application` class which extends `Symfony\Component\Console\Application`.
-    * Overrides `getDefaultInputDefinition()` and `configureIO()` to cleanup help output.
+    * Overrides `getDefaultInputDefinition()` and `configureIO()` to clean up help output.
   * New `Utils` class.
     * Adds a new function `isPossiblyClover()`, which attempts to ensure the provided file is a PHPUnit generated clover file.
   * New `Style\CoverageCheckStyle` which extends `Symfony\Console\Style\SymfonyStyle` to format console output.
@@ -36,6 +36,8 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 90
   * `CoverageCheck::loadMetrics` can now throw a `RuntimeException` if `file_get_contents` fails for whatever reason or if the new `isPossiblyClover` returns false.
     * With the addition of the new `--show-files` option and related additions, the `CoverageCheck::loadMetrics()` now has one parameter: `$xpath`.
   * Class const `XPATH_METRICS` now has `protected` visibility.
+  * Class const `APPLICATION_NAME` and `VERSION` moved from `CoverageCheck` to `Application`.
+    * Subsequently, `Application` now also overrides the parent `Symfony\Component\Console\Application` constructor and passes these values to the parent class.
   * Changed output message formats for `CoverageCheck::nonConsoleCall` and the Console to match more closely:
     * Old messages:
       * Insufficient data for calculation. Please add more code.
@@ -51,6 +53,11 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 90
 
   * `CoverageCheckCommand` updated to use the `Symfony\Console\Attribute\AsCommand` attribute, as using the static properties is deprecated as of `Symfony\Console` 6.1.
 
+### Removed
+
+  * Removed dev-dependency for `phpstan\phpstan-symfony`. Seemed to be a bit overkill to require a dependency for something I was able to solve with a couple extra lines, and was running into an issue where it seemed to suppress other issues from being reported.
+  * Removed `tests/console-application.php`, since it was a requirement for phpstan-symfony.
+
 ### TODO
 
   * The new `--show-files` option is not yet supported in `CoverageCheck::nonConsoleCall()`.
@@ -60,7 +67,7 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 90
 
 ## [1.0.0] - 2024-03-26
 
-This intial version is forked from [rregeer/phpunit-coverage-check](https://github.com/richardregeer/phpunit-coverage-check/) by [Richard Regeer](https://github.com/richardregeer). This is the CHANGELOG for changes in comparison to the original library.
+This initial version is forked from [rregeer/phpunit-coverage-check](https://github.com/richardregeer/phpunit-coverage-check/) by [Richard Regeer](https://github.com/richardregeer). This is the CHANGELOG for changes in comparison to the original library.
 
 ### Added
 

@@ -29,6 +29,21 @@ use function getenv;
 final class Application extends BaseApplication
 {
     /**
+     * Application / library name. (used in the Console Application).
+     */
+    public const APPLICATION_NAME = 'PHPUnit Coverage Check';
+
+    /**
+     * Current library version. (used in the Console Application).
+     */
+    public const VERSION = '2.0.0';
+
+    public function __construct()
+    {
+        parent::__construct(self::APPLICATION_NAME, self::VERSION);
+    }
+
+    /**
      * Same as {@see self::getDefaultInputDefinition()}, but overriding configureIO().
      *
      * @see \Symfony\Component\Console\Application::configureIO()

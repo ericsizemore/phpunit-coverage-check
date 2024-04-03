@@ -62,7 +62,7 @@ class CoverageCheckTest extends TestCase
         $this->coverageCheck->setOnlyPercentage(true);
         self::assertTrue($this->coverageCheck->getOnlyPercentage());
 
-        $this->coverageCheck->setOnlyPercentage(false);
+        $this->coverageCheck->setOnlyPercentage();
         self::assertFalse($this->coverageCheck->getOnlyPercentage());
     }
 
@@ -80,7 +80,7 @@ class CoverageCheckTest extends TestCase
 
     public function testNonConsoleCallInvalid(): void
     {
-        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 100);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid']);
         self::assertSame('[ERROR] Total code coverage is 90.32% which is below the accepted 100%', $results);
     }
 

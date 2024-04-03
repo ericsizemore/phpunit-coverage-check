@@ -64,9 +64,9 @@ class CoverageCheckCommandTest extends TestCase
         ];
 
         $coverageCheckCommand = new CoverageCheckCommand(new CoverageCheck());
-        $commandName          = $coverageCheckCommand->getName();
+        $commandName          = $coverageCheckCommand->getName() ?? 'coverage:check';
 
-        $this->application = new Application(CoverageCheck::APPLICATION_NAME, CoverageCheck::VERSION);
+        $this->application = new Application();
         $this->application->setAutoExit(false);
         $this->application->add($coverageCheckCommand);
         $this->application->setDefaultCommand($commandName, true);

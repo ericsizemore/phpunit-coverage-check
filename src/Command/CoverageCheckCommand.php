@@ -93,12 +93,18 @@ class CoverageCheckCommand extends Command
         /** @var string $threshold */
         $threshold = $input->getArgument('threshold');
 
+        /** @var bool $onlyPercentage */
+        $onlyPercentage = $input->getOption('only-percentage');
+
+        /** @var bool $showFiles */
+        $showFiles = $input->getOption('show-files');
+
         $this->coverageCheck->setCloverFile($cloverFile)
             ->setThreshold((int) $threshold)
-            ->setOnlyPercentage($input->getOption('only-percentage'));
+            ->setOnlyPercentage($onlyPercentage);
 
         try {
-            $result = $input->getOption('show-files') ? $this->coverageCheck->processByFile() : $this->coverageCheck->process();
+            $result = $showFiles ? $this->coverageCheck->processByFile() : $this->coverageCheck->process();
         } catch (Throwable $throwable) {
             $this->coverageCheckStyle->error($throwable->getMessage());
 
