@@ -74,9 +74,14 @@ final class Utils
     }
 
     /**
-     * @throws RuntimeException
+     * Handles parsing the XML data returned by CoverageCheck::loadMetrics().
+     *
+     * Attempts to gather any potential errors returned by SimpleXml/LibXml and wrap them
+     * in a RuntimeException.
+     *
+     * @throws RuntimeException For any xml parser related errors.
      */
-    public static function parseXml(string $xmlData): SimpleXmlElement
+    public static function parseXml(string $xmlData): SimpleXMLElement
     {
         static $errorLevels = [
             LIBXML_ERR_WARNING => 'Warning',
@@ -87,7 +92,7 @@ final class Utils
         libxml_use_internal_errors(true);
 
         try {
-            $xml = new SimpleXmlElement($xmlData);
+            $xml = new SimpleXMLElement($xmlData);
         } catch (Exception) {
             $errorMessage = PHP_EOL;
 

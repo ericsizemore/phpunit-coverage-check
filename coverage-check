@@ -24,7 +24,7 @@ declare(strict_types=1);
     $loader = null;
 
     foreach ($possibleLocations as $possibleLocation) {
-        if (\file_exists($possibleLocation)) {
+        if (file_exists($possibleLocation)) {
             $loader = $possibleLocation;
 
             break;
@@ -32,7 +32,7 @@ declare(strict_types=1);
     }
 
     if ($loader === null) {
-        throw new \RuntimeException(\sprintf(
+        throw new RuntimeException(sprintf(
             'You must set up the project dependencies, run the following commands:%1$s' .
             'curl -sS https://getcomposer.org/installer | php%1$s' .
             'php composer.phar install%1$s',

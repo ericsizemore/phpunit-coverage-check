@@ -22,8 +22,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-use function dirname;
-
 /**
  * @internal
  */
@@ -43,12 +41,13 @@ class CoverageCheckTest extends TestCase
     {
         $this->coverageCheck = new CoverageCheck();
         self::$fixtures      = [
-            'valid'        => dirname(__FILE__, 2) . '/fixtures/clover.xml',
-            'notexist'     => dirname(__FILE__, 2) . '/fixtures/clovr.xml',
-            'empty'        => dirname(__FILE__, 2) . '/fixtures/empty.xml',
-            'invalid_root' => dirname(__FILE__, 2) . '/fixtures/invalid_root_element.xml',
-            'no_children'  => dirname(__FILE__, 2) . '/fixtures/no_children.xml',
-            'no_metrics'   => dirname(__FILE__, 2) . '/fixtures/no_project_metrics.xml',
+            'valid'        => \dirname(__FILE__, 2) . '/fixtures/clover.xml',
+            'notexist'     => \dirname(__FILE__, 2) . '/fixtures/clovr.xml',
+            'empty'        => \dirname(__FILE__, 2) . '/fixtures/empty.xml',
+            'invalid_root' => \dirname(__FILE__, 2) . '/fixtures/invalid_root_element.xml',
+            'invalid_xml'  => \dirname(__FILE__, 2) . '/fixtures/invalid_xml.xml',
+            'no_children'  => \dirname(__FILE__, 2) . '/fixtures/no_children.xml',
+            'no_metrics'   => \dirname(__FILE__, 2) . '/fixtures/no_project_metrics.xml',
         ];
     }
 
@@ -130,7 +129,9 @@ class CoverageCheckTest extends TestCase
     public function testParseXmlErrors(): void
     {
         $this->expectException(RuntimeException::class);
-        Utils::parseXml('<clover></clove>');
+
+        $xml = (string) file_get_contents(self::$fixtures['invalid_xml']);
+        Utils::parseXml($xml);
     }
 
     public function testSetCloverFileThatDoesNotExist(): void

@@ -20,12 +20,11 @@ use RuntimeException;
 use SimpleXMLElement;
 
 use function array_map;
-use function count;
 use function file_get_contents;
 use function sprintf;
 
 /**
- * @see \Esi\CoverageCheck\Command\CoverageCheckCommand
+ * @see Command\CoverageCheckCommand
  */
 class CoverageCheck
 {
@@ -61,6 +60,10 @@ class CoverageCheck
     protected bool $onlyPercentage = false;
 
     protected int $threshold = 100;
+
+    /**
+     * Simple getters.
+     */
 
     public function getCloverFile(): string
     {
@@ -143,6 +146,10 @@ class CoverageCheck
     }
 
     /**
+     * Parses the clover xml file for coverage metrics by file.
+     *
+     * @see self::loadMetrics()
+     *
      * @return false|array{
      *     totalCoverage: float|int,
      *     fileMetrics: array<string, array{elements: int, coveredElements: int, percentage: int}>
@@ -177,10 +184,10 @@ class CoverageCheck
         }
 
         if ($totalCoverage !== 0) {
-            $totalCoverage /= count($fileMetrics);
+            $totalCoverage /= \count($fileMetrics);
         }
 
-        if (count($fileMetrics) < 1) {
+        if (\count($fileMetrics) < 1) {
             return false;
         }
 
@@ -189,6 +196,10 @@ class CoverageCheck
             'fileMetrics'   => $fileMetrics,
         ];
     }
+
+    /**
+     * Simple setters.
+     */
 
     /**
      * @throws InvalidArgumentException If the given file is empty or does not exist.
@@ -232,8 +243,6 @@ class CoverageCheck
      *
      * @internal
      *
-     * @codeCoverageIgnore
-     *
      * @return array<SimpleXMLElement> | false | null
      *
      * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
@@ -243,9 +252,11 @@ class CoverageCheck
     {
         $cloverData = file_get_contents($this->cloverFile);
 
+        //@codeCoverageIgnoreStart
         if ($cloverData === false || $cloverData === '') {
             throw new RuntimeException(sprintf('Failed to get the contents of %s', $this->cloverFile));
         }
+        //@codeCoverageIgnoreEnd
 
         $xml = Utils::parseXml($cloverData);
 

@@ -26,7 +26,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
-use function dirname;
 use function preg_replace;
 use function str_replace;
 use function trim;
@@ -55,13 +54,13 @@ class CoverageCheckCommandTest extends TestCase
     protected function setUp(): void
     {
         self::$fixtures = [
-            'valid'        => dirname(__FILE__, 3) . '/fixtures/clover.xml',
-            'notexist'     => dirname(__FILE__, 3) . '/fixtures/clovr.xml',
-            'empty'        => dirname(__FILE__, 3) . '/fixtures/empty.xml',
-            'invalid_root' => dirname(__FILE__, 3) . '/fixtures/invalid_root_element.xml',
-            'no_children'  => dirname(__FILE__, 3) . '/fixtures/no_children.xml',
-            'no_metrics'   => dirname(__FILE__, 3) . '/fixtures/no_project_metrics.xml',
-            'thisLibrary'  => dirname(__FILE__, 3) . '/fixtures/self_clover.xml',
+            'valid'        => \dirname(__FILE__, 3) . '/fixtures/clover.xml',
+            'notexist'     => \dirname(__FILE__, 3) . '/fixtures/clovr.xml',
+            'empty'        => \dirname(__FILE__, 3) . '/fixtures/empty.xml',
+            'invalid_root' => \dirname(__FILE__, 3) . '/fixtures/invalid_root_element.xml',
+            'no_children'  => \dirname(__FILE__, 3) . '/fixtures/no_children.xml',
+            'no_metrics'   => \dirname(__FILE__, 3) . '/fixtures/no_project_metrics.xml',
+            'thisLibrary'  => \dirname(__FILE__, 3) . '/fixtures/self_clover.xml',
         ];
 
         $coverageCheckCommand = new CoverageCheckCommand(new CoverageCheck());
