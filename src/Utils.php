@@ -75,6 +75,10 @@ final class Utils
      * Attempts to gather any potential errors returned by SimpleXml/LibXml and wrap them
      * in a RuntimeException.
      *
+     * @see https://www.php.net/SimpleXMLElement
+     * @see https://www.php.net/libxml_use_internal_errors
+     * @see https://www.php.net/libxml_get_errors
+     *
      * @throws RuntimeException For any xml parser related errors.
      */
     public static function parseXml(string $xmlData): SimpleXMLElement

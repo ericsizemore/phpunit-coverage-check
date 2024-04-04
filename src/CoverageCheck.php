@@ -118,11 +118,11 @@ class CoverageCheck
      */
     public function process(): float | false
     {
-        $metrics = $this->loadMetrics();
+        $metrics = $this->loadMetrics() ?? false;
 
         // Ignoring coverage here as theoretically this should not happen
         //@codeCoverageIgnoreStart
-        if ($metrics === null || $metrics === false) {
+        if ($metrics === false) {
             return false;
         }
         //@codeCoverageIgnoreEnd
@@ -157,7 +157,7 @@ class CoverageCheck
      * @since 2.0.0
      *
      * @return false|array{
-     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: int}>,
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
      *     totalCoverage: float|int
      * }
      *
@@ -168,11 +168,11 @@ class CoverageCheck
         $fileMetrics   = [];
         $totalCoverage = 0;
 
-        $metrics = $this->loadMetrics(self::XPATH_FILES);
+        $metrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
 
         // Ignoring coverage here as theoretically this should not happen
         //@codeCoverageIgnoreStart
-        if ($metrics === null || $metrics === false) {
+        if ($metrics === false) {
             return false;
         }
         //@codeCoverageIgnoreEnd
@@ -187,27 +187,31 @@ class CoverageCheck
 
         foreach ($metrics as $file) {
             $coveredMetrics = (int) ($file->metrics['coveredconditionals'] + $file->metrics['coveredstatements'] + $file->metrics['coveredmethods']);
-            $totalMetrics   = (int) ($file->metrics['conditionals'] + $file->metrics['statements'] + $file->metrics['methods']);
 
             if ($coveredMetrics === 0) {
                 continue;
             }
 
-            $fileMetrics[(string) $file['name']] = [
+            $totalMetrics       = (int) ($file->metrics['conditionals'] + $file->metrics['statements'] + $file->metrics['methods']);
+            $coveragePercentage = $coveredMetrics / $totalMetrics * 100;
+            $totalCoverage += $coveragePercentage;
+            $fileName = (string) $file['name'];
+
+            $fileMetrics[$fileName] = [
                 'coveredMetrics' => $coveredMetrics,
                 'totalMetrics'   => $totalMetrics,
-                'percentage'     => $coveredMetrics / $totalMetrics * 100,
+                'percentage'     => $coveragePercentage,
             ];
+        }
 
-            $totalCoverage += $fileMetrics[(string) $file['name']]['percentage'];
+        $fileCount = \count($fileMetrics);
+
+        if ($fileCount === 0) {
+            return false;
         }
 
         if ($totalCoverage !== 0) {
-            $totalCoverage /= \count($fileMetrics);
-        }
-
-        if (\count($fileMetrics) < 1) {
-            return false;
+            $totalCoverage /= $fileCount;
         }
 
         return [
@@ -256,11 +260,11 @@ class CoverageCheck
     }
 
     /**
-     * Loads the clover xml data and runs XML Xpath query with self::XPATH_METRICS.
-     *
-     * @see https://www.php.net/SimpleXMLElement
+     * Loads the clover xml data and runs a XML Xpath query.
      *
      * @internal
+     *
+     * @param self::XPATH_* $xpath
      *
      * @return array<SimpleXMLElement> | false | null
      *

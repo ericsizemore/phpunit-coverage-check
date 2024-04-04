@@ -129,8 +129,8 @@ class CoverageCheckCommand extends Command
 
     /**
      * @param array{
-     *     totalCoverage: float|int,
-     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: int}>
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
+     *     totalCoverage: float|int
      * } $result
      */
     private function getFileTable(array $result): int
