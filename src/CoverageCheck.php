@@ -30,6 +30,8 @@ class CoverageCheck
 {
     /**
      * Xpath expression for getting each file's data in a clover report.
+     *
+     * @since 2.0.0
      */
     protected const XPATH_FILES = '//file';
 
@@ -125,25 +127,41 @@ class CoverageCheck
         }
         //@codeCoverageIgnoreEnd
 
+        /**
+         * According to Atlassian:
+         *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+         *
+         * Though it appears elements + coveredelements should work the same, I am reverting back to Atlassian's
+         * calculation.
+         */
+
         $metrics = (array) $metrics[0];
         $metrics = array_map('intval', $metrics['@attributes']);
 
-        if ($metrics['elements'] === 0) {
+        $coveredMetrics = $metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods'];
+        $totalMetrics   = $metrics['conditionals'] + $metrics['statements'] + $metrics['methods'];
+
+        unset($metrics);
+
+        if ($coveredMetrics === 0) {
             return false;
         }
 
-        return $metrics['coveredelements'] / $metrics['elements'] * 100;
+        return $coveredMetrics / $totalMetrics * 100;
     }
 
     /**
      * Parses the clover xml file for coverage metrics by file.
      *
      * @see self::loadMetrics()
+     * @since 2.0.0
      *
      * @return false|array{
-     *     totalCoverage: float|int,
-     *     fileMetrics: array<string, array{elements: int, coveredElements: int, percentage: int}>
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: int}>,
+     *     totalCoverage: float|int
      * }
+     *
+     * @todo Could possibly clean this up a bit.
      */
     public function processByFile(): false | array
     {
@@ -159,15 +177,26 @@ class CoverageCheck
         }
         //@codeCoverageIgnoreEnd
 
+        /**
+         * According to Atlassian:
+         *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+         *
+         * Though it appears elements + coveredelements should work the same, I am reverting back to Atlassian's
+         * calculation.
+         */
+
         foreach ($metrics as $file) {
-            if ((int) $file->metrics['elements'] === 0) {
+            $coveredMetrics = (int) ($file->metrics['coveredconditionals'] + $file->metrics['coveredstatements'] + $file->metrics['coveredmethods']);
+            $totalMetrics   = (int) ($file->metrics['conditionals'] + $file->metrics['statements'] + $file->metrics['methods']);
+
+            if ($coveredMetrics === 0) {
                 continue;
             }
 
             $fileMetrics[(string) $file['name']] = [
-                'elements'        => (int) $file->metrics['elements'],
-                'coveredElements' => (int) $file->metrics['coveredelements'],
-                'percentage'      => (int) $file->metrics['coveredelements'] / (int) $file->metrics['elements'] * 100,
+                'coveredMetrics' => $coveredMetrics,
+                'totalMetrics'   => $totalMetrics,
+                'percentage'     => $coveredMetrics / $totalMetrics * 100,
             ];
 
             $totalCoverage += $fileMetrics[(string) $file['name']]['percentage'];
@@ -182,8 +211,8 @@ class CoverageCheck
         }
 
         return [
-            'totalCoverage' => $totalCoverage,
             'fileMetrics'   => $fileMetrics,
+            'totalCoverage' => $totalCoverage,
         ];
     }
 

@@ -130,14 +130,14 @@ class CoverageCheckCommand extends Command
     /**
      * @param array{
      *     totalCoverage: float|int,
-     *     fileMetrics: array<string, array{elements: int, coveredElements: int, percentage: int}>
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: int}>
      * } $result
      */
     private function getFileTable(array $result): int
     {
         $threshold     = $this->coverageCheck->getThreshold();
         $tableRows     = [];
-        $totalElements = ['coveredElements' => 0, 'elements' => 0];
+        $totalElements = ['coveredMetrics' => 0, 'totalMetrics' => 0];
         $metrics       = $result['fileMetrics'];
         $totalCoverage = $result['totalCoverage'];
 
@@ -148,21 +148,21 @@ class CoverageCheckCommand extends Command
 
             $tableRows[] = [
                 $name,
-                sprintf('%d/%d', $file['coveredElements'], $file['elements']),
+                sprintf('%d/%d', $file['coveredMetrics'], $file['totalMetrics']),
                 new TableCell(
                     Utils::formatCoverage($file['percentage']),
                     ['style' => new TableCellStyle(['cellFormat' => $cellFormat,])]
                 ),
             ];
 
-            $totalElements['coveredElements'] += $file['coveredElements'];
-            $totalElements['elements']        += $file['elements'];
+            $totalElements['coveredMetrics'] += $file['coveredMetrics'];
+            $totalElements['totalMetrics']   += $file['totalMetrics'];
         }
 
         $tableRows[] = new TableSeparator();
         $tableRows[] = [
             'Overall Totals',
-            sprintf('%d/%d', $totalElements['coveredElements'], $totalElements['elements']),
+            sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
             new TableCell(
                 Utils::formatCoverage($totalCoverage),
                 ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>',])]

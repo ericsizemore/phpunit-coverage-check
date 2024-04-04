@@ -32,7 +32,6 @@ $ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 90
 # after
 $ php vendor/bin/coverage-check /path/to/clover.xml 90
 ```
-  * `CoverageCheck::process` now simply relies on `elements` and `coveredelements` for totals.
   * `CoverageCheck::loadMetrics` can now throw a `RuntimeException` if `file_get_contents` fails for whatever reason or if the new `isPossiblyClover` returns false.
     * With the addition of the new `--show-files` option and related additions, the `CoverageCheck::loadMetrics()` now has one parameter: `$xpath`.
   * Class const `XPATH_METRICS` now has `protected` visibility.

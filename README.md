@@ -28,6 +28,11 @@ Please see [License](#license) and the [LICENSE](LICENSE) file for more informat
 For more information on changes made in this library, in comparison to the original by Richard Regeer, please see the [CHANGELOG](CHANGELOG.md) file.
 
 
+## Important Note
+
+This project is not in any way an official ``PHPUnit`` project. Meaning, that it is not associated with, or endorsed by, the ``PHPUnit`` project or its author ``Sebastian Bergmann``.
+
+
 ## Something I'd like to note...
 
 Symfony in general, and Symfony\Console specifically, is not my forte; neither are Phar files.
@@ -66,6 +71,15 @@ gpg --keyserver hkps://keys.openpgp.org --recv-keys F8367C6E9D7A7028292144AAC9D8
 rm phpunit-coverage-check.phar.asc
 chmod +x phpunit-coverage-check.phar
 ```
+
+The Phar files of *PHPUnit Coverage Check* are signed with a public key associated to ``admin@secondversion.com.``.
+The [`key(s) associated with this E-Mail address`](https://keys.openpgp.org/search?q=admin%40secondversion.com) can be queried at [`keys.openpgp.org`](https://keys.openpgp.org/).
+
+#### Install with Phive
+
+You can also install the *PHPUnit Coverage Check* Phar with `Phive`.
+
+If not already using Phive, you can read more about it [here](https://phar.io/), also Phive [installation](https://phar.io/#Install) and [usage](https://phar.io/#Usage).
 
 
 ## Usage
