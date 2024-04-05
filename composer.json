@@ -32,6 +32,20 @@
         "source": "https://github.com/ericsizemore/phpunit-coverage-check/tree/master",
         "security": "https://github.com/ericsizemore/phpunit-coverage-check/security/policy"
     },
+    "funding": [
+        {
+            "type": "custom",
+            "url": "https://ko-fi.com/ericsizemore"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/ericsizemore"
+        },
+        {
+            "type": "tidelift",
+            "url": "https://tidelift.com/funding/github/packagist/esi/phpunit-coverage-check"
+        }
+    ],
     "_comment": [
         "This package is also offered as a Phar binary, which can be downloaded from the latest",
         "release on GitHub at https://github.com/ericsizemore/phpunit-coverage-check/releases"
