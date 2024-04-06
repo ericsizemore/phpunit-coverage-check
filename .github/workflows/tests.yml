@@ -39,12 +39,13 @@ jobs:
 
       - name: "Cache Composer packages"
         id: composer-cache
+        shell: bash
         run: |
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v4
+        shell: bash
         with:
-          enableCrossOsArchive: true
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
