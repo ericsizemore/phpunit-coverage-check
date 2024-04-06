@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck\Command;
 
+use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\CoverageCheck;
 use Esi\CoverageCheck\Style\CoverageCheckStyle;
 use Esi\CoverageCheck\Utils;
@@ -34,7 +35,7 @@ use function sprintf;
 /**
  * @see \Esi\CoverageCheck\Tests\Command\CoverageCheckCommandTest
  */
-#[AsCommand(name: 'coverage:check', description: 'Reads the clover xml report from PHPUnit and calculates the coverage score.')]
+#[AsCommand(name: Application::COMMAND_NAME, description: Application::APPLICATION_DESCRIPTION)]
 class CoverageCheckCommand extends Command
 {
     private CoverageCheckStyle $coverageCheckStyle;

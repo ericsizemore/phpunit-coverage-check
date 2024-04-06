@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 |---------|--------------------|
+| 2.0.x   | :white_check_mark: |
 | 1.0.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
@@ -22,6 +23,5 @@ Once either a) a fix has been published, or b) I have declined to address the vu
 
 If you're a [Tidelift](https://tidelift.com/) subscriber, please use this route instead:
 
-To report a security vulnerability, please use the
-[Tidelift security contact](https://tidelift.com/security).
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security).
 Tidelift will coordinate the fix and disclosure.

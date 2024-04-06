@@ -111,31 +111,28 @@ class CoverageCheck
     /**
      * Parses the clover xml file for coverage metrics.
      *
-     * Inspired by: https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
-     * Calculation: https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * According to Atlassian:
+     *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+     *
+     * Though it appears elements + coveredelements should work the same, I am sticking with Atlassian's
+     * calculation.
      *
      * @see self::loadMetrics()
+     * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      */
     public function process(): float | false
     {
-        $metrics = $this->loadMetrics() ?? false;
+        $rawMetrics = $this->loadMetrics() ?? false;
 
         // Ignoring coverage here as theoretically this should not happen
         //@codeCoverageIgnoreStart
-        if ($metrics === false) {
+        if ($rawMetrics === false) {
             return false;
         }
         //@codeCoverageIgnoreEnd
 
-        /**
-         * According to Atlassian:
-         *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
-         *
-         * Though it appears elements + coveredelements should work the same, I am reverting back to Atlassian's
-         * calculation.
-         */
-
-        $metrics = (array) $metrics[0];
+        $metrics = (array) $rawMetrics[0];
         $metrics = array_map('intval', $metrics['@attributes']);
 
         $coveredMetrics = $metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods'];
@@ -143,7 +140,7 @@ class CoverageCheck
 
         unset($metrics);
 
-        if ($coveredMetrics === 0) {
+        if ($totalMetrics === 0) {
             return false;
         }
 
@@ -153,7 +150,15 @@ class CoverageCheck
     /**
      * Parses the clover xml file for coverage metrics by file.
      *
+     * According to Atlassian:
+     *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+     *
+     * Though it appears elements + coveredelements should work the same, I am sticking with Atlassian's
+     * calculation.
+     *
      * @see self::loadMetrics()
+     * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      * @since 2.0.0
      *
      * @return false|array{
@@ -168,36 +173,30 @@ class CoverageCheck
         $fileMetrics   = [];
         $totalCoverage = 0;
 
-        $metrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
+        $rawMetrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
 
         // Ignoring coverage here as theoretically this should not happen
         //@codeCoverageIgnoreStart
-        if ($metrics === false) {
+        if ($rawMetrics === false) {
             return false;
         }
         //@codeCoverageIgnoreEnd
 
-        /**
-         * According to Atlassian:
-         *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
-         *
-         * Though it appears elements + coveredelements should work the same, I am reverting back to Atlassian's
-         * calculation.
-         */
+        foreach ($rawMetrics as $file) {
+            $metrics = (array) $file->metrics;
+            $metrics = array_map('intval', $metrics['@attributes']);
 
-        foreach ($metrics as $file) {
-            $coveredMetrics = (int) ($file->metrics['coveredconditionals'] + $file->metrics['coveredstatements'] + $file->metrics['coveredmethods']);
+            $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
+            $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
 
-            if ($coveredMetrics === 0) {
+            if ($totalMetrics === 0) {
                 continue;
             }
 
-            $totalMetrics       = (int) ($file->metrics['conditionals'] + $file->metrics['statements'] + $file->metrics['methods']);
             $coveragePercentage = $coveredMetrics / $totalMetrics * 100;
             $totalCoverage += $coveragePercentage;
-            $fileName = (string) $file['name'];
 
-            $fileMetrics[$fileName] = [
+            $fileMetrics[(string) $file['name']] = [
                 'coveredMetrics' => $coveredMetrics,
                 'totalMetrics'   => $totalMetrics,
                 'percentage'     => $coveragePercentage,
@@ -260,7 +259,7 @@ class CoverageCheck
     }
 
     /**
-     * Loads the clover xml data and runs a XML Xpath query.
+     * Loads the clover xml data and runs an XML Xpath query.
      *
      * @internal
      *

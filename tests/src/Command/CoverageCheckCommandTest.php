@@ -19,6 +19,7 @@ use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
 use Esi\CoverageCheck\Style\CoverageCheckStyle;
+use Esi\CoverageCheck\Utils;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,7 @@ use const PHP_EOL;
 #[CoversClass(Application::class)]
 #[CoversClass(CoverageCheckStyle::class)]
 #[CoversClass(CoverageCheck::class)]
+#[CoversClass(Utils::class)]
 class CoverageCheckCommandTest extends TestCase
 {
     protected Application $application;
@@ -336,6 +338,9 @@ class CoverageCheckCommandTest extends TestCase
         self::assertSame(Command::FAILURE, $this->tester->getStatusCode());
     }
 
+    /**
+     * Could probably be done better, but it works.
+     */
     protected static function stripWhitespace(string $output): string
     {
         $output = (string) preg_replace('#\h{2,}#', '', $output);

@@ -29,15 +29,19 @@ use function getenv;
 final class Application extends BaseApplication
 {
     /**
-     * Application / library name. (used in the Console Application).
+     * Constants used in the Console Application for library information.
      */
+    public const APPLICATION_DESCRIPTION = 'Reads the clover xml report from PHPUnit and calculates the coverage score.';
+
     public const APPLICATION_NAME = 'PHPUnit Coverage Check';
 
-    /**
-     * Current library version. (used in the Console Application).
-     */
+    public const COMMAND_NAME = 'coverage:check';
+
     public const VERSION = '2.0.0';
 
+    /**
+     * Override constructor.
+     */
     public function __construct()
     {
         parent::__construct(self::APPLICATION_NAME, self::VERSION);
