@@ -30,8 +30,8 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
            php-version: "${{ matrix.php-version }}"
-           extensions: mbstring, 
-           coverage: xdebug,
+           extensions: mbstring
+           coverage: xdebug
            tools: composer:v2
 
       - name: "Validate composer.json and composer.lock"
