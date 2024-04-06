@@ -932,12 +932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "9782155324211694dd6593e2faf7d4458440e45b"
+                "reference": "5175075bb98f8e9182a9f005b3eae6d0c1c44a5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/9782155324211694dd6593e2faf7d4458440e45b",
-                "reference": "9782155324211694dd6593e2faf7d4458440e45b",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/5175075bb98f8e9182a9f005b3eae6d0c1c44a5c",
+                "reference": "5175075bb98f8e9182a9f005b3eae6d0c1c44a5c",
                 "shasum": ""
             },
             "require": {
@@ -1018,7 +1018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-27T07:57:31+00:00"
+            "time": "2024-04-05T12:46:04+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1261,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a72400bfc4a3b3e6471d6c26a9235b6322462744"
+                "reference": "c80f35e6bf6299d2b0c9335e7e870ff89fd45697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a72400bfc4a3b3e6471d6c26a9235b6322462744",
-                "reference": "a72400bfc4a3b3e6471d6c26a9235b6322462744",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c80f35e6bf6299d2b0c9335e7e870ff89fd45697",
+                "reference": "c80f35e6bf6299d2b0c9335e7e870ff89fd45697",
                 "shasum": ""
             },
             "require": {
@@ -1310,13 +1310,9 @@
                 {
                     "url": "https://github.com/phpstan",
                     "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
                 }
             ],
-            "time": "2024-04-03T19:06:52+00:00"
+            "time": "2024-04-05T14:23:22+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
