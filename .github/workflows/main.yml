@@ -43,6 +43,7 @@ jobs:
 
       - uses: actions/cache@v4
         with:
+          enableCrossOsArchive: true
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
