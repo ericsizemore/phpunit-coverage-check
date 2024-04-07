@@ -932,12 +932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "5175075bb98f8e9182a9f005b3eae6d0c1c44a5c"
+                "reference": "c825d7c600215b94f55d9ce09bbbdfd5e449759e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/5175075bb98f8e9182a9f005b3eae6d0c1c44a5c",
-                "reference": "5175075bb98f8e9182a9f005b3eae6d0c1c44a5c",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/c825d7c600215b94f55d9ce09bbbdfd5e449759e",
+                "reference": "c825d7c600215b94f55d9ce09bbbdfd5e449759e",
                 "shasum": ""
             },
             "require": {
@@ -1018,7 +1018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-05T12:46:04+00:00"
+            "time": "2024-04-06T19:15:16+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1261,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c80f35e6bf6299d2b0c9335e7e870ff89fd45697"
+                "reference": "8ff5626705253103d249dabc55f845f9bbc6cc85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c80f35e6bf6299d2b0c9335e7e870ff89fd45697",
-                "reference": "c80f35e6bf6299d2b0c9335e7e870ff89fd45697",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8ff5626705253103d249dabc55f845f9bbc6cc85",
+                "reference": "8ff5626705253103d249dabc55f845f9bbc6cc85",
                 "shasum": ""
             },
             "require": {
@@ -1312,7 +1312,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-05T14:23:22+00:00"
+            "time": "2024-04-06T14:21:32+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -1373,12 +1373,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-strict-rules.git",
-                "reference": "b5233d58637aadee4428961365196b205b557844"
+                "reference": "1a51fae7892bf7488cc7edf106ad579235bf53a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/b5233d58637aadee4428961365196b205b557844",
-                "reference": "b5233d58637aadee4428961365196b205b557844",
+                "url": "https://api.github.com/repos/phpstan/phpstan-strict-rules/zipball/1a51fae7892bf7488cc7edf106ad579235bf53a0",
+                "reference": "1a51fae7892bf7488cc7edf106ad579235bf53a0",
                 "shasum": ""
             },
             "require": {
@@ -1415,7 +1415,7 @@
                 "issues": "https://github.com/phpstan/phpstan-strict-rules/issues",
                 "source": "https://github.com/phpstan/phpstan-strict-rules/tree/1.6.x"
             },
-            "time": "2024-04-03T12:37:37+00:00"
+            "time": "2024-04-06T07:45:29+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
