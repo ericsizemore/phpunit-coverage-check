@@ -2,16 +2,6 @@
 
 declare(strict_types=1);
 
-/**
- * This file is part of PHPUnit Coverage Check.
- *
- * (c) Eric Sizemore <admin@secondversion.com>
- * (c) Richard Regeer <rich2309@gmail.com>
- *
- * This source file is subject to the MIT license. For the full copyright,
- * license information, and credits/acknowledgements, please view the LICENSE
- * and README files that were distributed with this source code.
- */
 $header = <<<'EOF'
     This file is part of PHPUnit Coverage Check.
 
@@ -110,7 +100,7 @@ $config
         PhpCsFixer\Finder::create()
             ->in(__DIR__ . '/src')
             ->in(__DIR__ . '/tests')
-            ->append([__DIR__ . '/coverage-check', __DIR__ . '/.php-cs-fixer.dist.php'])
+            ->append([__DIR__ . '/coverage-check'])
     )
 ;
 

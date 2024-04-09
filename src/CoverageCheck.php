@@ -135,6 +135,8 @@ class CoverageCheck
         $metrics = (array) $rawMetrics[0];
         $metrics = array_map('intval', $metrics['@attributes']);
 
+        unset($rawMetrics);
+
         $coveredMetrics = $metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods'];
         $totalMetrics   = $metrics['conditionals'] + $metrics['statements'] + $metrics['methods'];
 
@@ -202,6 +204,8 @@ class CoverageCheck
                 'percentage'     => $coveragePercentage,
             ];
         }
+
+        unset($rawMetrics);
 
         $fileCount = \count($fileMetrics);
 
