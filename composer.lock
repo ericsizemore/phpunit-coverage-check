@@ -932,12 +932,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "c825d7c600215b94f55d9ce09bbbdfd5e449759e"
+                "reference": "6d376f7850e17be454bd3e7c9ad08ffa59612886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/c825d7c600215b94f55d9ce09bbbdfd5e449759e",
-                "reference": "c825d7c600215b94f55d9ce09bbbdfd5e449759e",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/6d376f7850e17be454bd3e7c9ad08ffa59612886",
+                "reference": "6d376f7850e17be454bd3e7c9ad08ffa59612886",
                 "shasum": ""
             },
             "require": {
@@ -1018,7 +1018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-06T19:15:16+00:00"
+            "time": "2024-04-08T21:04:24+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1261,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "8ff5626705253103d249dabc55f845f9bbc6cc85"
+                "reference": "a370d5461dbdda49f61201486a37ff3dbad1c47d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8ff5626705253103d249dabc55f845f9bbc6cc85",
-                "reference": "8ff5626705253103d249dabc55f845f9bbc6cc85",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a370d5461dbdda49f61201486a37ff3dbad1c47d",
+                "reference": "a370d5461dbdda49f61201486a37ff3dbad1c47d",
                 "shasum": ""
             },
             "require": {
@@ -1312,7 +1312,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-06T14:21:32+00:00"
+            "time": "2024-04-09T07:53:55+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
