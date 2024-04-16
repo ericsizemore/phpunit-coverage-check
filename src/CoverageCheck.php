@@ -25,6 +25,7 @@ use function sprintf;
 
 /**
  * @see Command\CoverageCheckCommand
+ * @see Tests\CoverageCheckTest
  */
 class CoverageCheck
 {

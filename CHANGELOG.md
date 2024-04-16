@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+  * Minimum PHP version increased to 8.2.
+    * Symfony minimum ^7.0
+    * PHPUnit minimum ^11.0
   * The use of `coverage:check` when calling the Phar or the bin file is no longer needed.
 ```bash
 # before

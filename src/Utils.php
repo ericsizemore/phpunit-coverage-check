@@ -23,6 +23,7 @@ use function file_exists;
 use function libxml_clear_errors;
 use function libxml_get_errors;
 use function libxml_use_internal_errors;
+use function property_exists;
 use function sprintf;
 use function trim;
 
@@ -60,7 +61,11 @@ final class Utils
 
         $hasChildren = $xml->children();
 
-        if (!isset($hasChildren->project, $hasChildren->project->metrics) || (array) $hasChildren->project->metrics === []) {
+        if (
+            !property_exists($hasChildren, 'project')
+            || !property_exists($hasChildren->project, 'metrics')
+            || (array) $hasChildren->project->metrics === []
+        ) {
             return false;
         }
 

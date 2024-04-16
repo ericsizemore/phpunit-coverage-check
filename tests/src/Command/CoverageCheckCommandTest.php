@@ -83,7 +83,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 90,
         ]);
 
-        self::assertEquals(self::$fixtures['invalid_root'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['invalid_root'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -100,7 +100,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 90,
         ]);
 
-        self::assertEquals(self::$fixtures['no_children'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['no_children'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -117,7 +117,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 90,
         ]);
 
-        self::assertEquals(self::$fixtures['no_metrics'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['no_metrics'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -167,7 +167,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 90,
         ]);
 
-        self::assertEquals(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -185,7 +185,7 @@ class CoverageCheckCommandTest extends TestCase
             '--only-percentage' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
         self::assertTrue($this->tester->getInput()->getOption('only-percentage'));
 
@@ -203,7 +203,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 100,
         ]);
 
-        self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(100, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -221,7 +221,7 @@ class CoverageCheckCommandTest extends TestCase
             '--only-percentage' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(100, $this->tester->getInput()->getArgument('threshold'));
         self::assertTrue($this->tester->getInput()->getOption('only-percentage'));
 
@@ -239,7 +239,7 @@ class CoverageCheckCommandTest extends TestCase
             'threshold'  => 90,
         ]);
 
-        self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame(
@@ -257,7 +257,7 @@ class CoverageCheckCommandTest extends TestCase
             '--only-percentage' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
         self::assertTrue($this->tester->getInput()->getOption('only-percentage'));
 
@@ -276,7 +276,7 @@ class CoverageCheckCommandTest extends TestCase
             '--show-files' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['thisLibrary'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['thisLibrary'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
@@ -305,7 +305,7 @@ class CoverageCheckCommandTest extends TestCase
             '--show-files' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
@@ -331,7 +331,7 @@ class CoverageCheckCommandTest extends TestCase
             '--show-files' => true,
         ]);
 
-        self::assertEquals(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
+        self::assertSame(self::$fixtures['empty'], $this->tester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
 
         self::assertSame('[ERROR] Insufficient data for calculation. Please add more code.', trim($this->tester->getDisplay()));
