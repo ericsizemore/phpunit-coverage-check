@@ -48,7 +48,7 @@ $ composer require --dev esi/phpunit-coverage-check:^2.0
 To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0:
 
 ```bash
-$ composer require esi/phpunit-coverage-check:^1.0
+$ composer require --dev esi/phpunit-coverage-check:^1.0
 ```
 
 
