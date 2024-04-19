@@ -64,7 +64,6 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 90
 
   * The new `--show-files` option is not yet supported in `CoverageCheck::nonConsoleCall()`.
   * Cleanup, and add to, documentation throughout.
-  * Improve unit tests.
 
 
 ## [1.0.0] - 2024-03-26

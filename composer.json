@@ -57,7 +57,7 @@
         "symfony/console": "^7.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.53",
+        "friendsofphp/php-cs-fixer": "^3.54",
         "phpstan/phpstan": "^1.11",
         "phpstan/phpstan-deprecation-rules": "^1.2",
         "phpstan/phpstan-phpunit": "^1.4",

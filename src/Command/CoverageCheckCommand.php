@@ -171,7 +171,7 @@ class CoverageCheckCommand extends Command
         ];
 
         $this->coverageCheckStyle->table(
-            ['File', 'Covered Elements/Total Elements', 'Coverage'],
+            ['File', 'Elements (Covered/Total)', 'Coverage'],
             $tableRows
         );
 

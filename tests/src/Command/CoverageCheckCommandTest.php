@@ -281,17 +281,17 @@ class CoverageCheckCommandTest extends TestCase
 
         $eol = PHP_EOL;
 
-        $expected = '------------------------------------------------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  File                                                                Covered Elements/Total Elements   Coverage  ' . $eol;
-        $expected .= ' ------------------------------------------------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                    10/10                             100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   77/77                             100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                  63/63                             100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       4/4                               100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                          16/16                             100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                                                      170/170                           100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------- --------------------------------- ----------';
+        $expected  = '------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  File                                                                Elements (Covered/Total)   Coverage  ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                    10/10                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   77/77                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                  63/63                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       4/4                        100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                          16/16                      100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  Overall Totals                                                      170/170                    100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ----------';
 
         self::assertEquals($expected, trim($this->tester->getDisplay()));
         self::assertSame(Command::SUCCESS, $this->tester->getStatusCode());
@@ -310,14 +310,14 @@ class CoverageCheckCommandTest extends TestCase
 
         $eol = PHP_EOL;
 
-        $expected = '----------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  File                          Covered Elements/Total Elements   Coverage  ' . $eol;
-        $expected .= ' ----------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  /tmp/Example/String.php       36/38                             94.74%    ' . $eol;
-        $expected .= '  /tmp/Example/StringList.php   20/24                             83.33%    ' . $eol;
-        $expected .= ' ----------------------------- --------------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                56/62                             89.04%    ' . $eol;
-        $expected .= ' ----------------------------- --------------------------------- ----------';
+        $expected  = '----------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  File                          Elements (Covered/Total)   Coverage  ' . $eol;
+        $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  /tmp/Example/String.php       36/38                      94.74%    ' . $eol;
+        $expected .= '  /tmp/Example/StringList.php   20/24                      83.33%    ' . $eol;
+        $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  Overall Totals                56/62                      89.04%    ' . $eol;
+        $expected .= ' ----------------------------- -------------------------- ----------';
 
         self::assertEquals($expected, trim($this->tester->getDisplay()));
         self::assertSame(Command::FAILURE, $this->tester->getStatusCode());
