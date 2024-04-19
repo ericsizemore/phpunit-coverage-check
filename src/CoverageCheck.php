@@ -153,12 +153,7 @@ class CoverageCheck
     /**
      * Parses the clover xml file for coverage metrics by file.
      *
-     * According to Atlassian:
-     *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
-     *
-     * Though it appears elements + coveredelements should work the same, I am sticking with Atlassian's
-     * calculation.
-     *
+     * @see self::process()
      * @see self::loadMetrics()
      * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
      * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/

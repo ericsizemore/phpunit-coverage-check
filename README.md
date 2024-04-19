@@ -45,7 +45,7 @@ The script can be installed using composer. Add this repository as a dependency 
 $ composer require --dev esi/phpunit-coverage-check:^2.0
 ```
 
-To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0:
+To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage as usage is slightly different):
 
 ```bash
 $ composer require --dev esi/phpunit-coverage-check:^1.0
@@ -113,6 +113,8 @@ $ php vendor/bin/coverage-check /path/to/clover.xml 100
 $ php vendor/bin/coverage-check /path/to/clover.xml 100 --only-percentage
 # -O for only-percentage works as well
 $ php vendor/bin/coverage-check /path/to/clover.xml 100 -O
+# -F or show-files will display coverage per file, formatted in a table
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 -F
 ```
 
 You can also use the Api directly if you wish. I created a function called `nonConsoleCall` that will process and return the data, similar to how the console application displays it.
@@ -146,10 +148,48 @@ $ php phpunit-coverage-check.phar /path/to/clover.xml 100
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100 --only-percentage
 # -O for only-percentage works as well
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100 -O
+# -F or show-files will display coverage per file, formatted in a table
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 -F
 ```
 
 With `--only-percentage` (or `-O`) enabled, the CLI command will only return the resulting coverage percentage.
 
+#### --show-files
+
+With `--show-files` (or `-F`), `--only-percentage` will be ignored. This option parses the clover file for coverage information for each file in the project/package, determine coverage, and display the information in a table. For example:
+
+##### Passing coverage
+
+```bash
+$ php coverage-check build/logs/clover.xml 90 -F
+
+ ------------------------------------------------------------------- -------------------------- ----------
+  File                                                                Elements (Covered/Total)   Coverage
+ ------------------------------------------------------------------- -------------------------- ----------
+  [...]\phpunit-coverage-check\src\Application.php                    12/12                      100.00%
+  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   94/94                      100.00%
+  [...]\phpunit-coverage-check\src\CoverageCheck.php                  80/80                      100.00%
+  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       12/12                      100.00%
+  [...]\phpunit-coverage-check\src\Utils.php                          39/39                      100.00%
+ ------------------------------------------------------------------- -------------------------- ----------
+  Overall Totals                                                      237/237                    100.00%
+ ------------------------------------------------------------------- -------------------------- ----------
+```
+
+##### Mixed pass/fail coverage
+
+```bash
+$ php coverage-check tests/fixtures/clover.xml 90 -F
+
+ ----------------------------- -------------------------- ----------
+  File                          Elements (Covered/Total)   Coverage
+ ----------------------------- -------------------------- ----------
+  /tmp/Example/String.php       36/38                      94.74%
+  /tmp/Example/StringList.php   20/24                      83.33%
+ ----------------------------- -------------------------- ----------
+  Overall Totals                56/62                      89.04%
+ ----------------------------- -------------------------- ----------
+```
 
 ## About
 

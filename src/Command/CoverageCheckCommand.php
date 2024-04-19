@@ -145,20 +145,26 @@ class CoverageCheckCommand extends Command
         unset($result);
 
         foreach ($metrics as $name => $file) {
-            $cellFormat = ($file['percentage'] < $threshold) ? '<error>%s</error>' : '<info>%s</info>';
-
             $tableRows[] = [
                 $name,
                 sprintf('%d/%d', $file['coveredMetrics'], $file['totalMetrics']),
                 new TableCell(
                     Utils::formatCoverage($file['percentage']),
-                    ['style' => new TableCellStyle(['cellFormat' => $cellFormat,])]
+                    [
+                        'style' => new TableCellStyle(
+                            [
+                                'cellFormat' => ($file['percentage'] < $threshold) ? '<error>%s</error>' : '<info>%s</info>',
+                            ]
+                        ),
+                    ]
                 ),
             ];
 
             $totalElements['coveredMetrics'] += $file['coveredMetrics'];
             $totalElements['totalMetrics']   += $file['totalMetrics'];
         }
+
+        unset($metrics);
 
         $tableRows[] = new TableSeparator();
         $tableRows[] = [
@@ -175,7 +181,13 @@ class CoverageCheckCommand extends Command
             $tableRows
         );
 
-        return ($totalCoverage < $threshold) ? Command::FAILURE : Command::SUCCESS;
+        unset($tableRows);
+
+        if ($totalCoverage < $threshold) {
+            return Command::FAILURE;
+        }
+
+        return Command::SUCCESS;
     }
 
     private function getResultOutput(float $result): int

@@ -281,7 +281,7 @@ class CoverageCheckCommandTest extends TestCase
 
         $eol = PHP_EOL;
 
-        $expected  = '------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected = '------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
         $expected .= '  File                                                                Elements (Covered/Total)   Coverage  ' . $eol;
         $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
         $expected .= '  [...]\phpunit-coverage-check\src\Application.php                    10/10                      100.00%   ' . $eol;
@@ -310,7 +310,7 @@ class CoverageCheckCommandTest extends TestCase
 
         $eol = PHP_EOL;
 
-        $expected  = '----------------------------- -------------------------- ---------- ' . $eol;
+        $expected = '----------------------------- -------------------------- ---------- ' . $eol;
         $expected .= '  File                          Elements (Covered/Total)   Coverage  ' . $eol;
         $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
         $expected .= '  /tmp/Example/String.php       36/38                      94.74%    ' . $eol;
