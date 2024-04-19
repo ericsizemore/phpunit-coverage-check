@@ -45,7 +45,7 @@ The script can be installed using composer. Add this repository as a dependency 
 $ composer require --dev esi/phpunit-coverage-check:^2.0
 ```
 
-To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage as usage is slightly different):
+To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage) as usage is slightly different):
 
 ```bash
 $ composer require --dev esi/phpunit-coverage-check:^1.0
