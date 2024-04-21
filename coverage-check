@@ -13,30 +13,45 @@ declare(strict_types=1);
  * license information, and credits/acknowledgements, please view the LICENSE
  * and README files that were distributed with this source code.
  */
-$composerAutoloaders = [
-    __DIR__ . '/vendor/autoload.php', // Try the vendor directory first
-    __DIR__ . '/../../autoload.php',   // Then try the parent directory
-];
+// Attempt to load dependencies
+(static function () {
+    $possibleLocations = [
+        __DIR__ . '/../../autoload.php',
+        __DIR__ . '/../autoload.php',
+        __DIR__ . '/vendor/autoload.php',
+    ];
 
-$loader = false;
+    $loader = null;
 
-foreach ($composerAutoloaders as $autoloadFile) {
-    if (\file_exists($autoloadFile)) {
-        $loader = include $autoloadFile;
-        break;
+    foreach ($possibleLocations as $possibleLocation) {
+        if (file_exists($possibleLocation)) {
+            $loader = $possibleLocation;
+
+            break;
+        }
     }
-}
 
-if ($loader === false) {
-    die('You must set up the project dependencies, run the following commands:' . PHP_EOL .
-        'curl -sS https://getcomposer.org/installer | php' . PHP_EOL .
-        'php composer.phar install' . PHP_EOL);
-}
+    if ($loader === null) {
+        throw new RuntimeException(sprintf(
+            'You must set up the project dependencies, run the following commands:%1$s' .
+            'curl -sS https://getcomposer.org/installer | php%1$s' .
+            'php composer.phar install%1$s',
+            \PHP_EOL
+        ));
+    }
 
+    require_once $loader;
+})();
+
+// Setup application
+use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
-use Symfony\Component\Console\Application;
 
-$console = new Application('PHPUnit Coverage Check', CoverageCheck::VERSION);
-$console->add(new CoverageCheckCommand(new CoverageCheck()));
+$command     = new CoverageCheckCommand(new CoverageCheck());
+$commandName = $command->getName() ?? 'coverage:check';
+
+$console = new Application();
+$console->add($command);
+$console->setDefaultCommand($commandName, true);
 $console->run();

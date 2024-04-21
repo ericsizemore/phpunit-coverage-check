@@ -15,28 +15,31 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
-use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 use SimpleXMLElement;
 
-use function file_exists;
+use function array_map;
 use function file_get_contents;
 use function sprintf;
 
 /**
- * @see \Esi\CoverageCheck\Command\CoverageCheckCommand
+ * @see Command\CoverageCheckCommand
+ * @see Tests\CoverageCheckTest
  */
 class CoverageCheck
 {
     /**
-     * Current library version.
+     * Xpath expression for getting each file's data in a clover report.
+     *
+     * @since 2.0.0
      */
-    public const VERSION = '1.0.0';
+    protected const XPATH_FILES = '//file';
 
     /**
-     * Xpath expression for finding the metrics in a clover file.
+     * Xpath expression for getting the project total metrics in a clover report.
      */
-    public const XPATH_METRICS = '//project/metrics';
+    protected const XPATH_METRICS = '//project/metrics';
 
     /**
      * Configurable options.
@@ -45,22 +48,15 @@ class CoverageCheck
      * @see self::setThreshold()
      * @see self::setOnlyPercentage()
      */
-    protected string $cloverFile   = 'clover.xml';
+    protected string $cloverFile = 'clover.xml';
+
     protected bool $onlyPercentage = false;
-    protected int $threshold       = 100;
+
+    protected int $threshold = 100;
 
     /**
-     * Constructor. Doesn't need to do anything, at least for the moment.
+     * Simple getters.
      */
-    public function __construct() {}
-
-    /**
-     * Returns the given number formatted and rounded for percentage.
-     */
-    public static function formatCoverage(float $number): string
-    {
-        return sprintf('%0.2f %%', $number);
-    }
 
     public function getCloverFile(): string
     {
@@ -81,7 +77,7 @@ class CoverageCheck
      * Processes the coverage data with the given clover file and threshold, and returns the information
      * similar to how the Console application will.
      *
-     * This is mainly useful for those that may wish to use this library outside of the CLI/Console or PHAR.
+     * This is mainly useful for those that may wish to use this library outside the CLI/Console or PHAR.
      *
      * @throws InvalidArgumentException If the clover file does not exist, or the threshold is not within
      *                                  defined range (>= 1 <= 100).
@@ -95,58 +91,57 @@ class CoverageCheck
         $results = $this->process();
 
         if ($results === false) {
-            return 'Insufficient data for calculation. Please add more code.';
+            return '[ERROR] Insufficient data for calculation. Please add more code.';
         }
 
         if ($results < $threshold && !$onlyPercentage) {
             return sprintf(
-                'Total code coverage is %s which is below the accepted %d %%',
-                self::formatCoverage($results),
+                '[ERROR] Total code coverage is %s which is below the accepted %d%%',
+                Utils::formatCoverage($results),
                 $threshold
             );
         }
 
-        if ($results < $threshold && $onlyPercentage) {
-            return self::formatCoverage($results);
-        }
-
         if ($onlyPercentage) {
-            return self::formatCoverage($results);
+            return Utils::formatCoverage($results);
         }
 
-        return sprintf('Total code coverage is %s - OK!', self::formatCoverage($results));
+        return sprintf('[OK] Total code coverage is %s', Utils::formatCoverage($results));
     }
 
     /**
      * Parses the clover xml file for coverage metrics.
      *
-     * Inspired by: https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
-     * Calculation: https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * According to Atlassian:
+     *     TPC = (coveredconditionals + coveredstatements + coveredmethods) / (conditionals + statements + methods)
+     *
+     * Though it appears elements + coveredelements should work the same, I am sticking with Atlassian's
+     * calculation.
      *
      * @see self::loadMetrics()
-     *
-     * @throws Exception
+     * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      */
     public function process(): float | false
     {
-        $conditionals        = 0;
-        $coveredConditionals = 0;
-        $statements          = 0;
-        $coveredStatements   = 0;
-        $methods             = 0;
-        $coveredMethods      = 0;
+        $rawMetrics = $this->loadMetrics() ?? false;
 
-        foreach ($this->loadMetrics() as $metric) {
-            $conditionals        += (int) $metric['conditionals'];
-            $coveredConditionals += (int) $metric['coveredconditionals'];
-            $statements          += (int) $metric['statements'];
-            $coveredStatements   += (int) $metric['coveredstatements'];
-            $methods             += (int) $metric['methods'];
-            $coveredMethods      += (int) $metric['coveredmethods'];
+        // Ignoring coverage here as theoretically this should not happen
+        //@codeCoverageIgnoreStart
+        if ($rawMetrics === false) {
+            return false;
         }
+        //@codeCoverageIgnoreEnd
 
-        $coveredMetrics = $coveredStatements + $coveredMethods + $coveredConditionals;
-        $totalMetrics   = $statements + $methods + $conditionals;
+        $metrics = (array) $rawMetrics[0];
+        $metrics = array_map('intval', $metrics['@attributes']);
+
+        unset($rawMetrics);
+
+        $coveredMetrics = $metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods'];
+        $totalMetrics   = $metrics['conditionals'] + $metrics['statements'] + $metrics['methods'];
+
+        unset($metrics);
 
         if ($totalMetrics === 0) {
             return false;
@@ -156,11 +151,84 @@ class CoverageCheck
     }
 
     /**
+     * Parses the clover xml file for coverage metrics by file.
+     *
+     * @see self::process()
+     * @see self::loadMetrics()
+     * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
+     * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
+     * @since 2.0.0
+     *
+     * @return false|array{
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
+     *     totalCoverage: float|int
+     * }
+     *
+     * @todo Could possibly clean this up a bit.
+     */
+    public function processByFile(): false | array
+    {
+        $fileMetrics   = [];
+        $totalCoverage = 0;
+
+        $rawMetrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
+
+        // Ignoring coverage here as theoretically this should not happen
+        //@codeCoverageIgnoreStart
+        if ($rawMetrics === false) {
+            return false;
+        }
+        //@codeCoverageIgnoreEnd
+
+        foreach ($rawMetrics as $file) {
+            $metrics = (array) $file->metrics;
+            $metrics = array_map('intval', $metrics['@attributes']);
+
+            $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
+            $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
+
+            if ($totalMetrics === 0) {
+                continue;
+            }
+
+            $coveragePercentage = $coveredMetrics / $totalMetrics * 100;
+            $totalCoverage += $coveragePercentage;
+
+            $fileMetrics[(string) $file['name']] = [
+                'coveredMetrics' => $coveredMetrics,
+                'totalMetrics'   => $totalMetrics,
+                'percentage'     => $coveragePercentage,
+            ];
+        }
+
+        unset($rawMetrics);
+
+        $fileCount = \count($fileMetrics);
+
+        if ($fileCount === 0) {
+            return false;
+        }
+
+        if ($totalCoverage !== 0) {
+            $totalCoverage /= $fileCount;
+        }
+
+        return [
+            'fileMetrics'   => $fileMetrics,
+            'totalCoverage' => $totalCoverage,
+        ];
+    }
+
+    /**
+     * Simple setters.
+     */
+
+    /**
      * @throws InvalidArgumentException If the given file is empty or does not exist.
      */
     public function setCloverFile(string $cloverFile): CoverageCheck
     {
-        if ($cloverFile === '' || !file_exists($cloverFile)) {
+        if (!Utils::validateCloverFile($cloverFile)) {
             throw new InvalidArgumentException(sprintf('Invalid input file provided. Was given: %s', $cloverFile));
         }
 
@@ -181,7 +249,7 @@ class CoverageCheck
      */
     public function setThreshold(int $threshold): CoverageCheck
     {
-        if ($threshold < 1 || $threshold > 100) {
+        if (!Utils::validateThreshold($threshold)) {
             throw new InvalidArgumentException(sprintf('The threshold must be a minimum of 1 and a maximum of 100, %d given', $threshold));
         }
 
@@ -191,19 +259,33 @@ class CoverageCheck
     }
 
     /**
-     * Loads the clover xml data and runs XML Xpath query with self::XPATH_METRICS.
+     * Loads the clover xml data and runs an XML Xpath query.
      *
-     * @see https://www.php.net/SimpleXMLElement
      * @internal
      *
-     * @return array<SimpleXMLElement>
+     * @param self::XPATH_* $xpath
      *
-     * @throws Exception If XML data cannot be parsed.
+     * @return array<SimpleXMLElement> | false | null
+     *
+     * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
+     *                          if the given file does not appear to be a valid clover file.
      */
-    protected function loadMetrics(): array
+    protected function loadMetrics(string $xpath = self::XPATH_METRICS): array | false | null
     {
-        $xml = new SimpleXMLElement((string) file_get_contents($this->cloverFile));
+        $cloverData = file_get_contents($this->cloverFile);
 
-        return $xml->xpath(self::XPATH_METRICS);
+        //@codeCoverageIgnoreStart
+        if ($cloverData === false || $cloverData === '') {
+            throw new RuntimeException(sprintf('Failed to get the contents of %s', $this->cloverFile));
+        }
+        //@codeCoverageIgnoreEnd
+
+        $xml = Utils::parseXml($cloverData);
+
+        if (!Utils::isPossiblyClover($xml)) {
+            throw new RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');
+        }
+
+        return $xml->xpath($xpath);
     }
 }

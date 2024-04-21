@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support question?
+    url: https://github.com/ericsizemore/phpunit-coverage-check/discussions/categories/q-a
+    about: If you have any questions about configuring or using PHPUnit Coverage Check, please open a new Q&A discussion.

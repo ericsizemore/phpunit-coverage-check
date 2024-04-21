@@ -7,7 +7,6 @@
         "enabled": true,
         "extends": [
             "schedule:weekly"
-        ],
-        "automerge": true
+        ]
     }
 }

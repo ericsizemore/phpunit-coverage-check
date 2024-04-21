@@ -27,19 +27,12 @@ Please see [License](#license) and the [LICENSE](LICENSE) file for more informat
 
 For more information on changes made in this library, in comparison to the original by Richard Regeer, please see the [CHANGELOG](CHANGELOG.md) file.
 
+Phar generation is handled by using [Box](https://github.com/box-project/box). My implementation of the `coverage:check` command, with Symfony\Console, was inspired by [SensioLabs Security Checker](https://github.com/sensiolabs/security-checker).
+
 
 ## Important Note
 
 This project is not in any way an official ``PHPUnit`` project. Meaning, that it is not associated with, or endorsed by, the ``PHPUnit`` project or its author ``Sebastian Bergmann``.
-
-
-## Something I'd like to note...
-
-Symfony in general, and Symfony\Console specifically, is not my forte; neither are Phar files.
-
-With that being said, Phar generation is handled by using [Box](https://github.com/box-project/box). My implementation of the `coverage:check` command, with Symfony\Console, was inspired by [SensioLabs Security Checker](https://github.com/sensiolabs/security-checker).
-
-If you run into any issues, have any recommendations, etc. - please reach out [here](https://github.com/ericsizemore/phpunit-coverage-check/issues). I'm open to everything!
 
 
 ## Installation
@@ -49,7 +42,13 @@ If you run into any issues, have any recommendations, etc. - please reach out [h
 The script can be installed using composer. Add this repository as a dependency to the composer.json file.
 
 ```bash
-$ composer require --dev esi/phpunit-coverage-check
+$ composer require --dev esi/phpunit-coverage-check:^2.0
+```
+
+To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage) as usage is slightly different):
+
+```bash
+$ composer require --dev esi/phpunit-coverage-check:^1.0
 ```
 
 
@@ -59,8 +58,8 @@ Download the `phpunit-coverage-check.phar` from an available release. It is reco
 
 ```bash
 # Adjust the URL based on the latest release
-wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/1.0.0/phpunit-coverage-check.phar"
-wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/1.0.0/phpunit-coverage-check.phar.asc"
+wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar"
+wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar.asc"
 
 # Check that the signature matches
 gpg --verify phpunit-coverage-check.phar.asc phpunit-coverage-check.phar
@@ -74,6 +73,12 @@ chmod +x phpunit-coverage-check.phar
 
 The Phar files of *PHPUnit Coverage Check* are signed with a public key associated to ``admin@secondversion.com.``.
 The [`key(s) associated with this E-Mail address`](https://keys.openpgp.org/search?q=admin%40secondversion.com) can be queried at [`keys.openpgp.org`](https://keys.openpgp.org/).
+
+#### Install with Phive
+
+You can also install the *PHPUnit Coverage Check* Phar with `Phive`.
+
+If not already using Phive, you can read more about it [here](https://phar.io/), also Phive [installation](https://phar.io/#Install) and [usage](https://phar.io/#Usage).
 
 
 ## Usage
@@ -104,8 +109,12 @@ It's also possible to add the coverage report generation to your PHPUnit configu
 ### If installed with Composer
 
 ```bash
-$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100
-$ php vendor/bin/coverage-check coverage:check /path/to/clover.xml 100 --only-percentage
+$ php vendor/bin/coverage-check /path/to/clover.xml 100
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 --only-percentage
+# -O for only-percentage works as well
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 -O
+# -F or show-files will display coverage per file, formatted in a table
+$ php vendor/bin/coverage-check /path/to/clover.xml 100 -F
 ```
 
 You can also use the Api directly if you wish. I created a function called `nonConsoleCall` that will process and return the data, similar to how the console application displays it.
@@ -115,7 +124,7 @@ You can also use the Api directly if you wish. I created a function called `nonC
      * Processes the coverage data with the given clover file and threshold, and returns the information
      * similar to how the Console application will.
      *
-     * This is mainly useful for those that may wish to use this library outside of the CLI/Console or PHAR.
+     * This is mainly useful for those that may wish to use this library outside the CLI/Console or PHAR.
      */
     public function nonConsoleCall(string $cloverFile, int $threshold = 100, bool $onlyPercentage = false): string
 ```
@@ -128,25 +137,65 @@ use Esi\CoverageCheck\CoverageCheck;
 $check = new CoverageCheck();
 $results = $check->nonConsoleCall(__DIR__ . '/tests/fixtures/clover.xml', 90);
 
-echo $results; // Total code coverage is 90.32 % - OK!
+echo $results; // Total code coverage is 90.32%
 ```
 
 
 ### If using the Phar
 
 ```bash
-$ php phpunit-coverage-check.phar coverage:check /path/to/clover.xml 100
-$ php phpunit-coverage-check.phar coverage:check /path/to/clover.xml 100 --only-percentage
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 --only-percentage
+# -O for only-percentage works as well
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 -O
+# -F or show-files will display coverage per file, formatted in a table
+$ php phpunit-coverage-check.phar /path/to/clover.xml 100 -F
 ```
 
-With `--only-percentage` enabled, the CLI command will only return the resulting coverage percentage.
+With `--only-percentage` (or `-O`) enabled, the CLI command will only return the resulting coverage percentage.
 
+#### --show-files
+
+With `--show-files` (or `-F`), `--only-percentage` will be ignored. This option parses the clover file for coverage information for each file in the project/package, determine coverage, and display the information in a table. For example:
+
+##### Passing coverage
+
+```bash
+$ php coverage-check build/logs/clover.xml 90 -F
+
+ ------------------------------------------------------------------- -------------------------- ----------
+  File                                                                Elements (Covered/Total)   Coverage
+ ------------------------------------------------------------------- -------------------------- ----------
+  [...]\phpunit-coverage-check\src\Application.php                    12/12                      100.00%
+  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   94/94                      100.00%
+  [...]\phpunit-coverage-check\src\CoverageCheck.php                  80/80                      100.00%
+  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       12/12                      100.00%
+  [...]\phpunit-coverage-check\src\Utils.php                          39/39                      100.00%
+ ------------------------------------------------------------------- -------------------------- ----------
+  Overall Totals                                                      237/237                    100.00%
+ ------------------------------------------------------------------- -------------------------- ----------
+```
+
+##### Mixed pass/fail coverage
+
+```bash
+$ php coverage-check tests/fixtures/clover.xml 90 -F
+
+ ----------------------------- -------------------------- ----------
+  File                          Elements (Covered/Total)   Coverage
+ ----------------------------- -------------------------- ----------
+  /tmp/Example/String.php       36/38                      94.74%
+  /tmp/Example/StringList.php   20/24                      83.33%
+ ----------------------------- -------------------------- ----------
+  Overall Totals                56/62                      89.04%
+ ----------------------------- -------------------------- ----------
+```
 
 ## About
 
 ### Requirements
 
-- PHPUnit Coverage Check works with PHP 8.1.0 or above.
+- PHPUnit Coverage Check works with PHP 8.2.0 or above.
 
 
 ### Submitting bugs and feature requests
@@ -161,42 +210,7 @@ Issues are the quickest way to report a bug. If you find a bug or documentation 
 
 ### Contributing
 
-PHPUnit Coverage Check accepts contributions of code and documentation from the community. 
-These contributions can be made in the form of Issues or [Pull Requests](http://help.github.com/send-pull-requests/) on the [PHPUnit Coverage Check repository](https://github.com/ericsizemore/phpunit-coverage-check).
-
-PHPUnit Coverage Check is licensed under the MIT license. When submitting new features or patches to PHPUnit Coverage Check, you are giving permission to license those features or patches under the MIT license.
-
-PHPUnit Coverage Check tries to adhere to PHPStan level 9 with strict rules and bleeding edge. Please ensure any contributions do as well.
-
-
-#### Guidelines
-
-Before we look into how, here are the guidelines. If your Pull Requests fail to pass these guidelines it will be declined, and you will need to re-submit when you’ve made the changes. This might sound a bit tough, but it is required for me to maintain quality of the code-base.
-
-
-#### PHP Style
-
-Please ensure all new contributions match the [PSR-12](https://www.php-fig.org/psr/psr-12/) coding style guide. The project is not fully PSR-12 compatible, yet; however, to ensure the easiest transition to the coding guidelines, I would like to go ahead and request that any contributions follow them.
-
-
-#### Documentation
-
-If you change anything that requires a change to documentation then you will need to add it. New methods, parameters, changing default values, adding constants, etc. are all things that will require a change to documentation. The change-log must also be updated for every change. Also, PHPDoc blocks must be maintained.
-
-
-##### Documenting functions/variables (PHPDoc)
-
-Please ensure all new contributions adhere to:
-
-* [PSR-5 PHPDoc](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md)
-* [PSR-19 PHPDoc Tags](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc-tags.md)
-
-when documenting new functions, or changing existing documentation.
-
-
-#### Branching
-
-One thing at a time: A pull request should only contain one change. That does not mean only one commit, but one change - however many commits it took. The reason for this is that if you change X and Y but send a pull request for both at the same time, we might really want X but disagree with Y, meaning we cannot merge the request. Using the Git-Flow branching model you can create new branches for both of these features and send two requests.
+See [CONTRIBUTING](CONTRIBUTING.md)
 
 
 ### Backward Compatibility Promise
@@ -207,6 +221,7 @@ One thing at a time: A pull request should only contain one change. That does no
 ### Author
 
 Eric Sizemore - <admin@secondversion.com> - <https://www.secondversion.com>
+
 
 ### License
 
