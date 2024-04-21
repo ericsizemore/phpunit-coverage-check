@@ -20,7 +20,6 @@ jobs:
           - "8.4"
         operating-system:
           - "ubuntu-latest"
-          - "windows-latest"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,8 +55,6 @@ jobs:
       - name: "Run test suite"
         run: composer run-script test
 
-      - name: "Upload to Scrutinizer"
-        if: ${{ matrix.operating-system }} == 'ubuntu-latest'
       - uses: sudo-bot/action-scrutinizer@latest
         with:
            cli-args: "--format=php-clover build/logs/clover.xml"
