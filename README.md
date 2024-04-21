@@ -58,8 +58,8 @@ Download the `phpunit-coverage-check.phar` from an available release. It is reco
 
 ```bash
 # Adjust the URL based on the latest release
-wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/1.0.0/phpunit-coverage-check.phar"
-wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/1.0.0/phpunit-coverage-check.phar.asc"
+wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar"
+wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar.asc"
 
 # Check that the signature matches
 gpg --verify phpunit-coverage-check.phar.asc phpunit-coverage-check.phar

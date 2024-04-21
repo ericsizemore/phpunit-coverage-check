@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "2.x-dev"
+      - "master"
   pull_request:
     branches:
-      - "2.x-dev"
+      - "master"
 
 # Is it overkill to run PHPStan using different PHP versions? Probably :)
 jobs:
