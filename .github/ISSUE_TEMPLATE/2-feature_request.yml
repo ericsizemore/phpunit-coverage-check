@@ -1,0 +1,36 @@
+name: Feature Request
+description: I have a suggestion for a new feature (and possibly want to implement it).
+labels: [ "enhancement", "unverified" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before requesting a new feature, make sure your version of PHPUnit Coverage Check is up-to-date.
+
+        > [!NOTE]
+        > While it is not required to first create a [discussion](https://github.com/ericsizemore/phpunit-coverage-check/discussions/categories/ideas) before creating a request, it is preferable.
+
+        By first using [discussions](https://github.com/ericsizemore/phpunit-coverage-check/discussions/categories/ideas) to discuss a feature request or idea, it allows the scope of the request to be fleshed out and established before the actual issue is created.
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: Feature Request
+      description: Please describe the feature you would like to see implemented.
+    validations:
+      required: true
+  - type: input
+    id: discussion-reference
+    attributes:
+      label: Link to the discussion where the feature request was discussed, if any.
+      placeholder: "https://github.com/ericsizemore/phpunit-coverage-check/discussions/<ID>"
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Contribution Checks
+      options:
+        - label: I have verified whether this feature request was already discussed.
+          required: false
+        - label: I am familiar with ["Bug or Feature?"](https://github.com/ericsizemore/phpunit-coverage-check/discussions/21)
+          required: false

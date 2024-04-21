@@ -1,0 +1,61 @@
+name: Bug Report
+description: Existing feature does not behave as expected.
+labels: [ "bug", "unverified" ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before reporting a bug, make sure PHPUnit Coverage Check is up-to-date and the problem is/was not reported already.
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: Problem description
+      description: Please describe the problem you have encountered
+    validations:
+      required: true
+  - type: textarea
+    id: reproducer
+    attributes:
+      label: Reproducer
+      description: |
+        Please provide the clover file and CLI command that should be run to reproduce the problem.
+
+        If relevant, provide the expected output, the actual output and/or the error that occurred, if any.
+
+        Please use markdown syntax for the clover file contents, or provide a link to a remote clover file.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Library Version
+      description: Which version of PHPUnit Coverage Check is being run? (in X.Y.Z format)
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version
+      description: Which PHP version is PHPUnit Coverage Check being run on?
+    validations:
+      required: true
+  - type: dropdown
+    id: run-method
+    attributes:
+      label: How do you run PHPUnit Coverage Check?
+      multiple: false
+      options:
+        - Composer package
+        - Manual installation
+        - Phar binary
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Contribution Checks
+      options:
+        - label: I have verified whether this problem has already been reported.
+          required: false
+        - label: I am familiar with ["Bug or Feature?"](https://github.com/ericsizemore/phpunit-coverage-check/discussions/21)
+          required: false
