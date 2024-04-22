@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Updated coding standards with PHP-CS-Fixer, applied fixes.
+### Changed
+
+  * Updated coding standards with PHP-CS-Fixer, applied fixes.
+  * Updated `backward-compatibility.md`
+  * Updated `CONTRIBUTING.md` with more guidelines/information.
+  * Updated `.gitattributes`
+
 
 ## [2.0.0] - 2024-04-21
 

@@ -13,12 +13,12 @@ Further restrictions (and/or allowances) might be added in the future.
 | **Document Information** |            |
 |:-------------------------|:-----------|
 | **Effective Date**       | 03/26/2024 |
-| **Last Updated**         | 03/26/2024 |
-| **Version**              | 1.0.0      |
+| **Last Updated**         | 04/22/2024 |
+| **Version**              | 1.0.1      |
 
 ## Semantic Versioning
 
-PHPUnit Coverage Check follows [Semantic Versioning](https://semver.org/) (`<major>.<minor>.<patch>`). In general, this means that the version number is incremented based on the type of changes made:
+This project follows [Semantic Versioning](https://semver.org/) (`<major>.<minor>.<patch>`). In general, this means that the version number is incremented based on the type of changes made:
 
 * Patch version for backward-compatible bug fixes.
 * Minor version for backward-compatible additions.
@@ -88,29 +88,29 @@ See [Branches](#branches) for more information.
 
 ### Tags
 
-Tags in PHPUnit Coverage Check's Git repository are immutable. I do not change published tags to point to a different revision, for example.
+Tags in this project's Git repository are immutable. I do not change published tags to point to a different revision, for example.
 
 In very rare cases I may delete a tag in order to remove a broken release. The new release that fixes what was broken will always have a different tag than the one that was removed.
 
 ### Branches
 
-Branches in PHPUnit Coverage Check's Git repository are private implementation details. For example, I delete branches for versions of PHPUnit Coverage Check that are no longer supported. In general:
+Branches in this project's Git repository are private implementation details. For example, I delete branches for versions of PHPUnit Coverage Check that are no longer supported. In general:
 
 * The `master` branch will contain the currently released major version (and `<minor>` or `<patch>` versions that fall under it).
 * Previous major versions will be under a `<major>.x` branch.
 * `Next` or development code of a new major version will be under a `<major>.x-dev` branch.
 
-For example, let's say the latest released version of PHPUnit Coverage Check is 2.0.0, the last major version is 1, and the next major version is 3.
+For example, let's say the latest released version of this project is 3.0.0, the last major version is 2, and the next major version is 4.
 
-* The `master` branch will be all version 2 code, which includes: 2.0.1, 2.1.0, 2.2.0, etc.
-* The previous major version, version 1, will be under `1.x` (which includes: 1.0.1, 1.1.0, 1.2.0, etc.).
-* The `Next` or development code for a new major version, version 3, will be in `3.x-dev`.
-  * Once v3.0.0 is officially released, it will be merged into `master` and the `3.x-dev` branch will be deleted.
-  * Which then makes version 2 the previous major version, so it would have a new branch created for it: `2.x`
+* The `master` branch will be all version 3 code, which includes: 3.0.1, 3.1.0, 3.2.0, etc.
+* The previous major version, version 2, will be under `2.x` (which includes: 2.0.1, 2.1.0, 2.2.0, etc.).
+* The `Next` or development code for a new major version, version 4, will be in `4.x-dev`.
+  * Once v4.0.0 is officially released, it will be merged into `master` and the `4.x-dev` branch will be deleted.
+  * Which then makes version 3 the previous major version, so it would have a new branch created for it: `3.x`
 
 ## Updates
 
-I will keep the backward compatibility promise updated as PHPUnit Coverage Check evolves and new use cases emerge. The last updated date and version of this document under `Document Information` at the beginning of this file will be updated if any changes are made.
+I will keep the backward compatibility promise updated as this project evolves and new use cases emerge. The last updated date and version of this document under `Document Information` at the beginning of this file will be updated if any changes are made.
 
 ## Acknowledgements
 
