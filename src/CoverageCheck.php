@@ -122,7 +122,7 @@ class CoverageCheck
      * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
      * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      */
-    public function process(): float | false
+    public function process(): false|float
     {
         $rawMetrics = $this->loadMetrics() ?? false;
 
@@ -166,7 +166,7 @@ class CoverageCheck
      *
      * @todo Could possibly clean this up a bit.
      */
-    public function processByFile(): false | array
+    public function processByFile(): array|false
     {
         $fileMetrics   = [];
         $totalCoverage = 0;
@@ -265,12 +265,12 @@ class CoverageCheck
      *
      * @param self::XPATH_* $xpath
      *
-     * @return array<SimpleXMLElement> | false | null
-     *
      * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
      *                          if the given file does not appear to be a valid clover file.
+     *
+     * @return null|array<SimpleXMLElement>|false
      */
-    protected function loadMetrics(string $xpath = self::XPATH_METRICS): array | false | null
+    protected function loadMetrics(string $xpath = self::XPATH_METRICS): null|array|false
     {
         $cloverData = file_get_contents($this->cloverFile);
 

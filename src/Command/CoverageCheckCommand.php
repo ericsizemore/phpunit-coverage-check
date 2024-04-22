@@ -172,7 +172,7 @@ class CoverageCheckCommand extends Command
             sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
             new TableCell(
                 Utils::formatCoverage($totalCoverage),
-                ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>',])]
+                ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>', ])]
             ),
         ];
 

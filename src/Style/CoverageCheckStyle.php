@@ -30,7 +30,7 @@ class CoverageCheckStyle extends SymfonyStyle
      * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
-    public function error(string|array $message, bool $onlyPercentage = false): void
+    public function error(array|string $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'ERROR'), 'fg=white;bg=red', ' ', true);
     }
@@ -46,7 +46,7 @@ class CoverageCheckStyle extends SymfonyStyle
      * @phpstan-ignore missingType.iterableValue
      */
     #[\Override]
-    public function success(string|array $message, bool $onlyPercentage = false): void
+    public function success(array|string $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'OK'), 'fg=black;bg=green', ' ', true);
     }
