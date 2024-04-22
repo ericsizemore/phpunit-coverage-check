@@ -81,7 +81,7 @@ $ php coverage-check build/logs/clover.xml 100 -F
 The configuration file can be found at `phpstan.neon`, in the repository, for [PHPStan](https://phpstan.org/). You can use PHPStan to perform static analysis:
 
 ```bash
-$ composer run-script analyze:static
+$ composer run-script phpstan
 ```
 
 #### PHP-CS-Fixer
