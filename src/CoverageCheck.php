@@ -163,8 +163,6 @@ class CoverageCheck
      *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
      *     totalCoverage: float|int
      * }
-     *
-     * @todo Could possibly clean this up a bit.
      */
     public function processByFile(): array|false
     {
