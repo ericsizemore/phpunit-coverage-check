@@ -16,6 +16,9 @@ This php script will read the clover xml report from PHPUnit and calculate the c
 
 This script can be used in your continuous deployment environment or for example added to a pre-commit hook.
 
+## GitHub Action
+
+A GitHub action has been created for this library and can be found in the [PHPUnit Coverage Check Action](https://github.com/ericsizemore/phpunit-coverage-check-action) repository, or on the [GitHub Marketplace](https://github.com/marketplace/actions/phpunit-coverage-check).
 
 ## Acknowledgements/Credits
 
