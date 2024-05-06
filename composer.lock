@@ -1260,12 +1260,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "055ce843d630bc00221ab7548a7744c01e311da4"
+                "reference": "9007d02056dc86664a0238272ddfc4e055cf8a8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/055ce843d630bc00221ab7548a7744c01e311da4",
-                "reference": "055ce843d630bc00221ab7548a7744c01e311da4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9007d02056dc86664a0238272ddfc4e055cf8a8b",
+                "reference": "9007d02056dc86664a0238272ddfc4e055cf8a8b",
                 "shasum": ""
             },
             "require": {
@@ -1311,7 +1311,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-02T21:34:10+00:00"
+            "time": "2024-05-04T14:22:54+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
