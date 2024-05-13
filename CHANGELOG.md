@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Updated `backward-compatibility.md`
   * Updated `CONTRIBUTING.md` with more guidelines/information.
   * Updated `.gitattributes`
+  * Updates:
+    * `phpstan` to the non-dev `1.11.0`
+    * `phpstan/phpstan-phpunit` to the non-dev `1.4.0`
+    * `phpstan/phpstan-strict-rules` to the non-dev `1.6.0`
 
 
 ## [2.0.0] - 2024-04-21
