@@ -34,7 +34,7 @@ jobs:
            composer-options: "--no-dev"
 
       - name: "Build PHAR"
-        run: vendor/bin/box compile
+        run: box compile
 
       - name: "Ensure the PHAR works"
         run: bin/phpunit-coverage-check.phar --version
