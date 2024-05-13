@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+  * Adds `phpstan-baseline.neon` for PHPStan.
+
 ### Changed
 
   * Updated coding standards with PHP-CS-Fixer, applied fixes.

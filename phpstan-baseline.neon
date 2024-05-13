@@ -1,0 +1,21 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Esi\\\\CoverageCheck\\\\Style\\\\CoverageCheckStyle\\:\\:error\\(\\) has parameter \\$message with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Style/CoverageCheckStyle.php
+
+		-
+			message: "#^Method Esi\\\\CoverageCheck\\\\Style\\\\CoverageCheckStyle\\:\\:success\\(\\) has parameter \\$message with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Style/CoverageCheckStyle.php
+
+		-
+			message: "#^Method Esi\\\\CoverageCheck\\\\Style\\\\CoverageCheckStyle\\:\\:table\\(\\) has parameter \\$headers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Style/CoverageCheckStyle.php
+
+		-
+			message: "#^Method Esi\\\\CoverageCheck\\\\Style\\\\CoverageCheckStyle\\:\\:table\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Style/CoverageCheckStyle.php
