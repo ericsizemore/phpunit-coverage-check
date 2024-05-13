@@ -1,0 +1,88 @@
+# https://github.com/box-project/box/blob/main/.github/workflows/release.yaml
+name: Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [ created ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-phar:
+    name: "Build PHAR"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+           fetch-depth: 0
+
+      - name: "Install PHP"
+        uses: shivammathur/setup-php@master
+        with:
+           php-version: '8.2'
+           ini-values: phar.readonly=0
+           coverage: none
+           tools: composer:v2, box
+
+      - name: "Install dependencies"
+        uses: ramsey/composer-install@v3
+        with:
+           composer-options: "--no-dev"
+
+      - name: "Build PHAR"
+        run: box compile
+
+      - name: "Ensure the PHAR works"
+        run: bin/phpunit-coverage-check.phar --version
+
+      - name: "Import GPG key"
+        if: github.event_name == 'release'
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696 }}
+          passphrase: ${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696_PASSPHRASE }}
+
+      - name: "Sign the PHAR"
+        if: github.event_name == 'release'
+        run: |
+          gpg --local-user admin@secondversion.com \
+            --batch \
+            --yes \
+            --passphrase="${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696_PASSPHRASE }}" \
+            --detach-sign \
+            --output bin/phpunit-coverage-check.phar.asc \
+            bin/phpunit-coverage-check.phar
+
+      - name: "Upload the PHAR artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-coverage-check-phar
+          path: |
+            bin/phpunit-coverage-check.phar
+            bin/phpunit-coverage-check.phar.asc
+
+  publish-phar:
+    runs-on: ubuntu-latest
+    name: "Publish PHAR"
+    needs:
+      - build-phar
+    if: github.event_name == 'release'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: phpunit-coverage-check-phar
+          path: .
+
+      - name: "Upload PHAR to the release"
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            phpunit-coverage-check.phar
+            phpunit-coverage-check.phar.asc
