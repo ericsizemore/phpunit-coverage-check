@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
   * Adds `phpstan-baseline.neon` for PHPStan.
+  * Adds new GitHub workflow to generate the Phar and uploads an artifact:
+    * On release - if it is a release, it also signs the Phar and uploads the `.asc` for verification
+    * For pull requests
+    * On a schedule
 
 ### Changed
 

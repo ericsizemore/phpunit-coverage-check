@@ -1,8 +1,13 @@
-# https://github.com/box-project/box/blob/main/.github/workflows/release.yaml
+# Based on https://github.com/box-project/box/blob/main/.github/workflows/release.yaml
 name: Release
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request: ~
+  schedule:
+    - cron: "15 9 */3 * *"
   release:
     types: [ created ]
 
@@ -37,7 +42,9 @@ jobs:
         run: box compile
 
       - name: "Ensure the PHAR works"
-        run: bin/phpunit-coverage-check.phar --version
+        run: |
+          bin/phpunit-coverage-check.phar --version
+          bin/phpunit-coverage-check.phar --help
 
       - name: "Import GPG key"
         if: github.event_name == 'release'
