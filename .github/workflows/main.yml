@@ -30,6 +30,9 @@ jobs:
            php-version: "${{ matrix.php-version }}"
            extensions: mbstring
 
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
       - name: Setup Composer, install dependencies
         uses: ramsey/composer-install@v3
         with:
