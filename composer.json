@@ -58,9 +58,9 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.58",
+        "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan": "^1.11",
         "phpstan/phpstan-deprecation-rules": "^1.2",
-        "phpstan/extension-installer": "^1.2",
         "phpstan/phpstan-phpunit": "^1.4",
         "phpstan/phpstan-strict-rules": "^1.6",
         "phpunit/phpunit": "^11.1"
@@ -81,6 +81,9 @@
         "coverage-check"
     ],
     "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
         "platform": {
             "php": "8.2.0"
         }
@@ -88,11 +91,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "2.x-dev"
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "phpstan/extension-installer": true
         }
     },
     "scripts": {
