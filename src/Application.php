@@ -50,7 +50,7 @@ final class Application extends BaseApplication
     /**
      * Same as {@see self::getDefaultInputDefinition()}, but overriding configureIO().
      *
-     * @see \Symfony\Component\Console\Application::configureIO()
+     * @see BaseApplication::configureIO()
      *
      * @inheritDoc
      */
@@ -66,7 +66,7 @@ final class Application extends BaseApplication
      * By default, (without this override) it shows Symfony specific information along with
      * our command's information, much of which is not needed.
      *
-     * @see \Symfony\Component\Console\Application::getDefaultInputDefinition()
+     * @see BaseApplication::getDefaultInputDefinition()
      *
      * @inheritDoc
      */

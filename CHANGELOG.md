@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * On release - if it is a release, it also signs the Phar and uploads the `.asc` for verification
     * For pull requests
     * On a schedule
+  * Adds `phpstan/extension-installer` with `composer.json` config updated to allow plugins for PHPStan.
 
 ### Changed
 
@@ -25,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * `phpstan` to the non-dev `1.11.0`
     * `phpstan/phpstan-phpunit` to the non-dev `1.4.0`
     * `phpstan/phpstan-strict-rules` to the non-dev `1.6.0`
-
 
 ## [2.0.0] - 2024-04-21
 
