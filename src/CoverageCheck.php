@@ -133,8 +133,8 @@ class CoverageCheck
         }
         //@codeCoverageIgnoreEnd
 
-        $metrics = (array) $rawMetrics[0];
-        $metrics = array_map('intval', $metrics['@attributes']);
+        $metrics = ((array) $rawMetrics[0])['@attributes'];
+        array_walk($metrics, static fn(string $value, string $key) => $metrics[$key] = intval($value));
 
         unset($rawMetrics);
 
@@ -179,8 +179,8 @@ class CoverageCheck
         //@codeCoverageIgnoreEnd
 
         foreach ($rawMetrics as $file) {
-            $metrics = (array) $file->metrics;
-            $metrics = array_map('intval', $metrics['@attributes']);
+            $metrics = ((array) $file->metrics)['@attributes'];
+            array_walk($metrics, static fn(string $value, string $key) => $metrics[$key] = intval($value));
 
             $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
             $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
