@@ -113,6 +113,7 @@ $config
         PhpCsFixer\Finder::create()
             ->in(__DIR__ . '/src')
             ->in(__DIR__ . '/tests')
+            ->append([__DIR__ . '/scoper.inc.php'])
     )
 ;
 $config->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect());

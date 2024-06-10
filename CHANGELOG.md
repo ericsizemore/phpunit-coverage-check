@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * `phpstan` to the non-dev `1.11.0`
     * `phpstan/phpstan-phpunit` to the non-dev `1.4.0`
     * `phpstan/phpstan-strict-rules` to the non-dev `1.6.0`
+  * The `box` configuration for generating the Phar has been updated.
+    * The Phar will now be scoped to `Esi\CoverageCheckPhar`.
+    * The Phar now will be gz compressed.
+
 
 ## [2.0.0] - 2024-04-21
 

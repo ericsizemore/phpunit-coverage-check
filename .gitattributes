@@ -18,3 +18,4 @@
 /phpstan-baseline.neon     export-ignore
 /phpunit.xml               export-ignore
 /renovate.json             export-ignore
+/scoper.inc.php            export-ignore
