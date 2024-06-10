@@ -8,5 +8,9 @@
         "extends": [
             "schedule:weekly"
         ]
-    }
+    },
+    "labels": [
+        "dependency"
+    ],
+    "commitMessagePrefix": "chore(deps)"
 }
