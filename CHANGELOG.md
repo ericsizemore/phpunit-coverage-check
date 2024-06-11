@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * `phpstan/phpstan-strict-rules` to the non-dev `1.6.0`
   * The `box` configuration for generating the Phar has been updated.
     * The Phar will now be scoped to `Esi\CoverageCheckPhar`.
-    * The Phar now will be gz compressed.
+    * The Phar now will be gz compressed, which adds `ext-zlib` as a requirement to run it.
 
 
 ## [2.0.0] - 2024-04-21
@@ -122,5 +122,6 @@ This initial version is forked from [rregeer/phpunit-coverage-check](https://git
   * `coverage-check.php`, `bin/coverage-check`, and `test/run` removed.
 
 
+[unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/tree/master
 [2.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.0
 [1.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/1.0.0
