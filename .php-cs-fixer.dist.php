@@ -38,13 +38,13 @@ $config
         'fully_qualified_strict_types' => true,
         'header_comment'               => ['comment_type' => 'PHPDoc', 'header' => $header, 'separate' => 'top'],
         'heredoc_to_nowdoc'            => true,
-        //'global_namespace_import'                      => ['import_classes' => true, 'import_constants' => true, 'import_functions' => true],
-        'native_function_invocation'                    => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced', 'strict' => true],
-        'native_constant_invocation'                    => ['fix_built_in' => false, 'include' => ['DIRECTORY_SEPARATOR', 'PHP_INT_SIZE', 'PHP_SAPI', 'PHP_VERSION_ID'], 'scope' => 'namespaced', 'strict' => true],
-        'no_leading_import_slash'                       => true,
-        'no_unneeded_import_alias'                      => true,
-        'no_unused_imports'                             => true,
-        'ordered_class_elements'                        => [
+        //'global_namespace_import'    => ['import_classes' => true, 'import_constants' => true, 'import_functions' => true],
+        'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced', 'strict' => true],
+        'native_constant_invocation' => ['fix_built_in' => false, 'include' => ['DIRECTORY_SEPARATOR', 'PHP_INT_SIZE', 'PHP_SAPI', 'PHP_VERSION_ID'], 'scope' => 'namespaced', 'strict' => true],
+        'no_leading_import_slash'    => true,
+        'no_unneeded_import_alias'   => true,
+        'no_unused_imports'          => true,
+        'ordered_class_elements'     => [
             'order' => [
                 'use_trait',
                 'case',
@@ -102,11 +102,11 @@ $config
         'phpdoc_var_without_name'                       => true,
         'php_unit_internal_class'                       => ['types' => ['normal', 'final']],
         'php_unit_expectation'                          => true,
-        'single_import_per_statement'     => true,
-        'static_lambda'                   => true,
-        'strict_param'                    => true,
-        'use_arrow_functions'             => true,
-        'whitespace_after_comma_in_array' => true,
+        'single_import_per_statement'                   => true,
+        'static_lambda'                                 => true,
+        'strict_param'                                  => true,
+        'use_arrow_functions'                           => true,
+        'whitespace_after_comma_in_array'               => true,
     ])
     ->setLineEnding("\n")
     ->setFinder(

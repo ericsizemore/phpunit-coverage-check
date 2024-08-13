@@ -21,7 +21,6 @@ use SimpleXMLElement;
 
 use function array_walk;
 use function file_get_contents;
-use function sprintf;
 
 /**
  * @see Command\CoverageCheckCommand
@@ -95,7 +94,7 @@ class CoverageCheck
         }
 
         if ($results < $threshold && !$onlyPercentage) {
-            return sprintf(
+            return \sprintf(
                 '[ERROR] Total code coverage is %s which is below the accepted %d%%',
                 Utils::formatCoverage($results),
                 $threshold
@@ -106,7 +105,7 @@ class CoverageCheck
             return Utils::formatCoverage($results);
         }
 
-        return sprintf('[OK] Total code coverage is %s', Utils::formatCoverage($results));
+        return \sprintf('[OK] Total code coverage is %s', Utils::formatCoverage($results));
     }
 
     /**
@@ -227,7 +226,7 @@ class CoverageCheck
     public function setCloverFile(string $cloverFile): CoverageCheck
     {
         if (!Utils::validateCloverFile($cloverFile)) {
-            throw new InvalidArgumentException(sprintf('Invalid input file provided. Was given: %s', $cloverFile));
+            throw new InvalidArgumentException(\sprintf('Invalid input file provided. Was given: %s', $cloverFile));
         }
 
         $this->cloverFile = $cloverFile;
@@ -248,7 +247,7 @@ class CoverageCheck
     public function setThreshold(int $threshold): CoverageCheck
     {
         if (!Utils::validateThreshold($threshold)) {
-            throw new InvalidArgumentException(sprintf('The threshold must be a minimum of 1 and a maximum of 100, %d given', $threshold));
+            throw new InvalidArgumentException(\sprintf('The threshold must be a minimum of 1 and a maximum of 100, %d given', $threshold));
         }
 
         $this->threshold = $threshold;
@@ -274,7 +273,7 @@ class CoverageCheck
 
         //@codeCoverageIgnoreStart
         if ($cloverData === false || $cloverData === '') {
-            throw new RuntimeException(sprintf('Failed to get the contents of %s', $this->cloverFile));
+            throw new RuntimeException(\sprintf('Failed to get the contents of %s', $this->cloverFile));
         }
         //@codeCoverageIgnoreEnd
 

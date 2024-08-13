@@ -24,7 +24,6 @@ use function libxml_clear_errors;
 use function libxml_get_errors;
 use function libxml_use_internal_errors;
 use function property_exists;
-use function sprintf;
 use function trim;
 
 use const LIBXML_ERR_ERROR;
@@ -39,7 +38,7 @@ final class Utils
      */
     public static function formatCoverage(float $number): string
     {
-        return sprintf('%0.2F%%', $number);
+        return \sprintf('%0.2F%%', $number);
     }
 
     /**
@@ -102,7 +101,7 @@ final class Utils
             $errorMessage = PHP_EOL;
 
             foreach (libxml_get_errors() as $error) {
-                $errorMessage .= sprintf(
+                $errorMessage .= \sprintf(
                     '%s %d: %s. Line %d Column %d',
                     $errorLevels[$error->level],
                     $error->code,
@@ -112,7 +111,7 @@ final class Utils
                 ) . PHP_EOL;
             }
 
-            throw new RuntimeException(sprintf('Unable to load Clover XML data. LibXml returned: %s', $errorMessage));
+            throw new RuntimeException(\sprintf('Unable to load Clover XML data. LibXml returned: %s', $errorMessage));
         } finally {
             libxml_clear_errors();
             libxml_use_internal_errors(false);

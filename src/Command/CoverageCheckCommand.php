@@ -30,8 +30,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
-use function sprintf;
-
 /**
  * @see \Esi\CoverageCheck\Tests\Command\CoverageCheckCommandTest
  */
@@ -147,7 +145,7 @@ class CoverageCheckCommand extends Command
         foreach ($metrics as $name => $file) {
             $tableRows[] = [
                 $name,
-                sprintf('%d/%d', $file['coveredMetrics'], $file['totalMetrics']),
+                \sprintf('%d/%d', $file['coveredMetrics'], $file['totalMetrics']),
                 new TableCell(
                     Utils::formatCoverage($file['percentage']),
                     [
@@ -169,7 +167,7 @@ class CoverageCheckCommand extends Command
         $tableRows[] = new TableSeparator();
         $tableRows[] = [
             'Overall Totals',
-            sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
+            \sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
             new TableCell(
                 Utils::formatCoverage($totalCoverage),
                 ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>', ])]
@@ -216,14 +214,14 @@ class CoverageCheckCommand extends Command
         if ($belowThreshold) {
             // ... below the accepted threshold
             $this->coverageCheckStyle->error(
-                sprintf('Total code coverage is %s which is below the accepted %d%%', $formattedCoverage, $threshold)
+                \sprintf('Total code coverage is %s which is below the accepted %d%%', $formattedCoverage, $threshold)
             );
 
             return Command::FAILURE;
         }
 
         // all good, we meet or exceed the threshold
-        $this->coverageCheckStyle->success(sprintf('Total code coverage is %s', $formattedCoverage));
+        $this->coverageCheckStyle->success(\sprintf('Total code coverage is %s', $formattedCoverage));
 
         return Command::SUCCESS;
     }
