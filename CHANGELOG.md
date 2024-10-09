@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.1] - 2024-10-09
 
 ### Added
 
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Updated `CONTRIBUTING.md` with more guidelines/information.
   * Updated `.gitattributes`
   * Updates:
-    * `phpstan` to the non-dev `1.11.0`
+    * `phpstan` to the non-dev `1.12.0`
     * `phpstan/phpstan-phpunit` to the non-dev `1.4.0`
     * `phpstan/phpstan-strict-rules` to the non-dev `1.6.0`
   * The `box` configuration for generating the Phar has been updated.
@@ -123,5 +123,6 @@ This initial version is forked from [rregeer/phpunit-coverage-check](https://git
 
 
 [unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/tree/master
+[2.0.1]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.1
 [2.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.0
 [1.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/1.0.0

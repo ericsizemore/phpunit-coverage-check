@@ -220,6 +220,13 @@ See [CONTRIBUTING](CONTRIBUTING.md)
 * See [backward-compatibility.md](backward-compatibility.md)
 
 
+### Credits
+
+- Author: [Eric Sizemore](https://github.com/ericsizemore)
+- Thanks to [all Contributors](https://github.com/ericsizemore/phpunit-coverage-check/contributors).
+- Special thanks to [JetBrains](https://www.jetbrains.com/?from=phpunit-coverage-check) for their Licenses for Open Source Development.
+
+
 ### Author
 
 Eric Sizemore - <admin@secondversion.com> - <https://www.secondversion.com>
