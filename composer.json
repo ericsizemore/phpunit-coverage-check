@@ -26,10 +26,13 @@
             "role": "Original Developer"
         }
     ],
+    "homepage": "https://github.com/ericsizemore/phpunit-coverage-check",
     "support": {
         "issues": "https://github.com/ericsizemore/phpunit-coverage-check/issues",
         "forum": "https://github.com/ericsizemore/phpunit-coverage-check/discussions",
         "source": "https://github.com/ericsizemore/phpunit-coverage-check/tree/master",
+        "docs": "https://github.com/ericsizemore/phpunit-coverage-check",
+        "rss": "https://github.com/ericsizemore/phpunit-coverage-check/releases.atom",
         "security": "https://github.com/ericsizemore/phpunit-coverage-check/security/policy"
     },
     "funding": [
@@ -94,10 +97,19 @@
         }
     },
     "scripts": {
+        "analyze": [
+            "@clear-build",
+            "@composer validate",
+            "@phpunit",
+            "@code-coverage",
+            "@phpstan"
+        ],
         "clear-build": "rm -rf ./build/*",
-        "cs:check": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff",
-        "cs:fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+        "code-coverage": "@php ./coverage-check build/logs/clover.xml 100",
+        "phpcs:check": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff",
+        "phpcs:fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -vvv",
-        "test": "phpunit"
+        "phpunit": "vendor/bin/phpunit",
+        "phpunit:migrate": "@phpunit --migrate-configuration"
     }
 }

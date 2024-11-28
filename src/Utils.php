@@ -87,6 +87,9 @@ final class Utils
      */
     public static function parseXml(string $xmlData): SimpleXMLElement
     {
+        /**
+         * @var array<int, string> $errorLevels
+         */
         static $errorLevels = [
             LIBXML_ERR_WARNING => 'Warning',
             LIBXML_ERR_ERROR   => 'Error',

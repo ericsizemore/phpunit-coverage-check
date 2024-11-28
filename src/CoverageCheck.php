@@ -19,7 +19,7 @@ use InvalidArgumentException;
 use RuntimeException;
 use SimpleXMLElement;
 
-use function array_walk;
+use function array_map;
 use function file_get_contents;
 
 /**
@@ -132,8 +132,12 @@ class CoverageCheck
         }
         //@codeCoverageIgnoreEnd
 
+        /**
+         * @var array<string> $metrics
+         */
         $metrics = ((array) $rawMetrics[0])['@attributes'];
-        array_walk($metrics, static fn (string $value, string $key) => $metrics[$key] = \intval($value));
+
+        $metrics = array_map(static fn (string $value): int => \intval($value), $metrics);
 
         unset($rawMetrics);
 
@@ -178,8 +182,12 @@ class CoverageCheck
         //@codeCoverageIgnoreEnd
 
         foreach ($rawMetrics as $file) {
+            /**
+             * @var array<string> $metrics
+             */
             $metrics = ((array) $file->metrics)['@attributes'];
-            array_walk($metrics, static fn (string $value, string $key) => $metrics[$key] = \intval($value));
+
+            $metrics = array_map(static fn (string $value): int => \intval($value), $metrics);
 
             $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
             $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
