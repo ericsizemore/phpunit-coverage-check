@@ -75,7 +75,7 @@ jobs:
            require-lock-file: "true"
 
       - name: "Run test suite"
-        run: composer run-script test
+        run: composer run-script phpunit
 
       - name: Coverage Check
         uses: ericsizemore/phpunit-coverage-check-action@1.1.0
