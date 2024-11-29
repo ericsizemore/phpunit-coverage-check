@@ -4,7 +4,7 @@ name: Release
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request: ~
   schedule:
     - cron: "15 9 */3 * *"
