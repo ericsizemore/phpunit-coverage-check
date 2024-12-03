@@ -301,12 +301,12 @@ class CoverageCheckCommandTest extends TestCase
     {
         $this->tester->run([
             'cloverfile'   => self::$fixtures['valid'],
-            'threshold'    => 90,
+            'threshold'    => 91,
             '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->tester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->tester->getInput()->getArgument('threshold'));
+        self::assertSame(91, $this->tester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
@@ -316,7 +316,7 @@ class CoverageCheckCommandTest extends TestCase
         $expected .= '  /tmp/Example/String.php       36/38                      94.74%    ' . $eol;
         $expected .= '  /tmp/Example/StringList.php   20/24                      83.33%    ' . $eol;
         $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                56/62                      89.04%    ' . $eol;
+        $expected .= '  Overall Totals                56/62                      90.32%    ' . $eol;
         $expected .= ' ----------------------------- -------------------------- ----------';
 
         self::assertEquals($expected, trim($this->tester->getDisplay()));

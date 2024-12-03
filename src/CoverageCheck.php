@@ -130,6 +130,7 @@ class CoverageCheck
         if ($rawMetrics === false) {
             return false;
         }
+
         //@codeCoverageIgnoreEnd
 
         /**
@@ -169,8 +170,9 @@ class CoverageCheck
      */
     public function processByFile(): array|false
     {
-        $fileMetrics   = [];
-        $totalCoverage = 0;
+        $fileMetrics          = [];
+        $totalElementsCovered = 0;
+        $totalElements        = 0;
 
         $rawMetrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
 
@@ -197,7 +199,8 @@ class CoverageCheck
             }
 
             $coveragePercentage = $coveredMetrics / $totalMetrics * 100;
-            $totalCoverage += $coveragePercentage;
+            $totalElementsCovered += $coveredMetrics;
+            $totalElements        += $totalMetrics;
 
             $fileMetrics[(string) $file['name']] = [
                 'coveredMetrics' => $coveredMetrics,
@@ -208,15 +211,11 @@ class CoverageCheck
 
         unset($rawMetrics);
 
-        $fileCount = \count($fileMetrics);
-
-        if ($fileCount === 0) {
+        if ($totalElements === 0) {
             return false;
         }
 
-        if ($totalCoverage !== 0) {
-            $totalCoverage /= $fileCount;
-        }
+        $totalCoverage = $totalElementsCovered / $totalElements * 100;
 
         return [
             'fileMetrics'   => $fileMetrics,
