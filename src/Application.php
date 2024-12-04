@@ -37,7 +37,7 @@ final class Application extends BaseApplication
 
     public const COMMAND_NAME = 'coverage:check';
 
-    public const VERSION = '2.0.0';
+    public const VERSION = '2.0.3';
 
     /**
      * Override constructor.
