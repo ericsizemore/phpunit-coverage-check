@@ -1,5 +1,5 @@
 # Based on https://github.com/box-project/box/blob/main/.github/workflows/release.yaml
-name: Release
+name: "Release"
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
       - name: "Install PHP"
         uses: shivammathur/setup-php@master
         with:
-           php-version: '8.2'
+           php-version: '8.3'
            ini-values: phar.readonly=0
            coverage: none
            tools: box
@@ -43,8 +43,8 @@ jobs:
 
       - name: "Ensure the PHAR works"
         run: |
-          bin/phpunit-coverage-check.phar --version
-          bin/phpunit-coverage-check.phar --help
+          dist/phpunit-coverage-check.phar --version
+          dist/phpunit-coverage-check.phar --help
 
       - name: "Import GPG key"
         if: github.event_name == 'release'
@@ -61,16 +61,16 @@ jobs:
             --yes \
             --passphrase="${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696_PASSPHRASE }}" \
             --detach-sign \
-            --output bin/phpunit-coverage-check.phar.asc \
-            bin/phpunit-coverage-check.phar
+            --output dist/phpunit-coverage-check.phar.asc \
+            dist/phpunit-coverage-check.phar
 
       - name: "Upload the PHAR artifact"
         uses: actions/upload-artifact@v4
         with:
           name: phpunit-coverage-check-phar
           path: |
-            bin/phpunit-coverage-check.phar
-            bin/phpunit-coverage-check.phar.asc
+            dist/phpunit-coverage-check.phar
+            dist/phpunit-coverage-check.phar.asc
 
   publish-phar:
     runs-on: ubuntu-latest

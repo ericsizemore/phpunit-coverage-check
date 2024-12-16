@@ -1,4 +1,3 @@
 vendor/
-bin/
 build/
 .php-cs-fixer.cache

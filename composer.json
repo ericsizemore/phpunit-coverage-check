@@ -54,10 +54,10 @@
         "release on GitHub at https://github.com/ericsizemore/phpunit-coverage-check/releases"
     ],
     "require": {
-        "php": "^8.2 <8.5",
+        "php": "^8.3",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "symfony/console": "^7.1"
+        "symfony/console": "^7.3"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.65",
@@ -66,7 +66,11 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^11.4"
+        "phpunit/phpunit": "^12.0",
+        "psalm/plugin-phpunit": "^0.19.0",
+        "psalm/plugin-symfony": "5.x-dev",
+        "rector/rector": "^2.0",
+        "vimeo/psalm": "dev-master as 5.26.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -81,19 +85,19 @@
         }
     },
     "bin": [
-        "coverage-check"
+        "bin/coverage-check"
     ],
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true
         },
         "platform": {
-            "php": "8.2.0"
+            "php": "8.3.0"
         }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.x-dev"
+            "dev-master": "3.x-dev"
         }
     },
     "scripts": {
@@ -102,14 +106,24 @@
             "@composer validate",
             "@phpunit",
             "@code-coverage",
-            "@phpstan"
+            "@phpstan",
+            "@psalm",
+            "@psalm:security",
+            "@psalm:shepherd"
         ],
         "clear-build": "rm -rf ./build/*",
-        "code-coverage": "@php ./coverage-check build/logs/clover.xml 100",
-        "phpcs:check": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run --diff",
+        "code-coverage": "@php bin/coverage-check build/logs/clover.xml 100",
+        "phpcs:check": "@phpcs:fix --dry-run --diff",
         "phpcs:fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -vvv",
         "phpunit": "vendor/bin/phpunit",
-        "phpunit:migrate": "@phpunit --migrate-configuration"
+        "phpunit:migrate": "@phpunit --migrate-configuration",
+        "psalm": "vendor/bin/psalm -c psalm.xml --no-cache --show-info=true",
+        "psalm:baseline": "@psalm --no-diff --set-baseline=psalm-baseline.xml",
+        "psalm:ci": "@psalm:security --shepherd --report=results.sarif",
+        "psalm:security": "@psalm --no-diff --taint-analysis",
+        "psalm:shepherd": "@psalm --no-diff --shepherd --stats",
+        "refactor:check": "@refactor:fix --dry-run",
+        "refactor:fix": "vendor/bin/rector process"
     }
 }

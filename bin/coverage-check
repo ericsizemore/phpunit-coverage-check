@@ -16,9 +16,10 @@ declare(strict_types=1);
 // Attempt to load dependencies
 (static function (): void {
     $possibleLocations = [
+        __DIR__ . '/../../../autoload.php',
         __DIR__ . '/../../autoload.php',
         __DIR__ . '/../autoload.php',
-        __DIR__ . '/vendor/autoload.php',
+        __DIR__ . '/../vendor/autoload.php',
     ];
 
     $loader = null;

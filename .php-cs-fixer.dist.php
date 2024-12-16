@@ -19,7 +19,7 @@ $config
     ->setRules([
         '@PER-CS'                 => true,
         '@PSR12'                  => true,
-        '@PHP82Migration'         => true,
+        '@PHP83Migration'         => true,
         'align_multiline_comment' => true,
         'array_syntax'            => [
             'syntax' => 'short',
@@ -190,7 +190,7 @@ $config
             ->in(__DIR__ . '/src')
             ->in(__DIR__ . '/tests')
             ->append([
-                __DIR__ . '/coverage-check',
+                __DIR__ . '/bin/coverage-check',
                 __DIR__ . '/scoper.inc.php',
             ])
     )

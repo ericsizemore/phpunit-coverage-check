@@ -15,6 +15,10 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
+use Esi\CoverageCheck\Exceptions\FailedToGetFileContentsException;
+use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
+use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
+use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use InvalidArgumentException;
 use RuntimeException;
 use SimpleXMLElement;
@@ -26,19 +30,49 @@ use function file_get_contents;
  * @see Command\CoverageCheckCommand
  * @see Tests\CoverageCheckTest
  */
-class CoverageCheck
+final class CoverageCheck
 {
     /**
-     * Xpath expression for getting each file's data in a clover report.
+     * Message returned if there is not enough data to calculate coverage.
+     *
+     * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA without prefix.
+     *
+     * @see Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA
+     * @since 3.0.0
+     */
+    public const string ERROR_INSUFFICIENT_DATA = '[ERROR] Insufficient data for calculation. Please add more code.';
+
+    /**
+     * Message returned if coverage falls below a given threshold.
+     *
+     * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::ERROR_COVERAGE_BELOW_THRESHOLD without prefix.
+     *
+     * @see Command\CoverageCheckCommand::ERROR_COVERAGE_BELOW_THRESHOLD
+     * @since 3.0.0
+     */
+    public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s%% which is below the accepted %d%%';
+
+    /**
+     * Message returned if coverage meets or exceeds a given threshold.
+     *
+     * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::OK_TOTAL_CODE_COVERAGE without prefix.
+     *
+     * @see Command\CoverageCheckCommand::OK_TOTAL_CODE_COVERAGE
+     * @since 3.0.0
+     */
+    public const string OK_TOTAL_CODE_COVERAGE = '[OK] Total code coverage is %s%%';
+
+    /**
+     * Xpath expression for getting each files' data in a clover report.
      *
      * @since 2.0.0
      */
-    protected const XPATH_FILES = '//file';
+    protected const string XPATH_FILES = '//file';
 
     /**
      * Xpath expression for getting the project total metrics in a clover report.
      */
-    protected const XPATH_METRICS = '//project/metrics';
+    protected const string XPATH_METRICS = '//project/metrics';
 
     /**
      * Configurable options.
@@ -47,11 +81,11 @@ class CoverageCheck
      * @see self::setThreshold()
      * @see self::setOnlyPercentage()
      */
-    protected string $cloverFile = 'clover.xml';
+    private string $cloverFile = 'clover.xml';
 
-    protected bool $onlyPercentage = false;
+    private bool $onlyPercentage = false;
 
-    protected int $threshold = 100;
+    private int $threshold = 100;
 
     /**
      * Simple getters.
@@ -90,12 +124,12 @@ class CoverageCheck
         $results = $this->process();
 
         if ($results === false) {
-            return '[ERROR] Insufficient data for calculation. Please add more code.';
+            return self::ERROR_INSUFFICIENT_DATA;
         }
 
         if ($results < $threshold && !$onlyPercentage) {
             return \sprintf(
-                '[ERROR] Total code coverage is %s which is below the accepted %d%%',
+                self::ERROR_COVERAGE_BELOW_THRESHOLD,
                 Utils::formatCoverage($results),
                 $threshold
             );
@@ -105,7 +139,7 @@ class CoverageCheck
             return Utils::formatCoverage($results);
         }
 
-        return \sprintf('[OK] Total code coverage is %s', Utils::formatCoverage($results));
+        return \sprintf(self::OK_TOTAL_CODE_COVERAGE, Utils::formatCoverage($results));
     }
 
     /**
@@ -130,7 +164,6 @@ class CoverageCheck
         if ($rawMetrics === false) {
             return false;
         }
-
         //@codeCoverageIgnoreEnd
 
         /**
@@ -183,11 +216,11 @@ class CoverageCheck
         }
         //@codeCoverageIgnoreEnd
 
-        foreach ($rawMetrics as $file) {
+        foreach ($rawMetrics as $rawMetric) {
             /**
              * @var array<string> $metrics
              */
-            $metrics = ((array) $file->metrics)['@attributes'];
+            $metrics = ((array) $rawMetric->metrics)['@attributes'];
 
             $metrics = array_map(static fn (string $value): int => \intval($value), $metrics);
 
@@ -202,7 +235,7 @@ class CoverageCheck
             $totalElementsCovered += $coveredMetrics;
             $totalElements        += $totalMetrics;
 
-            $fileMetrics[(string) $file['name']] = [
+            $fileMetrics[(string) $rawMetric['name']] = [
                 'coveredMetrics' => $coveredMetrics,
                 'totalMetrics'   => $totalMetrics,
                 'percentage'     => $coveragePercentage,
@@ -228,12 +261,12 @@ class CoverageCheck
      */
 
     /**
-     * @throws InvalidArgumentException If the given file is empty or does not exist.
+     * @throws InvalidInputFileException If the given file is empty or does not exist.
      */
     public function setCloverFile(string $cloverFile): CoverageCheck
     {
         if (!Utils::validateCloverFile($cloverFile)) {
-            throw new InvalidArgumentException(\sprintf('Invalid input file provided. Was given: %s', $cloverFile));
+            throw InvalidInputFileException::create($cloverFile);
         }
 
         $this->cloverFile = $cloverFile;
@@ -249,12 +282,12 @@ class CoverageCheck
     }
 
     /**
-     * @throws InvalidArgumentException If the threshold is less than 1 or greater than 100.
+     * @throws ThresholdOutOfBoundsException If the threshold is less than 1 or greater than 100.
      */
     public function setThreshold(int $threshold): CoverageCheck
     {
         if (!Utils::validateThreshold($threshold)) {
-            throw new InvalidArgumentException(\sprintf('The threshold must be a minimum of 1 and a maximum of 100, %d given', $threshold));
+            throw ThresholdOutOfBoundsException::create($threshold);
         }
 
         $this->threshold = $threshold;
@@ -274,20 +307,20 @@ class CoverageCheck
      *
      * @return null|array<SimpleXMLElement>|false
      */
-    protected function loadMetrics(string $xpath = self::XPATH_METRICS): null|array|false
+    private function loadMetrics(string $xpath = self::XPATH_METRICS): null|array|false
     {
         $cloverData = file_get_contents($this->cloverFile);
 
         //@codeCoverageIgnoreStart
         if ($cloverData === false || $cloverData === '') {
-            throw new RuntimeException(\sprintf('Failed to get the contents of %s', $this->cloverFile));
+            throw FailedToGetFileContentsException::create($this->cloverFile);
         }
         //@codeCoverageIgnoreEnd
 
         $xml = Utils::parseXml($cloverData);
 
         if (!Utils::isPossiblyClover($xml)) {
-            throw new RuntimeException('Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?');
+            throw NotAValidCloverFileException::create();
         }
 
         return $xml->xpath($xpath);

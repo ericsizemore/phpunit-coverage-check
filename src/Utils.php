@@ -23,7 +23,6 @@ use function file_exists;
 use function libxml_clear_errors;
 use function libxml_get_errors;
 use function libxml_use_internal_errors;
-use function property_exists;
 use function trim;
 
 use const LIBXML_ERR_ERROR;
@@ -31,7 +30,7 @@ use const LIBXML_ERR_FATAL;
 use const LIBXML_ERR_WARNING;
 use const PHP_EOL;
 
-final class Utils
+abstract class Utils
 {
     /**
      * Returns the given number formatted and rounded for percentage.
@@ -60,11 +59,7 @@ final class Utils
 
         $hasChildren = $xml->children();
 
-        if (
-            !property_exists($hasChildren, 'project')
-            || !property_exists($hasChildren->project, 'metrics')
-            || (array) $hasChildren->project->metrics === []
-        ) {
+        if ($hasChildren === null || !isset($hasChildren->project, $hasChildren->project->metrics) || (array) $hasChildren->project->metrics === []) {
             return false;
         }
 
@@ -103,14 +98,14 @@ final class Utils
         } catch (Exception) {
             $errorMessage = PHP_EOL;
 
-            foreach (libxml_get_errors() as $error) {
+            foreach (libxml_get_errors() as $libXMLError) {
                 $errorMessage .= \sprintf(
                     '%s %d: %s. Line %d Column %d',
-                    $errorLevels[$error->level],
-                    $error->code,
-                    trim($error->message),
-                    $error->line,
-                    $error->column
+                    $errorLevels[$libXMLError->level],
+                    $libXMLError->code,
+                    trim($libXMLError->message),
+                    $libXMLError->line,
+                    $libXMLError->column
                 ) . PHP_EOL;
             }
 

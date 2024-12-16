@@ -15,26 +15,27 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck\Style;
 
+use Override;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * @see SymfonyStyle
  */
-class CoverageCheckStyle extends SymfonyStyle
+final class CoverageCheckStyle extends SymfonyStyle
 {
-    #[\Override]
+    #[Override]
     public function error(array|string $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'ERROR'), 'fg=white;bg=red', ' ', true);
     }
 
-    #[\Override]
+    #[Override]
     public function success(array|string $message, bool $onlyPercentage = false): void
     {
         $this->block($message, ($onlyPercentage ? null : 'OK'), 'fg=black;bg=green', ' ', true);
     }
 
-    #[\Override]
+    #[Override]
     public function table(array $headers, array $rows): void
     {
         $this->createTable()

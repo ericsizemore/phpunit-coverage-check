@@ -1,5 +1,7 @@
 # Set the default behavior, in case people don't have core.autocrlf set.
 * text eol=lf
+*.php text diff=php
+*.md text diff=markdown
 
 # Ignore all test and documentation with "export-ignore".
 /.github                   export-ignore
@@ -17,5 +19,7 @@
 /phpstan.neon              export-ignore
 /phpstan-baseline.neon     export-ignore
 /phpunit.xml               export-ignore
+/psalm.xml                 export-ignore
+/rector.php                export-ignore
 /renovate.json             export-ignore
 /scoper.inc.php            export-ignore

@@ -5,52 +5,51 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ericsizemore/phpunit-coverage-check/?branch=master)
 [![Continuous Integration](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/ericsizemore/phpunit-coverage-check/actions/workflows/continuous-integration.yml)
 [![SymfonyInsight](https://insight.symfony.com/projects/78420c3f-1f4e-4c79-b684-03887756083b/mini.svg)](https://insight.symfony.com/projects/78420c3f-1f4e-4c79-b684-03887756083b)
+[![Type Coverage](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check/coverage.svg)](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check)
+[![Psalm Level](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check/level.svg)](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check)
 [![Latest Stable Version](https://img.shields.io/packagist/v/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
 [![Downloads per Month](https://img.shields.io/packagist/dm/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
 [![License](https://img.shields.io/packagist/l/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
 
 [PHPUnit Coverage Check](http://github.com/ericsizemore/phpunit-coverage-check/) - Check the code coverage using the clover report of PHPUnit.
 
-This php script will read the clover xml report from PHPUnit and calculate the coverage score. Based on the given threshold the script will exit ok if the coverage is higher than the threshold or exit with code 1 if the coverage is lower than the threshold.
+This library will read the clover xml report from PHPUnit and calculate the coverage score. 
+Based on the given threshold the application will exit OK if the coverage is higher than the threshold or exit with code 1 if the coverage is lower than the threshold.
 
-This script can be used in your continuous deployment environment or for example added to a pre-commit hook.
+This library can be used in multiple ways:
 
-## GitHub Action
+* In your continuous deployment environment
+* By adding it to a pre-commit hook
+* Requiring it as a dev dependency in your `composer.json` and running it with a [composer script](https://getcomposer.org/doc/articles/scripts.md). 
 
-A GitHub action has been created for this library and can be found in the [PHPUnit Coverage Check Action](https://github.com/ericsizemore/phpunit-coverage-check-action) repository, or on the [GitHub Marketplace](https://github.com/marketplace/actions/phpunit-coverage-check).
+See [GitHub Action](#github-action), [Installation](#installation) and [Usage](#usage) for more information.
 
-## Acknowledgements/Credits
+> [!IMPORTANT]
+> This project is not in any way an official ``PHPUnit`` project.
+> Meaning, that it is not associated with, or endorsed by, the ``PHPUnit`` project or its author ``Sebastian Bergmann``.
 
-This library is a fork of/based upon [rregeer/phpunit-coverage-check](https://github.com/richardregeer/phpunit-coverage-check/) by [Richard Regeer](https://github.com/richardregeer).
+### GitHub Action
 
-Most of this library has been rewritten from the ground up, to replace and improve a majority of the original library. The overall idea, and key pieces of the calculation, are thanks to the original library. Many thanks and much appreciation to Richard Regeer for his wonderful work.
-
-Please see [License](#license) and the [LICENSE](LICENSE) file for more information.
-
-For more information on changes made in this library, in comparison to the original by Richard Regeer, please see the [CHANGELOG](CHANGELOG.md) file.
-
-Phar generation is handled by using [Box](https://github.com/box-project/box). My implementation of the `coverage:check` command, with Symfony\Console, was inspired by [SensioLabs Security Checker](https://github.com/sensiolabs/security-checker).
-
-
-## Important Note
-
-This project is not in any way an official ``PHPUnit`` project. Meaning, that it is not associated with, or endorsed by, the ``PHPUnit`` project or its author ``Sebastian Bergmann``.
-
+A GitHub action is available and can be found in the [PHPUnit Coverage Check Action](https://github.com/ericsizemore/phpunit-coverage-check-action) repository, or on the [GitHub Marketplace](https://github.com/marketplace/actions/phpunit-coverage-check).
 
 ## Installation
 
 ### Composer
 
-The script can be installed using composer. Add this repository as a dependency to the composer.json file.
+`PHPUnit Coverage Check` can be installed using Composer. Add this repository as a dev-dependency to the composer.json file.
 
 ```bash
-$ composer require --dev esi/phpunit-coverage-check:^2.0
+$ composer require --dev esi/phpunit-coverage-check:^3.0
 ```
 
-To use PHPUnit Coverage Check on PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage) as usage is slightly different):
-
+To use PHPUnit Coverage Check on an older version of PHP:
+* PHP 8.1, use version 1.0.0 (and check 1.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/1.x/README.md#usage) as usage is slightly different):
 ```bash
 $ composer require --dev esi/phpunit-coverage-check:^1.0
+```
+* PHP 8.2, use version 2.0.0 (and check 2.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/2.x/README.md#usage))
+```bash
+$ composer require --dev esi/phpunit-coverage-check:^2.0
 ```
 
 
@@ -60,8 +59,8 @@ Download the `phpunit-coverage-check.phar` from an available release. It is reco
 
 ```bash
 # Adjust the URL based on the latest release
-wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar"
-wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/2.0.0/phpunit-coverage-check.phar.asc"
+wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar"
+wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar.asc"
 
 # Check that the signature matches
 gpg --verify phpunit-coverage-check.phar.asc phpunit-coverage-check.phar
@@ -76,6 +75,7 @@ chmod +x phpunit-coverage-check.phar
 The Phar files of *PHPUnit Coverage Check* are signed with a public key associated to ``admin@secondversion.com.``.
 The [`key(s) associated with this E-Mail address`](https://keys.openpgp.org/search?q=admin%40secondversion.com) can be queried at [`keys.openpgp.org`](https://keys.openpgp.org/).
 
+
 #### Install with Phive
 
 You can also install the *PHPUnit Coverage Check* Phar with `Phive`.
@@ -85,10 +85,10 @@ If not already using Phive, you can read more about it [here](https://phar.io/),
 
 ## Usage
 
-The script has 2 parameters that are mandatory to return the code coverage.
+There are 2 parameters that must be passed to return the code coverage.
 
-1. The location of the clover xml file, that's generated by PHPUnit.
-2. The coverage threshold that is acceptable. Min = 1, Max = 100
+1. The location of the clover xml file, that has been generated by PHPUnit.
+2. The coverage threshold that is acceptable or 'passing'. Min = 1, Max = 100
 
 Generate the `clover.xml` file by using PHPUnit:
 
@@ -96,7 +96,7 @@ Generate the `clover.xml` file by using PHPUnit:
 $ php vendor/bin/phpunit --coverage-clover clover.xml
 ```
 
-It's also possible to add the coverage report generation to your PHPUnit configuration file (`phpunit.xml.dist` for example). You would add to following lines to the xml file inside the `<coverage>` tag:
+You can also add the coverage report generation to your PHPUnit configuration file (`phpunit.xml.dist` for example). You would need to add the following lines inside the `<coverage>` tag:
 
 ```xml
     <report>
@@ -113,18 +113,20 @@ It's also possible to add the coverage report generation to your PHPUnit configu
 ```bash
 $ php vendor/bin/coverage-check /path/to/clover.xml 100
 $ php vendor/bin/coverage-check /path/to/clover.xml 100 --only-percentage
+
 # -O for only-percentage works as well
 $ php vendor/bin/coverage-check /path/to/clover.xml 100 -O
+
 # -F or show-files will display coverage per file, formatted in a table
 $ php vendor/bin/coverage-check /path/to/clover.xml 100 -F
 ```
 
-You can also use the Api directly if you wish. I created a function called `nonConsoleCall` that will process and return the data, similar to how the console application displays it.
+You can use the Api directly if you wish. The `Esi\CoverageCheck\CoverageCheck::nonConsoleCall()` method will process and return the data, like how the console application displays it.
 
 ```php
     /**
      * Processes the coverage data with the given clover file and threshold, and returns the information
-     * similar to how the Console application will.
+     * like how the Console application will.
      *
      * This is mainly useful for those that may wish to use this library outside the CLI/Console or PHAR.
      */
@@ -142,14 +144,15 @@ $results = $check->nonConsoleCall(__DIR__ . '/tests/fixtures/clover.xml', 90);
 echo $results; // Total code coverage is 90.32%
 ```
 
-
 ### If using the Phar
 
 ```bash
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100 --only-percentage
+
 # -O for only-percentage works as well
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100 -O
+
 # -F or show-files will display coverage per file, formatted in a table
 $ php phpunit-coverage-check.phar /path/to/clover.xml 100 -F
 ```
@@ -158,9 +161,11 @@ With `--only-percentage` (or `-O`) enabled, the CLI command will only return the
 
 #### --show-files
 
-With `--show-files` (or `-F`), `--only-percentage` will be ignored. This option parses the clover file for coverage information for each file in the project/package, determine coverage, and display the information in a table. For example:
+With `--show-files` (or `-F`), `--only-percentage` will be ignored. This option parses the clover file for coverage information for each file in the project/package, determine coverage, and display the information in a table.
 
-##### Passing coverage
+For example:
+
+##### Passing coverage example output
 
 ```bash
 $ php coverage-check build/logs/clover.xml 90 -F
@@ -178,7 +183,7 @@ $ php coverage-check build/logs/clover.xml 90 -F
  ------------------------------------------------------------------- -------------------------- ----------
 ```
 
-##### Mixed pass/fail coverage
+##### Mixed pass/fail coverage example output
 
 ```bash
 $ php coverage-check tests/fixtures/clover.xml 90 -F
@@ -197,41 +202,47 @@ $ php coverage-check tests/fixtures/clover.xml 90 -F
 
 ### Requirements
 
-- PHPUnit Coverage Check works with PHP 8.2.0 or above.
-
-
-### Submitting bugs and feature requests
-
-Bugs and feature requests are tracked on [GitHub](https://github.com/ericsizemore/phpunit-coverage-check/issues)
-
-Issues are the quickest way to report a bug. If you find a bug or documentation error, please check the following first:
-
-* That there is not an Issue already open concerning the bug
-* That the issue has not already been addressed (within closed Issues, for example)
-
-
-### Contributing
-
-See [CONTRIBUTING](CONTRIBUTING.md)
-
-
-### Backward Compatibility Promise
-
-* See [backward-compatibility.md](backward-compatibility.md)
+- PHPUnit Coverage Check works with PHP 8.3.0 or above.
+- For PHP 8.2 please use [v2.0.x](https://github.com/ericsizemore/phpunit-coverage-check/tree/2.x) of PHPUnit Coverage Check.
+- For PHP 8.1 please use [v1.0.x](https://github.com/ericsizemore/phpunit-coverage-check/tree/1.x) of PHPUnit Coverage Check.
 
 
 ### Credits
 
+This library is a fork of/based upon [rregeer/phpunit-coverage-check](https://github.com/richardregeer/phpunit-coverage-check/) by [Richard Regeer](https://github.com/richardregeer).
+
+Most of this library has been rewritten from the ground up, to replace and improve a majority of the original library. The overall idea, and key pieces of the calculation, are thanks to the original library. Many thanks and much appreciation to Richard Regeer for his wonderful work.
+
 - Author: [Eric Sizemore](https://github.com/ericsizemore)
+- Thanks to [Richard Regeer](https://github.com/richardregeer) for the original `phpunit-coverage-check` library this library is forked from.
+- Thanks to [SensioLabs Security Checker](https://github.com/sensiolabs/security-checker) for inspiration in creating my implementation of the `coverage:check` command.
+- Thanks to [Box](https://github.com/box-project/box) for their wonderful project that makes Phar generation a breeze.
 - Thanks to [all Contributors](https://github.com/ericsizemore/phpunit-coverage-check/contributors).
 - Special thanks to [JetBrains](https://www.jetbrains.com/?from=phpunit-coverage-check) for their Licenses for Open Source Development.
 
 
-### Author
+### Contributing
 
-Eric Sizemore - <admin@secondversion.com> - <https://www.secondversion.com>
+See [CONTRIBUTING](./CONTRIBUTING.md).
 
+Bugs and feature requests are tracked on [GitHub](https://github.com/ericsizemore/phpunit-coverage-check/issues).
+
+### Contributor Covenant Code of Conduct
+
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+
+### Backward Compatibility Promise
+
+See [backward-compatibility.md](./backward-compatibility.md) for more information on Backwards Compatibility.
+
+### Changelog
+
+See the [CHANGELOG](./CHANGELOG.md) for more information on what has changed recently.
 
 ### License
 
-PHPUnit Coverage Check is licensed under the MIT [License](LICENSE).
+See the [LICENSE](./LICENSE) for more information on the license that applies to this project.
+
+### Security
+
+See [SECURITY](./SECURITY.md) for more information on the security disclosure process.

@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "master"
+      - "3.x-dev"
   pull_request:
     branches:
-      - "master"
+      - "3.x-dev"
 
 jobs:
   phpstan:
@@ -16,9 +16,9 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         operating-system:
           - "ubuntu-latest"
     steps:
@@ -42,15 +42,45 @@ jobs:
       - name: "Run PHPStan"
         run: composer run-script phpstan
 
+  psalm:
+    name: "Psalm"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Install PHP 8.3"
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 8.3
+          extensions: mbstring
+          coverage: none
+
+      - name: "Validate composer.json and composer.lock"
+        run: composer validate --strict
+
+      - name: "Setup Composer, install dependencies"
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--prefer-dist --optimize-autoloader"
+          require-lock-file: "true"
+
+      - name: "Psalm Analysis"
+        run: composer run-script psalm:ci
+
+      - name: "Upload Security Analysis results to GitHub"
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: results.sarif
+
   unit-test:
     name: "Run Unit Tests ${{ matrix.php-version }}, ${{ matrix.operating-system }}"
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
         php-version:
-          - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
         operating-system:
           - "ubuntu-latest"
     steps:
@@ -77,12 +107,12 @@ jobs:
       - name: "Run test suite"
         run: composer run-script phpunit
 
-      - name: Coverage Check
+      - name: "Coverage Check"
         uses: ericsizemore/phpunit-coverage-check-action@1.1.1
         with:
           clover_file: 'build/logs/clover.xml'
           threshold: 100
 
-      - uses: sudo-bot/action-scrutinizer@latest
-        with:
-           cli-args: "--format=php-clover build/logs/clover.xml"
+     # - uses: sudo-bot/action-scrutinizer@latest
+     #   with:
+     #      cli-args: "--format=php-clover build/logs/clover.xml"

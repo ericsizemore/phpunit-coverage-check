@@ -1,5 +1,5 @@
 {
-    "output": "bin/phpunit-coverage-check.phar",
+    "output": "dist/phpunit-coverage-check.phar",
     "compactors": [
         "KevinGH\\Box\\Compactor\\Php",
         "KevinGH\\Box\\Compactor\\Json",

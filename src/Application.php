@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
+use Override;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,13 +32,13 @@ final class Application extends BaseApplication
     /**
      * Constants used in the Console Application for library information.
      */
-    public const APPLICATION_DESCRIPTION = 'Reads the clover xml report from PHPUnit and calculates the coverage score.';
+    public const string APPLICATION_DESCRIPTION = 'Reads the clover xml report from PHPUnit and calculates the coverage score.';
 
-    public const APPLICATION_NAME = 'PHPUnit Coverage Check';
+    public const string APPLICATION_NAME = 'PHPUnit Coverage Check';
 
-    public const COMMAND_NAME = 'coverage:check';
+    public const string COMMAND_NAME = 'coverage:check';
 
-    public const VERSION = '2.0.3';
+    public const string VERSION = '3.0.0';
 
     /**
      * Override constructor.
@@ -54,7 +55,7 @@ final class Application extends BaseApplication
      *
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     protected function configureIO(InputInterface $input, OutputInterface $output): void
     {
         $output->setDecorated(!(bool) getenv('PHPUNIT_TEST'));
@@ -70,7 +71,7 @@ final class Application extends BaseApplication
      *
      * @inheritDoc
      */
-    #[\Override]
+    #[Override]
     protected function getDefaultInputDefinition(): InputDefinition
     {
         return new InputDefinition(

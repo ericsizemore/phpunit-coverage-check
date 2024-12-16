@@ -90,6 +90,14 @@ The configuration file can be found at `phpstan.neon`, in the repository, for [P
 $ composer run-script phpstan
 ```
 
+#### Psalm
+
+The configuration file can be found at `psalm.xml`, in the repository, for [Psalm](https://psalm.dev/). You can use Psalm to perform static analysis (with a focus on type checking):
+
+```bash
+$ composer run-script psalm
+```
+
 #### PHP-CS-Fixer
 
 The configuration file can be found at `.php-cs-fixer.dist.php`, in the repository, for [PHP-CS-Fixer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer). You can use PHP-CS-Fixer to (re)format your source code for compliance with this project's coding guidelines:

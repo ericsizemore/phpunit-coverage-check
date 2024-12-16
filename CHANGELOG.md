@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [Unreleased]
+
+### Added
+
+  * Added [rector/rector](https://github.com/rectorphp/rector) to dev-dependencies.
+  * Added new class constants to `Esi\CoverageCheck\CoverageCheck` and `Esi\CoverageCheck\Command\CoverageCheckCommand` for ERROR and OK messages, so they are easier to update (if needed) in the future.
+    *  The constants are the same for both classes, with some exceptions:
+      * The constants in `CoverageCheckCommand` do not use the '[ERROR]' and '[OK]' prefixes as the `symfony/console` method(s) used to output these messages add the prefixes automatically.
+      * The constants in `CoverageCheckCommand` also remove the extra '%' in the format as it is added in with the formatted coverage.
+  * Added new Exceptions:
+    * `Exceptions\FailedToGetFileContentsException`
+    * `Exceptions\InvalidInputFileException`
+    * `Exceptions\NotAValidCloverFileException`
+    * `Exceptions\ThresholdOutOfBoundsException`
+  * Added [vimeo/psalm](https://github.com/vimeo/psalm), [psalm/plugin-phpunit](https://github.com/psalm/psalm-plugin-phpunit), and [psalm/plugin-symfony](https://github.com/psalm/psalm-plugin-symfony) as dev-dependencies
+    * Fixes implemented based on Psalm reported errors.
+
+### Changed
+
+  * Minimum PHP version bumped to 8.3.
+  * Class constants updated to have the appropriate typing.
+  * All classes marked `final`, and the `Utils` class made abstract since it is never instantiated (all static methods).
+  * `coverage-check` file moved to `bin/coverage-check`
+  * Update to PHPUnit 12 (`^12.0-dev` until official release).
+  * Updated `phpstan-baseline.neon` as it doesn't seem to understand `xpath()`'s ability to possibly return `null` or `false`.
+  * Add nightly PHP (8.5-dev) to GitHub workflow `continuous-integration.yml`.
+
+
 ## [2.0.2] - 2024-12-03
 
 ### Changed
@@ -131,7 +160,7 @@ This initial version is forked from [rregeer/phpunit-coverage-check](https://git
   * `coverage-check.php`, `bin/coverage-check`, and `test/run` removed.
 
 
-[unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/tree/master
+[unreleased]: https://github.com/ericsizemore/phpunit-coverage-check/tree/3.x-dev
 [2.0.2]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.2
 [2.0.1]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.1
 [2.0.0]: https://github.com/ericsizemore/phpunit-coverage-check/releases/tag/2.0.0

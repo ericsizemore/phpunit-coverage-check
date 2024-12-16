@@ -16,8 +16,11 @@ declare(strict_types=1);
 namespace Esi\CoverageCheck\Tests;
 
 use Esi\CoverageCheck\CoverageCheck;
+use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
+use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
+use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use Esi\CoverageCheck\Utils;
-use InvalidArgumentException;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -27,7 +30,10 @@ use RuntimeException;
  */
 #[CoversClass(CoverageCheck::class)]
 #[CoversClass(Utils::class)]
-class CoverageCheckTest extends TestCase
+#[CoversClass(InvalidInputFileException::class)]
+#[CoversClass(ThresholdOutOfBoundsException::class)]
+#[CoversClass(NotAValidCloverFileException::class)]
+final class CoverageCheckTest extends TestCase
 {
     private CoverageCheck $coverageCheck;
 
@@ -36,7 +42,7 @@ class CoverageCheckTest extends TestCase
      */
     private static array $fixtures;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         $this->coverageCheck = new CoverageCheck();
@@ -74,14 +80,14 @@ class CoverageCheckTest extends TestCase
 
     public function testGetSetThresholdInvalid(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ThresholdOutOfBoundsException::class);
         $this->coverageCheck->setThreshold(101);
     }
 
     public function testNonConsoleCallInvalid(): void
     {
         $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid']);
-        self::assertSame('[ERROR] Total code coverage is 90.32% which is below the accepted 100%', $results);
+        self::assertStringMatchesFormat(CoverageCheck::ERROR_COVERAGE_BELOW_THRESHOLD, $results);
     }
 
     public function testNonConsoleCallInvalidOnlyPercentage(): void
@@ -93,7 +99,7 @@ class CoverageCheckTest extends TestCase
     public function testNonConsoleCallValid(): void
     {
         $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 90);
-        self::assertSame('[OK] Total code coverage is 90.32%', $results);
+        self::assertStringMatchesFormat(CoverageCheck::OK_TOTAL_CODE_COVERAGE, $results);
     }
 
     public function testNonConsoleCallValidOnlyPercentage(): void
@@ -104,26 +110,26 @@ class CoverageCheckTest extends TestCase
 
     public function testNonConsoleInvalidCloverNoChildren(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(NotAValidCloverFileException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['no_children'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoProjectMetrics(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(NotAValidCloverFileException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['no_metrics'], 90);
     }
 
     public function testNonConsoleInvalidCloverNoRootElement(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(NotAValidCloverFileException::class);
         $this->coverageCheck->nonConsoleCall(self::$fixtures['invalid_root'], 90);
     }
 
     public function testNonConsoleNotEnoughCode(): void
     {
         $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['empty'], 90);
-        self::assertSame('[ERROR] Insufficient data for calculation. Please add more code.', $results);
+        self::assertSame(CoverageCheck::ERROR_INSUFFICIENT_DATA, $results);
     }
 
     public function testParseXmlErrors(): void
@@ -136,7 +142,7 @@ class CoverageCheckTest extends TestCase
 
     public function testSetCloverFileThatDoesNotExist(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidInputFileException::class);
         $this->coverageCheck->setCloverFile(self::$fixtures['notexist']);
     }
 }
