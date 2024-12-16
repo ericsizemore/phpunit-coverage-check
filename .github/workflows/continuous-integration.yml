@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - "3.x-dev"
+      - "master"
   pull_request:
     branches:
-      - "3.x-dev"
+      - "master"
 
 jobs:
   phpstan:
