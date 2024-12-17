@@ -78,10 +78,16 @@ final class CoverageCheckTest extends TestCase
         self::assertSame(100, $this->coverageCheck->getThreshold());
     }
 
-    public function testGetSetThresholdInvalid(): void
+    public function testGetSetThresholdInvalidMax(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
         $this->coverageCheck->setThreshold(101);
+    }
+
+    public function testGetSetThresholdInvalidMin(): void
+    {
+        $this->expectException(ThresholdOutOfBoundsException::class);
+        $this->coverageCheck->setThreshold(0);
     }
 
     public function testNonConsoleCallInvalid(): void

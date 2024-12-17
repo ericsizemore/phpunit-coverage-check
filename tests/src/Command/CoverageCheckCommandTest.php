@@ -23,6 +23,7 @@ use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
 use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use Esi\CoverageCheck\Style\CoverageCheckStyle;
 use Esi\CoverageCheck\Utils;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -58,7 +59,7 @@ final class CoverageCheckCommandTest extends TestCase
      */
     private static array $fixtures;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         self::$fixtures = [
@@ -214,7 +215,6 @@ final class CoverageCheckCommandTest extends TestCase
 
         self::assertSame(
             \sprintf(CoverageCheck::ERROR_COVERAGE_BELOW_THRESHOLD, 90.32, 100),
-            //'[ERROR] Total code coverage is 90.32% which is below the accepted 100%',
             trim($this->applicationTester->getDisplay())
         );
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
@@ -251,7 +251,6 @@ final class CoverageCheckCommandTest extends TestCase
 
         self::assertSame(
             \sprintf(CoverageCheck::OK_TOTAL_CODE_COVERAGE, 90.32),
-            //'[OK] Total code coverage is 90.32%',
             trim($this->applicationTester->getDisplay())
         );
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
