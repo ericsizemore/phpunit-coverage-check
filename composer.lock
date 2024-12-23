@@ -1291,13 +1291,13 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "3.x-dev"
-                },
                 "phpstan": {
                     "includes": [
                         "extension.neon"
                     ]
+                },
+                "branch-alias": {
+                    "dev-main": "3.x-dev"
                 }
             },
             "autoload": {
@@ -2651,12 +2651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "c41f7301aeb5b4ecdf073ed3809086781734237a"
+                "reference": "2c52441e0a9543fe5d064310a0b84fb5c816ff4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/c41f7301aeb5b4ecdf073ed3809086781734237a",
-                "reference": "c41f7301aeb5b4ecdf073ed3809086781734237a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2c52441e0a9543fe5d064310a0b84fb5c816ff4b",
+                "reference": "2c52441e0a9543fe5d064310a0b84fb5c816ff4b",
                 "shasum": ""
             },
             "require": {
@@ -2721,7 +2721,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-16T13:31:41+00:00"
+            "time": "2024-12-20T16:22:19+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2974,12 +2974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "84adce5436d3fa3f465af575e1fe5636605696a9"
+                "reference": "c02b58e54985dfe2690ddf8f50032760405e1abd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/84adce5436d3fa3f465af575e1fe5636605696a9",
-                "reference": "84adce5436d3fa3f465af575e1fe5636605696a9",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c02b58e54985dfe2690ddf8f50032760405e1abd",
+                "reference": "c02b58e54985dfe2690ddf8f50032760405e1abd",
                 "shasum": ""
             },
             "require": {
@@ -3064,7 +3064,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-16T13:32:56+00:00"
+            "time": "2024-12-21T05:52:01+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -3132,19 +3132,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196"
+                "reference": "1638f172b4ae5f283ee6b1b58fff3e44aa628742"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196",
-                "reference": "fb801a9b3d12ace9fb619febfaa3ae0bc1dbb196",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/1638f172b4ae5f283ee6b1b58fff3e44aa628742",
+                "reference": "1638f172b4ae5f283ee6b1b58fff3e44aa628742",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^8.1",
                 "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
-                "vimeo/psalm": "^5.16"
+                "vimeo/psalm": "^5.16 || dev-master"
             },
             "require-dev": {
                 "doctrine/annotations": "^1.8|^2",
@@ -3188,9 +3188,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.5"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.6"
             },
-            "time": "2024-07-03T11:57:02+00:00"
+            "time": "2024-12-21T08:46:26+00:00"
         },
         {
             "name": "psr/cache",
