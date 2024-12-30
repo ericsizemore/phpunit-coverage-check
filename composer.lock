@@ -2651,12 +2651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2c52441e0a9543fe5d064310a0b84fb5c816ff4b"
+                "reference": "752cfeda8ebce1e2a6e7e026bf04d0fdf8966066"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2c52441e0a9543fe5d064310a0b84fb5c816ff4b",
-                "reference": "2c52441e0a9543fe5d064310a0b84fb5c816ff4b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/752cfeda8ebce1e2a6e7e026bf04d0fdf8966066",
+                "reference": "752cfeda8ebce1e2a6e7e026bf04d0fdf8966066",
                 "shasum": ""
             },
             "require": {
@@ -2721,7 +2721,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-12-20T16:22:19+00:00"
+            "time": "2024-12-23T14:30:25+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2974,12 +2974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c02b58e54985dfe2690ddf8f50032760405e1abd"
+                "reference": "9c465319b0b2de233d3bf658344ee75b33557388"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c02b58e54985dfe2690ddf8f50032760405e1abd",
-                "reference": "c02b58e54985dfe2690ddf8f50032760405e1abd",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9c465319b0b2de233d3bf658344ee75b33557388",
+                "reference": "9c465319b0b2de233d3bf658344ee75b33557388",
                 "shasum": ""
             },
             "require": {
@@ -3064,7 +3064,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-21T05:52:01+00:00"
+            "time": "2024-12-24T06:10:43+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -5050,12 +5050,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {
