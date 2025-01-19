@@ -7,6 +7,7 @@
 [![SymfonyInsight](https://insight.symfony.com/projects/78420c3f-1f4e-4c79-b684-03887756083b/mini.svg)](https://insight.symfony.com/projects/78420c3f-1f4e-4c79-b684-03887756083b)
 [![Type Coverage](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check/coverage.svg)](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check)
 [![Psalm Level](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check/level.svg)](https://shepherd.dev/github/ericsizemore/phpunit-coverage-check)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ericsizemore_phpunit-coverage-check&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ericsizemore_phpunit-coverage-check)
 [![Latest Stable Version](https://img.shields.io/packagist/v/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
 [![Downloads per Month](https://img.shields.io/packagist/dm/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
 [![License](https://img.shields.io/packagist/l/esi/phpunit-coverage-check.svg)](https://packagist.org/packages/esi/phpunit-coverage-check)
