@@ -22,7 +22,7 @@ declare(strict_types=1);
  */
 (static function (): void {
     $possibleLocations = [
-        $GLOBALS['_composer_autoload_path'] ?? '',
+        //$GLOBALS['_composer_autoload_path'] ?? '',
         __DIR__ . '/../../../autoload.php',
         __DIR__ . '/../vendor/autoload.php',
     ];
