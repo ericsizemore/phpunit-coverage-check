@@ -13,35 +13,59 @@ declare(strict_types=1);
  * license information, and credits/acknowledgements, please view the LICENSE
  * and README files that were distributed with this source code.
  */
-// Attempt to load dependencies
+/**
+ * Attempt to load dependencies.
+ *
+ * Based on the autoloading logic from infection/infection.
+ *
+ * @see https://github.com/infection/infection/blob/master/bin/infection#L50
+ */
 (static function (): void {
     $possibleLocations = [
+        $GLOBALS['_composer_autoload_path'] ?? '',
         __DIR__ . '/../../../autoload.php',
-        __DIR__ . '/../../autoload.php',
-        __DIR__ . '/../autoload.php',
         __DIR__ . '/../vendor/autoload.php',
     ];
 
     $loader = null;
 
+    /**
+     * @var string $possibleLocation
+     */
     foreach ($possibleLocations as $possibleLocation) {
-        if (file_exists($possibleLocation)) {
+        if ($possibleLocation !== '' && file_exists($possibleLocation)) {
             $loader = $possibleLocation;
 
             break;
         }
     }
 
-    if ($loader === null) {
-        throw new RuntimeException(sprintf(
-            'You must set up the project dependencies, run the following commands:%1$s' .
-            'curl -sS https://getcomposer.org/installer | php%1$s' .
-            'php composer.phar install%1$s',
-            \PHP_EOL
-        ));
+    if ($loader !== null) {
+        require_once $loader;
+
+        return;
     }
 
-    require_once $loader;
+    fwrite(
+        STDERR,
+        <<<'ERROR'
+            You need to set up the project dependencies using Composer:
+                $ composer install
+            You can learn all about Composer on https://getcomposer.org/.
+
+            ERROR,
+    );
+
+    throw new RuntimeException('Unable to find the Composer autoloader.');
+})();
+
+// Project (third-party) autoloading.
+(static function (): void {
+    $autoload = getcwd() . '/vendor/autoload.php';
+
+    if (file_exists($autoload)) {
+        require_once $autoload;
+    }
 })();
 
 // Setup application
