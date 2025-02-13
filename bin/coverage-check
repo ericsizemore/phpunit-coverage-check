@@ -41,7 +41,7 @@ declare(strict_types=1);
     }
 
     if ($loader !== null) {
-        require_once $loader;
+        include_once $loader;
 
         return;
     }
