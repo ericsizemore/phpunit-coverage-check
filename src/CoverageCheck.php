@@ -33,16 +33,6 @@ use function file_get_contents;
 final class CoverageCheck
 {
     /**
-     * Message returned if there is not enough data to calculate coverage.
-     *
-     * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA without prefix.
-     *
-     * @see Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA
-     * @since 3.0.0
-     */
-    public const string ERROR_INSUFFICIENT_DATA = '[ERROR] Insufficient data for calculation. Please add more code.';
-
-    /**
      * Message returned if coverage falls below a given threshold.
      *
      * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::ERROR_COVERAGE_BELOW_THRESHOLD without prefix.
@@ -51,6 +41,16 @@ final class CoverageCheck
      * @since 3.0.0
      */
     public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s%% which is below the accepted %d%%';
+
+    /**
+     * Message returned if there is not enough data to calculate coverage.
+     *
+     * Mirrored in \Esi\CoverageCheck\Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA without prefix.
+     *
+     * @see Command\CoverageCheckCommand::ERROR_INSUFFICIENT_DATA
+     * @since 3.0.0
+     */
+    public const string ERROR_INSUFFICIENT_DATA = '[ERROR] Insufficient data for calculation. Please add more code.';
 
     /**
      * Message returned if coverage meets or exceeds a given threshold.
@@ -164,6 +164,7 @@ final class CoverageCheck
         if ($rawMetrics === false) {
             return false;
         }
+
         //@codeCoverageIgnoreEnd
 
         /**
@@ -184,7 +185,7 @@ final class CoverageCheck
             return false;
         }
 
-        return $coveredMetrics / $totalMetrics * 100;
+        return (float) ($coveredMetrics / $totalMetrics) * 100.0;
     }
 
     /**
@@ -214,6 +215,7 @@ final class CoverageCheck
         if ($rawMetrics === false) {
             return false;
         }
+
         //@codeCoverageIgnoreEnd
 
         foreach ($rawMetrics as $rawMetric) {
@@ -231,7 +233,7 @@ final class CoverageCheck
                 continue;
             }
 
-            $coveragePercentage = $coveredMetrics / $totalMetrics * 100;
+            $coveragePercentage = (float) ($coveredMetrics / $totalMetrics) * 100.0;
             $totalElementsCovered += $coveredMetrics;
             $totalElements        += $totalMetrics;
 
@@ -248,7 +250,7 @@ final class CoverageCheck
             return false;
         }
 
-        $totalCoverage = $totalElementsCovered / $totalElements * 100;
+        $totalCoverage = (float) ($totalElementsCovered / $totalElements) * 100.0;
 
         return [
             'fileMetrics'   => $fileMetrics,
@@ -315,6 +317,7 @@ final class CoverageCheck
         if ($cloverData === false || $cloverData === '') {
             throw FailedToGetFileContentsException::create($this->cloverFile);
         }
+
         //@codeCoverageIgnoreEnd
 
         $xml = Utils::parseXml($cloverData);

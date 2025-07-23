@@ -16,6 +16,7 @@ $header = <<<'EOF'
 $config = new PhpCsFixer\Config();
 $config
     ->setRiskyAllowed(true)
+    ->setUnsupportedPhpVersionAllowed(true)
     ->setRules([
         '@PER-CS'                 => true,
         '@PSR12'                  => true,

@@ -73,12 +73,11 @@ final class CoverageCheckCommandTest extends TestCase
         ];
 
         $coverageCheckCommand = new CoverageCheckCommand(new CoverageCheck());
-        $commandName          = $coverageCheckCommand->getName() ?? 'coverage:check';
 
         $this->application = new Application();
         $this->application->setAutoExit(false);
         $this->application->add($coverageCheckCommand);
-        $this->application->setDefaultCommand($commandName, true);
+        $this->application->setDefaultCommand(Application::COMMAND_NAME, true);
 
         $this->applicationTester = new ApplicationTester($this->application);
     }
@@ -343,6 +342,69 @@ final class CoverageCheckCommandTest extends TestCase
 
         self::assertSame(CoverageCheck::ERROR_INSUFFICIENT_DATA, trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
+    }
+
+    /**
+     * @todo This test needs an example output that actually will display a table width of 100
+     */
+    public function testShowFilesTableOutputWithDifferentTableWidth(): void
+    {
+        $this->applicationTester->run([
+            'cloverfile'    => self::$fixtures['thisLibrary'],
+            'threshold'     => 90,
+            '--table-width' => 100,
+            '--show-files'  => true,
+        ]);
+
+        self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
+        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+
+        $eol = PHP_EOL;
+
+        $expected = '------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  File                                                                Elements (Covered/Total)   Coverage  ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                    10/10                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   77/77                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                  63/63                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       4/4                        100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                          16/16                      100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  Overall Totals                                                      170/170                    100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ----------';
+
+        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
+    }
+
+    public function testShowFilesTableOutputWithDifferentTableWidthLessThanMin(): void
+    {
+        $this->applicationTester->run([
+            'cloverfile'    => self::$fixtures['thisLibrary'],
+            'threshold'     => 90,
+            '--table-width' => 60,
+            '--show-files'  => true,
+        ]);
+
+        self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
+        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+
+        $eol = PHP_EOL;
+
+        $expected = '------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  File                                                                Elements (Covered/Total)   Coverage  ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                    10/10                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php   77/77                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                  63/63                      100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php       4/4                        100.00%   ' . $eol;
+        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                          16/16                      100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
+        $expected .= '  Overall Totals                                                      170/170                    100.00%   ' . $eol;
+        $expected .= ' ------------------------------------------------------------------- -------------------------- ----------';
+
+        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
     }
 
     /**

@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [Unreleased]
+
+ ### Added
+
+  * (feat) CLI option for table width
+    * Thanks to [LeoVie, discussion #311](https://github.com/ericsizemore/phpunit-coverage-check/discussions/311) for the idea.
+
+### Changed
+
+  * The `composer.json` script `psalm:ci` now uses the `psalm` script instead of the (now removed) `psalm:security`.
+  * Updated dev-dependencies, most notably requiring Psalm v7-beta.
+  * Updated `Command\CoverageCheckCommand` to use `__invoke()` instead of `configure()` and `execute()`. This was introduced in [Symfony 7.3](https://symfony.com/blog/new-in-symfony-7-3-invokable-commands-and-input-attributes).
+    * Note, it still extends `Symfony\Component\Console\Command\Command` for now. 
+  * Updated `README.md` for some minor enhancements, and to add information for the new `--table-width` option.
+
+### Removed
+
+  * The `composer.json` script `psalm:security` has been removed.
+
+
 ## [3.0.0] - 2024-12-16
 
 This release is mainly a bump to a PHP 8.3 requirement with some minor refactoring.

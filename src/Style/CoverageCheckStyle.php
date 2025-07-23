@@ -16,6 +16,8 @@ declare(strict_types=1);
 namespace Esi\CoverageCheck\Style;
 
 use Override;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -23,6 +25,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 final class CoverageCheckStyle extends SymfonyStyle
 {
+    public function __construct(
+        InputInterface $input,
+        OutputInterface $output,
+        private readonly int $tableWidth = 70
+    ) {
+        parent::__construct($input, $output);
+    }
+
     #[Override]
     public function error(array|string $message, bool $onlyPercentage = false): void
     {
@@ -41,7 +51,7 @@ final class CoverageCheckStyle extends SymfonyStyle
         $this->createTable()
             ->setHeaders($headers)
             ->setRows($rows)
-            ->setColumnMaxWidth(0, 70)
+            ->setColumnMaxWidth(0, $this->tableWidth)
             ->render()
         ;
 

@@ -7,12 +7,6 @@ parameters:
 			path: src/CoverageCheck.php
 
 		-
-			message: '#^Method Esi\\CoverageCheck\\CoverageCheck\:\:loadMetrics\(\) never returns null so it can be removed from the return type\.$#'
-			identifier: return.unusedType
-			count: 1
-			path: src/CoverageCheck.php
-
-		-
 			message: '#^Method Esi\\CoverageCheck\\Style\\CoverageCheckStyle\:\:error\(\) has parameter \$message with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1

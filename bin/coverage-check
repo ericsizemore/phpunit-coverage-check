@@ -49,10 +49,7 @@ use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
 
-$command     = new CoverageCheckCommand(new CoverageCheck());
-$commandName = $command->getName() ?? 'coverage:check';
-
 $console = new Application();
-$console->add($command);
-$console->setDefaultCommand($commandName, true);
+$console->add(new CoverageCheckCommand(new CoverageCheck()));
+$console->setDefaultCommand(Application::COMMAND_NAME, true);
 $console->run();

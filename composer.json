@@ -57,20 +57,20 @@
         "php": "^8.3",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "symfony/console": "^7.2"
+        "symfony/console": "^7.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.68",
+        "friendsofphp/php-cs-fixer": "^3.83",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^11.5 || ^12.0",
-        "psalm/plugin-phpunit": "^0.19.0",
+        "phpunit/phpunit": "^12.2",
+        "psalm/plugin-phpunit": "^0.19.5",
         "psalm/plugin-symfony": "^5.2.7",
-        "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.5"
+        "rector/rector": "^2.1",
+        "vimeo/psalm": "^7.0.0-beta11"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -92,7 +92,7 @@
             "phpstan/extension-installer": true
         },
         "platform": {
-            "php": "8.3.0"
+            "php": "8.3.99"
         }
     },
     "extra": {
@@ -112,7 +112,7 @@
             "@psalm:shepherd"
         ],
         "clear-build": "rm -rf ./build/*",
-        "code-coverage": "@php bin/coverage-check build/logs/clover.xml 100",
+        "code-coverage": "@php bin/coverage-check build/logs/clover.xml 100 --show-files --table-width 110",
         "phpcs:check": "@phpcs:fix --dry-run --diff",
         "phpcs:fix": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
         "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -vvv",
@@ -120,8 +120,7 @@
         "phpunit:migrate": "@phpunit --migrate-configuration",
         "psalm": "vendor/bin/psalm -c psalm.xml --no-cache --show-info=true",
         "psalm:baseline": "@psalm --no-diff --set-baseline=psalm-baseline.xml",
-        "psalm:ci": "@psalm:security --shepherd --report=results.sarif",
-        "psalm:security": "@psalm --no-diff --taint-analysis",
+        "psalm:ci": "@psalm --shepherd --report=results.sarif",
         "psalm:shepherd": "@psalm --no-diff --shepherd --stats",
         "refactor:check": "@refactor:fix --dry-run",
         "refactor:fix": "vendor/bin/rector process"
