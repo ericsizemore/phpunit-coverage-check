@@ -232,7 +232,6 @@ Many thanks and much appreciation to Richard Regeer for his wonderful work.
 - Thanks to [SensioLabs Security Checker](https://github.com/sensiolabs/security-checker) for inspiration in creating my implementation of the `coverage:check` command.
 - Thanks to [Box](https://github.com/box-project/box) for their wonderful project that makes Phar generation a breeze.
 - Thanks to [all Contributors](https://github.com/ericsizemore/phpunit-coverage-check/contributors).
-- Special thanks to [JetBrains](https://www.jetbrains.com/?from=phpunit-coverage-check) for their Licenses for Open Source Development.
 
 
 ### Contributing
