@@ -14,7 +14,7 @@
 
 [PHPUnit Coverage Check](http://github.com/ericsizemore/phpunit-coverage-check/) - Check the code coverage using the clover report of PHPUnit.
 
-This library will read the clover XML report from PHPUnit and calculate the coverage score. 
+This library will read the clover (or openclover in PHPUnit 12.2+) XML report from PHPUnit and calculate the coverage score. 
 Based on the given threshold, the application will exit OK if the coverage is higher than the threshold or exit with code 1 if the coverage is lower than the threshold.
 
 This library can be used in multiple ways:
@@ -52,7 +52,6 @@ $ composer require --dev esi/phpunit-coverage-check:^1.0
 ```bash
 $ composer require --dev esi/phpunit-coverage-check:^2.0
 ```
-
 
 ### Phar
 
@@ -93,6 +92,8 @@ There are two parameters that must be passed to return the code coverage.
 
 Generate the `clover.xml` file by using PHPUnit:
 
+#### Prior to PHPUnit 12.2 (or if you prefer the old clover format of PHPUnit)
+
 ```bash
 $ php vendor/bin/phpunit --coverage-clover clover.xml
 ```
@@ -105,8 +106,23 @@ You can also add the coverage report generation to your PHPUnit configuration fi
     </report>
 ```
 
-* For more information, see the [PHPUnit Documentation](https://docs.phpunit.de/en/10.5/).
-* Information about the [configuration file](https://docs.phpunit.de/en/10.5/configuration.html) and [commandline options](https://docs.phpunit.de/en/10.5/textui.html#command-line-options).
+#### PHPUnit 12.2 and later, for OpenClover
+
+For the experimental OpenClover report in PHPUnit 12.2+
+
+```bash
+$ php vendor/bin/phpunit --coverage-openclover clover.xml
+```
+
+```xml
+    <report>
+        <openclover outputFile="clover.xml"/>
+    </report>
+```
+
+* For more information, see the [PHPUnit Documentation](https://docs.phpunit.de/en/12.3/).
+* Information about the [configuration file](https://docs.phpunit.de/en/10.5/configuration.html) and [commandline options](https://docs.phpunit.de/en/12.3/textui.html#command-line-options).
+* Also see the [release notes](https://github.com/sebastianbergmann/phpunit/releases/tag/12.2.0) for PHPUnit 12.2.0.
 
 
 ### If installed with Composer

@@ -197,10 +197,10 @@ final class CoverageCheck
      * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      * @since 2.0.0
      *
-     * @return false|array{
+     * @return array{
      *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
      *     totalCoverage: float|int
-     * }
+     * }|false
      */
     public function processByFile(): array|false
     {
@@ -236,6 +236,12 @@ final class CoverageCheck
             $coveragePercentage = (float) ($coveredMetrics / $totalMetrics) * 100.0;
             $totalElementsCovered += $coveredMetrics;
             $totalElements        += $totalMetrics;
+
+            // As far as we are concerned, path will only be set in the openclover output of PHPUnit.
+            // We like having the full path, so in this case, set name to path.
+            if (isset($rawMetric['path'])) {
+                $rawMetric['name'] = $rawMetric['path'];
+            }
 
             $fileMetrics[(string) $rawMetric['name']] = [
                 'coveredMetrics' => $coveredMetrics,

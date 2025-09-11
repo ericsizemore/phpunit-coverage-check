@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * Updated `Command\CoverageCheckCommand` to use `__invoke()` instead of `configure()` and `execute()`. This was introduced in [Symfony 7.3](https://symfony.com/blog/new-in-symfony-7-3-invokable-commands-and-input-attributes).
     * Note, it still extends `Symfony\Component\Console\Command\Command` for now. 
   * Updated `README.md` for some minor enhancements, and to add information for the new `--table-width` option.
+  * Updated `processByFile()` to handle the new experimental support for OpenClover in PHPUnit 12.2+
 
 ### Removed
 

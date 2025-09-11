@@ -34,9 +34,9 @@ declare(strict_types=1);
 
     if ($loader === null) {
         throw new RuntimeException(sprintf(
-            'You must set up the project dependencies, run the following commands:%1$s' .
-            'curl -sS https://getcomposer.org/installer | php%1$s' .
-            'php composer.phar install%1$s',
+            'You must set up the project dependencies, run the following commands:%1$s'
+            . 'curl -sS https://getcomposer.org/installer | php%1$s'
+            . 'php composer.phar install%1$s',
             \PHP_EOL
         ));
     }
