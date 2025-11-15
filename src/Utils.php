@@ -43,8 +43,10 @@ abstract class Utils
     /**
      * Attempts to determine if we are actually using a PHPUnit generated clover file.
      *
-     * @todo As of version 12.2, PHPUnit now supports generating OpenClover.
-     * @todo Look into validating against the official clover XSD.
+     * ```
+     *     As of version 12.2, PHPUnit now supports generating OpenClover.
+     *     I will need to look into validating against the official clover XSD.
+     * ```
      *
      * @see https://bitbucket.org/atlassian/clover/raw/master/etc/schema/clover.xsd
      * @see https://github.com/sebastianbergmann/phpunit/releases/tag/12.2.0

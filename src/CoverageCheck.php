@@ -159,7 +159,7 @@ final class CoverageCheck
     {
         $rawMetrics = $this->loadMetrics() ?? false;
 
-        // Ignoring coverage here as theoretically this should not happen
+        // Ignoring coverage here as theoretically this should not happen.
         //@codeCoverageIgnoreStart
         if ($rawMetrics === false) {
             return false;
@@ -172,7 +172,7 @@ final class CoverageCheck
          */
         $metrics = ((array) $rawMetrics[0])['@attributes'];
 
-        $metrics = array_map(static fn (string $value): int => \intval($value), $metrics);
+        $metrics = array_map(\intval(...), $metrics);
 
         unset($rawMetrics);
 
@@ -224,7 +224,7 @@ final class CoverageCheck
              */
             $metrics = ((array) $rawMetric->metrics)['@attributes'];
 
-            $metrics = array_map(static fn (string $value): int => \intval($value), $metrics);
+            $metrics = array_map(\intval(...), $metrics);
 
             $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
             $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
