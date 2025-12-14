@@ -77,7 +77,13 @@ final class CoverageCheckCommandTest extends TestCase
 
         $this->application = new Application();
         $this->application->setAutoExit(false);
-        $this->application->add($coverageCheckCommand);
+
+        if (method_exists($this->application, 'addCommand')) {
+            $this->application->addCommand($coverageCheckCommand);
+        } else {
+            $this->application->add($coverageCheckCommand);
+        }
+
         $this->application->setDefaultCommand(Application::COMMAND_NAME, true);
 
         $this->applicationTester = new ApplicationTester($this->application);

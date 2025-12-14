@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * Note, it still extends `Symfony\Component\Console\Command\Command` for now. 
   * Updated `README.md` for some minor enhancements, and to add information for the new `--table-width` option.
   * Updated `processByFile()` to handle the new experimental support for OpenClover in PHPUnit 12.2+
+  * Updated use of `Symfony\Component\Console\Application::add()`. Will use `Symfony\Component\Console\Application::addCommand()` instead if on
+    `symfony/console` version `>=7.4`.
+    * Update `psalm.xml` (Psalm's configuration) to move `tests` to `extraFiles` and suppress possible unused methods/classes for now. 
 
 ### Removed
 
