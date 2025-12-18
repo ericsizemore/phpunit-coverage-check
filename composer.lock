@@ -3779,16 +3779,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.2.7",
+            "version": "v5.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "56dd7ba14c4ac9796e06077f00e45fbbecc640af"
+                "reference": "603010dd920df45a924acdf0376bffa604ffa97a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/56dd7ba14c4ac9796e06077f00e45fbbecc640af",
-                "reference": "56dd7ba14c4ac9796e06077f00e45fbbecc640af",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/603010dd920df45a924acdf0376bffa604ffa97a",
+                "reference": "603010dd920df45a924acdf0376bffa604ffa97a",
                 "shasum": ""
             },
             "require": {
@@ -3838,9 +3838,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.7"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.2.8"
             },
-            "time": "2025-01-26T10:27:48+00:00"
+            "time": "2025-12-18T11:18:29+00:00"
         },
         {
             "name": "psr/cache",
