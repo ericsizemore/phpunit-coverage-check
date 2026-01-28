@@ -40,7 +40,7 @@ A GitHub action is available and can be found in the [PHPUnit Coverage Check Act
 `PHPUnit Coverage Check` can be installed using Composer. Add this repository as a dev-dependency to the composer.json file.
 
 ```bash
-$ composer require --dev esi/phpunit-coverage-check:^3.0
+$ composer require --dev esi/phpunit-coverage-check:^3.1
 ```
 
 To use PHPUnit Coverage Check on an older version of PHP:
@@ -59,8 +59,8 @@ Download the `phpunit-coverage-check.phar` from an available release. It is reco
 
 ```bash
 # Adjust the URL based on the latest release
-wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar"
-wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar.asc"
+wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.1.0/phpunit-coverage-check.phar"
+wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.1.0/phpunit-coverage-check.phar.asc"
 
 # Check that the signature matches
 gpg --verify phpunit-coverage-check.phar.asc phpunit-coverage-check.phar
