@@ -28,7 +28,7 @@ jobs:
       - name: "Install PHP"
         uses: shivammathur/setup-php@master
         with:
-           php-version: '8.3'
+           php-version: '8.4'
            ini-values: phar.readonly=0
            coverage: none
            tools: box

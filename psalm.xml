@@ -32,6 +32,11 @@
                 <directory name="src"/>
             </errorLevel>
         </UnusedClass>
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </MissingConstructor>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

@@ -39,9 +39,9 @@ use Throwable;
     name: Application::COMMAND_NAME,
     description: Application::APPLICATION_DESCRIPTION,
     help: <<<'TXT'
-        The <info>%command.name%</info> command calculates coverage score for the provided clover xml report.
+        The <info>%command.name%</info> command calculates coverage score for the provided clover XML report.
 
-        You must also pass a coverage threshold that is acceptable. <info>Min = 1, Max = 100</info>:
+        You must pass a coverage threshold that is acceptable. <info>Min = 1, Max = 100</info>:
 
         <info>php %command.full_name% /path/to/clover.xml 100</info>
 
@@ -49,7 +49,7 @@ use Throwable;
 
         <info>php %command.full_name% /path/to/clover.xml 100 --only-percentage</info>
 
-        You may also choose to show a breakdown of coverage by file by using the <info>--show-files</info> option:
+        You may also choose to show a breakdown of coverage by file using the <info>--show-files</info> option:
 
         <info>php %command.full_name% /path/to/clover.xml 100 --show-files</info>
 
@@ -60,7 +60,7 @@ use Throwable;
         <info>php %command.full_name% /path/to/clover.xml 100 --show-files --table-width=120</info>
         TXT
 )]
-final class CoverageCheckCommand extends Command
+final class CoverageCheckCommand
 {
     /**
      * Matches CoverageCheck::ERROR_COVERAGE_BELOW_THRESHOLD, except for '[ERROR]' prefix and '%' on first value.
@@ -94,6 +94,12 @@ final class CoverageCheckCommand extends Command
      * @since 3.0.0
      */
     public const string OK_TOTAL_CODE_COVERAGE = 'Total code coverage is %s';
+
+    public const string TABLE_HEADER_COVERAGE = 'Coverage';
+
+    public const string TABLE_HEADER_ELEMENTS = 'Elements (Covered/Total)';
+
+    public const string TABLE_HEADER_FILE = 'File';
 
     /**
      * @internal
@@ -132,10 +138,7 @@ final class CoverageCheckCommand extends Command
 
     private CoverageCheckStyle $coverageCheckStyle;
 
-    public function __construct(private readonly CoverageCheck $coverageCheck)
-    {
-        parent::__construct();
-    }
+    public function __construct(private readonly CoverageCheck $coverageCheck) {}
 
     public function __invoke(
         InputInterface $input,
@@ -157,9 +160,9 @@ final class CoverageCheckCommand extends Command
 
         $this->coverageCheckStyle = new CoverageCheckStyle($input, $output, $tablewidth);
 
-        $this->coverageCheck->setCloverFile($cloverfile)
-            ->setThreshold($threshold)
-            ->setOnlyPercentage($onlypercentage);
+        $this->coverageCheck->cloverFile     = $cloverfile;
+        $this->coverageCheck->threshold      = $threshold;
+        $this->coverageCheck->onlyPercentage = $onlypercentage;
 
         try {
             $result = $showfiles ? $this->coverageCheck->processByFile() : $this->coverageCheck->process();
@@ -193,15 +196,11 @@ final class CoverageCheckCommand extends Command
      */
     private function getFileTable(array $result): int
     {
-        $threshold     = $this->coverageCheck->getThreshold();
-        $tableRows     = [];
-        $totalElements = ['coveredMetrics' => 0, 'totalMetrics' => 0];
-        $metrics       = $result['fileMetrics'];
-        $totalCoverage = $result['totalCoverage'];
+        $tableRows      = [];
+        $coveredMetrics = 0;
+        $totalMetrics   = 0;
 
-        unset($result);
-
-        foreach ($metrics as $name => $file) {
+        foreach ($result['fileMetrics'] as $name => $file) {
             $tableRows[] = [
                 $name,
                 \sprintf('%d/%d', $file['coveredMetrics'], $file['totalMetrics']),
@@ -210,37 +209,39 @@ final class CoverageCheckCommand extends Command
                     [
                         'style' => new TableCellStyle(
                             [
-                                'cellFormat' => ($file['percentage'] < $threshold) ? '<error>%s</error>' : '<info>%s</info>',
+                                'cellFormat' => ($file['percentage'] < $this->coverageCheck->threshold) ? '<error>%s</error>' : '<info>%s</info>',
                             ]
                         ),
                     ]
                 ),
             ];
 
-            $totalElements['coveredMetrics'] += $file['coveredMetrics'];
-            $totalElements['totalMetrics']   += $file['totalMetrics'];
+            $coveredMetrics += $file['coveredMetrics'];
+            $totalMetrics   += $file['totalMetrics'];
         }
-
-        unset($metrics);
 
         $tableRows[] = new TableSeparator();
         $tableRows[] = [
             'Overall Totals',
-            \sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
+            \sprintf('%d/%d', $coveredMetrics, $totalMetrics),
             new TableCell(
-                Utils::formatCoverage($totalCoverage),
-                ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>', ])]
+                Utils::formatCoverage($result['totalCoverage']),
+                [
+                    'style' => new TableCellStyle([
+                        'cellFormat' => ($result['totalCoverage'] < $this->coverageCheck->threshold) ? '<error>%s</error>' : '<info>%s</info>',
+                    ]),
+                ]
             ),
         ];
 
         $this->coverageCheckStyle->table(
-            ['File', 'Elements (Covered/Total)', 'Coverage'],
+            [self::TABLE_HEADER_FILE, self::TABLE_HEADER_ELEMENTS, self::TABLE_HEADER_COVERAGE],
             $tableRows
         );
 
         unset($tableRows);
 
-        if ($totalCoverage < $threshold) {
+        if ($result['totalCoverage'] < $this->coverageCheck->threshold) {
             return Command::FAILURE;
         }
 
@@ -249,15 +250,12 @@ final class CoverageCheckCommand extends Command
 
     private function getResultOutput(float $result): int
     {
-        $threshold         = $this->coverageCheck->getThreshold();
-        $onlyPercentage    = $this->coverageCheck->getOnlyPercentage();
         $formattedCoverage = Utils::formatCoverage($result);
-        $belowThreshold    = $result < $threshold;
 
         // Only display the percentage?
-        if ($onlyPercentage) {
+        if ($this->coverageCheck->onlyPercentage) {
             // … below the accepted threshold
-            if ($belowThreshold) {
+            if ($result < $this->coverageCheck->threshold) {
                 $this->coverageCheckStyle->error($formattedCoverage, true);
 
                 return Command::FAILURE;
@@ -270,10 +268,10 @@ final class CoverageCheckCommand extends Command
         }
 
         // We want the full message…
-        if ($belowThreshold) {
+        if ($result < $this->coverageCheck->threshold) {
             // … below the accepted threshold
             $this->coverageCheckStyle->error(
-                \sprintf(self::ERROR_COVERAGE_BELOW_THRESHOLD, $formattedCoverage, $threshold)
+                \sprintf(self::ERROR_COVERAGE_BELOW_THRESHOLD, $formattedCoverage, $this->coverageCheck->threshold)
             );
 
             return Command::FAILURE;

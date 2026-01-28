@@ -67,43 +67,49 @@ final class CoverageCheck
      *
      * @since 2.0.0
      */
-    protected const string XPATH_FILES = '//file';
+    private const string XPATH_FILES = '//file';
 
     /**
      * Xpath expression for getting the project total metrics in a clover report.
      */
-    protected const string XPATH_METRICS = '//project/metrics';
+    private const string XPATH_METRICS = '//project/metrics';
 
     /**
-     * Configurable options.
-     *
-     * @see self::setCloverFile()
-     * @see self::setThreshold()
-     * @see self::setOnlyPercentage()
+     * @throws InvalidInputFileException If the given file is empty or does not exist.
      */
-    private string $cloverFile = 'clover.xml';
+    public string $cloverFile {
+        set(string $cloverFile) {
+            if (!Utils::validateCloverFile($cloverFile)) {
+                throw InvalidInputFileException::create($cloverFile);
+            }
 
-    private bool $onlyPercentage = false;
+            $this->cloverFile = $cloverFile;
+        }
 
-    private int $threshold = 100;
+        get => $this->cloverFile ?? 'clover.xml';
+    }
+
+    public bool $onlyPercentage {
+        set(bool $enabled) {
+            $this->onlyPercentage = $enabled;
+        }
+
+        get => $this->onlyPercentage ?? false;
+    }
 
     /**
-     * Simple getters.
+     * @throws ThresholdOutOfBoundsException If the threshold is less than 1 or greater than 100.
      */
+    public int $threshold {
+        set(int $threshold) {
+            if (!Utils::validateThreshold($threshold)) {
+                throw ThresholdOutOfBoundsException::create($threshold);
+            }
 
-    public function getCloverFile(): string
-    {
-        return $this->cloverFile;
-    }
+            $this->threshold = $threshold;
+        }
 
-    public function getOnlyPercentage(): bool
-    {
-        return $this->onlyPercentage;
-    }
-
-    public function getThreshold(): int
-    {
-        return $this->threshold;
+        get => $this->threshold ?? 100;
     }
 
     /**
@@ -117,9 +123,9 @@ final class CoverageCheck
      */
     public function nonConsoleCall(string $cloverFile, int $threshold = 100, bool $onlyPercentage = false): string
     {
-        $this->setCloverFile($cloverFile)
-            ->setThreshold($threshold)
-            ->setOnlyPercentage($onlyPercentage);
+        $this->cloverFile     = $cloverFile;
+        $this->threshold      = $threshold;
+        $this->onlyPercentage = $onlyPercentage;
 
         $results = $this->process();
 
@@ -265,45 +271,6 @@ final class CoverageCheck
     }
 
     /**
-     * Simple setters.
-     */
-
-    /**
-     * @throws InvalidInputFileException If the given file is empty or does not exist.
-     */
-    public function setCloverFile(string $cloverFile): CoverageCheck
-    {
-        if (!Utils::validateCloverFile($cloverFile)) {
-            throw InvalidInputFileException::create($cloverFile);
-        }
-
-        $this->cloverFile = $cloverFile;
-
-        return $this;
-    }
-
-    public function setOnlyPercentage(bool $enable = false): CoverageCheck
-    {
-        $this->onlyPercentage = $enable;
-
-        return $this;
-    }
-
-    /**
-     * @throws ThresholdOutOfBoundsException If the threshold is less than 1 or greater than 100.
-     */
-    public function setThreshold(int $threshold): CoverageCheck
-    {
-        if (!Utils::validateThreshold($threshold)) {
-            throw ThresholdOutOfBoundsException::create($threshold);
-        }
-
-        $this->threshold = $threshold;
-
-        return $this;
-    }
-
-    /**
      * Loads the clover xml data and runs an XML Xpath query.
      *
      * @internal
@@ -313,9 +280,9 @@ final class CoverageCheck
      * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
      *                          if the given file does not appear to be a valid clover file.
      *
-     * @return null|array<SimpleXMLElement>|false
+     * @return null|array<SimpleXMLElement>
      */
-    private function loadMetrics(string $xpath = self::XPATH_METRICS): null|array|false
+    private function loadMetrics(string $xpath = self::XPATH_METRICS): ?array
     {
         $cloverData = file_get_contents($this->cloverFile);
 

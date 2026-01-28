@@ -32,9 +32,9 @@ return RectorConfig::configure()
         IssetOnPropertyObjectToPropertyExistsRector::class,
     ])
     ->withPhpSets(
-        php83: true
+        php84: true
     )
-    ->withPhpVersion(PhpVersion::PHP_10)
+    ->withPhpVersion(PhpVersion::PHP_84)
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
@@ -44,18 +44,15 @@ return RectorConfig::configure()
         naming: true,
         instanceOf: true,
         earlyReturn: true,
-        //strictBooleans: true,
-        carbon: false,
         rectorPreset: true,
         phpunitCodeQuality: true,
-        doctrineCodeQuality: false,
         symfonyCodeQuality: true,
-        symfonyConfigs: false,
     )
     ->withRootFiles()
     ->withSets([
         PHPUnitSetList::PHPUNIT_100,
         PHPUnitSetList::PHPUNIT_110,
+        PHPUnitSetList::PHPUNIT_120,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])

@@ -40,7 +40,7 @@ A GitHub action is available and can be found in the [PHPUnit Coverage Check Act
 `PHPUnit Coverage Check` can be installed using Composer. Add this repository as a dev-dependency to the composer.json file.
 
 ```bash
-$ composer require --dev esi/phpunit-coverage-check:^3.0
+$ composer require --dev esi/phpunit-coverage-check:^4.0
 ```
 
 To use PHPUnit Coverage Check on an older version of PHP:
@@ -52,6 +52,10 @@ $ composer require --dev esi/phpunit-coverage-check:^1.0
 ```bash
 $ composer require --dev esi/phpunit-coverage-check:^2.0
 ```
+* PHP 8.3, use version 3.0.0 (and check 3.x's [readme](https://github.com/ericsizemore/phpunit-coverage-check/blob/3.x/README.md#usage))
+```bash
+$ composer require --dev esi/phpunit-coverage-check:^3.0
+```
 
 ### Phar
 
@@ -59,8 +63,8 @@ Download the `phpunit-coverage-check.phar` from an available release. It is reco
 
 ```bash
 # Adjust the URL based on the latest release
-wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar"
-wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/3.0.0/phpunit-coverage-check.phar.asc"
+wget -O phpunit-coverage-check.phar "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/4.0.0/phpunit-coverage-check.phar"
+wget -O phpunit-coverage-check.phar.asc "https://github.com/ericsizemore/phpunit-coverage-check/releases/download/4.0.0/phpunit-coverage-check.phar.asc"
 
 # Check that the signature matches
 gpg --verify phpunit-coverage-check.phar.asc phpunit-coverage-check.phar
@@ -231,7 +235,8 @@ $ php coverage-check tests/fixtures/clover.xml 90 --show-files --table-width 120
 
 ### Requirements
 
-- PHPUnit Coverage Check works with PHP 8.3.0 or above.
+- PHPUnit Coverage Check works with PHP 8.4.0 or above.
+- For PHP 8.3 please use [v3.0.x](https://github.com/ericsizemore/phpunit-coverage-check/tree/3.x) of PHPUnit Coverage Check.
 - For PHP 8.2 please use [v2.0.x](https://github.com/ericsizemore/phpunit-coverage-check/tree/2.x) of PHPUnit Coverage Check.
 - For PHP 8.1 please use [v1.0.x](https://github.com/ericsizemore/phpunit-coverage-check/tree/1.x) of PHPUnit Coverage Check.
 

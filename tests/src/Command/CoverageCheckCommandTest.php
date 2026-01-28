@@ -31,6 +31,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
+use function implode;
 use function preg_replace;
 use function str_replace;
 use function trim;
@@ -77,13 +78,7 @@ final class CoverageCheckCommandTest extends TestCase
 
         $this->application = new Application();
         $this->application->setAutoExit(false);
-
-        if (method_exists($this->application, 'addCommand')) {
-            $this->application->addCommand($coverageCheckCommand);
-        } else {
-            $this->application->add($coverageCheckCommand);
-        }
-
+        $this->application->addCommand($coverageCheckCommand);
         $this->application->setDefaultCommand(Application::COMMAND_NAME, true);
 
         $this->applicationTester = new ApplicationTester($this->application);
@@ -292,27 +287,26 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
 
-        $eol = PHP_EOL;
+        $expected   = [];
+        $expected[] = '------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  File                                                                     Elements (Covered/Total)   Coverage  ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ';
+        $expected[] = '  php                                                                                                           ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ';
+        $expected[] = '  on.php                                                                                                        ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ';
+        $expected[] = '  ion.php                                                                                                       ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  Overall Totals                                                           230/230                    100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ----------';
 
-        $expected = '------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  File                                                                     Elements (Covered/Total)   Coverage  ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ' . $eol;
-        $expected .= '  php                                                                                                           ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ' . $eol;
-        $expected .= '  on.php                                                                                                        ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ' . $eol;
-        $expected .= '  ion.php                                                                                                       ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                                                           230/230                    100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ----------';
-
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
     }
 
@@ -327,18 +321,17 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
         self::assertSame(91, $this->applicationTester->getInput()->getArgument('threshold'));
 
-        $eol = PHP_EOL;
+        $expected   = [];
+        $expected[] = '----------------------------- -------------------------- ---------- ';
+        $expected[] = '  File                          Elements (Covered/Total)   Coverage  ';
+        $expected[] = ' ----------------------------- -------------------------- ---------- ';
+        $expected[] = '  /tmp/Example/String.php       36/38                      94.74%    ';
+        $expected[] = '  /tmp/Example/StringList.php   20/24                      83.33%    ';
+        $expected[] = ' ----------------------------- -------------------------- ---------- ';
+        $expected[] = '  Overall Totals                56/62                      90.32%    ';
+        $expected[] = ' ----------------------------- -------------------------- ----------';
 
-        $expected = '----------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  File                          Elements (Covered/Total)   Coverage  ' . $eol;
-        $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  /tmp/Example/String.php       36/38                      94.74%    ' . $eol;
-        $expected .= '  /tmp/Example/StringList.php   20/24                      83.33%    ' . $eol;
-        $expected .= ' ----------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                56/62                      90.32%    ' . $eol;
-        $expected .= ' ----------------------------- -------------------------- ----------';
-
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
     }
 
@@ -353,27 +346,26 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
 
-        $eol = PHP_EOL;
+        $expected   = [];
+        $expected[] = '------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  File                                                                     Elements (Covered/Total)   Coverage  ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ';
+        $expected[] = '  php                                                                                                           ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ';
+        $expected[] = '  on.php                                                                                                        ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ';
+        $expected[] = '  ion.php                                                                                                       ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  Overall Totals                                                           230/230                    100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ----------';
 
-        $expected = '------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  File                                                                     Elements (Covered/Total)   Coverage  ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ' . $eol;
-        $expected .= '  php                                                                                                           ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ' . $eol;
-        $expected .= '  on.php                                                                                                        ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ' . $eol;
-        $expected .= '  ion.php                                                                                                       ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                                                           230/230                    100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ----------';
-
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
 
         $this->applicationTester->run([
@@ -382,7 +374,7 @@ final class CoverageCheckCommandTest extends TestCase
             '--show-files' => true,
         ]);
 
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
     }
 
     public function testShowFilesTableOutputEmpty(): void
@@ -401,7 +393,7 @@ final class CoverageCheckCommandTest extends TestCase
     }
 
     /**
-     * @todo This test needs an example output that actually will display a table width of 100
+     * This test needs an example output that actually will display a table width of 100.
      */
     public function testShowFilesTableOutputWithDifferentTableWidth(): void
     {
@@ -415,24 +407,23 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
 
-        $eol = PHP_EOL;
+        $expected   = [];
+        $expected[] = '------------------------------------------------------------------------------- -------------------------- ---------- ';
+        $expected[] = '  File                                                                            Elements (Covered/Total)   Coverage  ';
+        $expected[] = ' ------------------------------------------------------------------------------- -------------------------- ---------- ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Application.php                                12/12                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\CoverageCheck.php                              82/82                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Utils.php                                      37/37                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php               79/79                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.php       2/2                        100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileException.php    2/2                        100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsException.php   2/2                        100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php                   14/14                      100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------------- -------------------------- ---------- ';
+        $expected[] = '  Overall Totals                                                                  230/230                    100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------------- -------------------------- ----------';
 
-        $expected = '------------------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  File                                                                            Elements (Covered/Total)   Coverage  ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                                12/12                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                              82/82                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                                      37/37                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php               79/79                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.php       2/2                        100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileException.php    2/2                        100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsException.php   2/2                        100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php                   14/14                      100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------------- -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                                                                  230/230                    100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------------- -------------------------- ----------';
-
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
     }
 
@@ -448,27 +439,26 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
         self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
 
-        $eol = PHP_EOL;
+        $expected   = [];
+        $expected[] = '------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  File                                                                     Elements (Covered/Total)   Coverage  ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ';
+        $expected[] = '  php                                                                                                           ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ';
+        $expected[] = '  on.php                                                                                                        ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ';
+        $expected[] = '  ion.php                                                                                                       ';
+        $expected[] = '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ---------- ';
+        $expected[] = '  Overall Totals                                                           230/230                    100.00%   ';
+        $expected[] = ' ------------------------------------------------------------------------ -------------------------- ----------';
 
-        $expected = '------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  File                                                                     Elements (Covered/Total)   Coverage  ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Application.php                         12/12                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\CoverageCheck.php                       82/82                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Utils.php                               37/37                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Command\CoverageCheckCommand.php        79/79                      100.00%   ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\InvalidInputFileException.   2/2                        100.00%   ' . $eol;
-        $expected .= '  php                                                                                                           ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\NotAValidCloverFileExcepti   2/2                        100.00%   ' . $eol;
-        $expected .= '  on.php                                                                                                        ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Exceptions\ThresholdOutOfBoundsExcept   2/2                        100.00%   ' . $eol;
-        $expected .= '  ion.php                                                                                                       ' . $eol;
-        $expected .= '  [...]\phpunit-coverage-check\src\Style\CoverageCheckStyle.php            14/14                      100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ---------- ' . $eol;
-        $expected .= '  Overall Totals                                                           230/230                    100.00%   ' . $eol;
-        $expected .= ' ------------------------------------------------------------------------ -------------------------- ----------';
-
-        self::assertSame($expected, trim($this->applicationTester->getDisplay()));
+        self::assertSame(implode(PHP_EOL, $expected), trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
     }
 

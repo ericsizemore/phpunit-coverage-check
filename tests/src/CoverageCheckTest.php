@@ -59,35 +59,35 @@ final class CoverageCheckTest extends TestCase
 
     public function testGetSetCloverFile(): void
     {
-        $this->coverageCheck->setCloverFile(self::$fixtures['valid']);
-        self::assertSame(self::$fixtures['valid'], $this->coverageCheck->getCloverFile());
+        $this->coverageCheck->cloverFile = self::$fixtures['valid'];
+        self::assertSame(self::$fixtures['valid'], $this->coverageCheck->cloverFile);
     }
 
     public function testGetSetOnlyPercentage(): void
     {
-        $this->coverageCheck->setOnlyPercentage(true);
-        self::assertTrue($this->coverageCheck->getOnlyPercentage());
+        $this->coverageCheck->onlyPercentage = true;
+        self::assertTrue($this->coverageCheck->onlyPercentage);
 
-        $this->coverageCheck->setOnlyPercentage();
-        self::assertFalse($this->coverageCheck->getOnlyPercentage());
+        $this->coverageCheck->onlyPercentage = false;
+        self::assertFalse($this->coverageCheck->onlyPercentage);
     }
 
     public function testGetSetThreshold(): void
     {
-        $this->coverageCheck->setThreshold(100);
-        self::assertSame(100, $this->coverageCheck->getThreshold());
+        $this->coverageCheck->threshold = 100;
+        self::assertSame(100, $this->coverageCheck->threshold);
     }
 
     public function testGetSetThresholdInvalidMax(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->coverageCheck->setThreshold(101);
+        $this->coverageCheck->threshold = 101;
     }
 
     public function testGetSetThresholdInvalidMin(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->coverageCheck->setThreshold(0);
+        $this->coverageCheck->threshold = 0;
     }
 
     public function testNonConsoleCallInvalid(): void
@@ -149,6 +149,6 @@ final class CoverageCheckTest extends TestCase
     public function testSetCloverFileThatDoesNotExist(): void
     {
         $this->expectException(InvalidInputFileException::class);
-        $this->coverageCheck->setCloverFile(self::$fixtures['notexist']);
+        $this->coverageCheck->cloverFile = self::$fixtures['notexist'];
     }
 }

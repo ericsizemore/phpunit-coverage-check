@@ -20,6 +20,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function max;
+
 /**
  * @see SymfonyStyle
  */
@@ -28,7 +30,11 @@ final class CoverageCheckStyle extends SymfonyStyle
     public function __construct(
         InputInterface $input,
         OutputInterface $output,
-        private readonly int $tableWidth = 70
+        private int $tableWidth {
+            set(int $tableWidth) {
+                $this->tableWidth = max(70, $tableWidth);
+            }
+        }
     ) {
         parent::__construct($input, $output);
     }
