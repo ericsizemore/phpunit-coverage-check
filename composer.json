@@ -54,23 +54,23 @@
         "release on GitHub at https://github.com/ericsizemore/phpunit-coverage-check/releases"
     ],
     "require": {
-        "php": "^8.3",
+        "php": ">=8.3",
         "ext-libxml": "*",
         "ext-simplexml": "*",
-        "symfony/console": "~7.3.10"
+        "symfony/console": "^7.4 || ^8.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.93",
+        "friendsofphp/php-cs-fixer": "^3.94",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^12.5",
+        "phpunit/phpunit": "^12.5 || ^13.0",
         "psalm/plugin-phpunit": "^0.19",
         "psalm/plugin-symfony": "^5.2",
         "rector/rector": "^2.3",
-        "vimeo/psalm": "^7.0.0"
+        "vimeo/psalm": "^6.15"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -90,9 +90,6 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true
-        },
-        "platform": {
-            "php": "8.3.99"
         }
     },
     "extra": {
