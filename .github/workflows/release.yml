@@ -37,6 +37,8 @@ jobs:
         uses: ramsey/composer-install@v3
         with:
            composer-options: "--no-dev"
+           require-lock-file: "false"
+           dependency-versions: "highest"
 
       - name: "Build PHAR"
         run: box compile

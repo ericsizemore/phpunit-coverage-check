@@ -31,7 +31,13 @@ parameters:
 			path: src/Style/CoverageCheckStyle.php
 
 		-
-			rawMessage: 'Call to function method_exists() with Esi\CoverageCheck\Application and ''addCommand'' will always evaluate to false.'
-			identifier: function.impossibleType
+			rawMessage: 'Call to an undefined method Esi\CoverageCheck\Application::add().'
+			identifier: method.notFound
+			count: 1
+			path: tests/src/Command/CoverageCheckCommandTest.php
+
+		-
+			rawMessage: 'Call to function method_exists() with Esi\CoverageCheck\Application and ''addCommand'' will always evaluate to true.'
+			identifier: function.alreadyNarrowedType
 			count: 1
 			path: tests/src/Command/CoverageCheckCommandTest.php
