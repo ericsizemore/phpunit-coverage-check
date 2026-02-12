@@ -71,7 +71,7 @@ final class CoverageCheckCommand extends Command
      *
      * @since 3.0.0
      */
-    public const string ERROR_COVERAGE_BELOW_THRESHOLD = 'Total code coverage is %s which is below the accepted %d%%';
+    public const string ERROR_COVERAGE_BELOW_THRESHOLD = 'Total code coverage is %s which is below the accepted %s%%';
 
     /**
      * Matches CoverageCheck::ERROR_INSUFFICIENT_DATA, except for '[ERROR]' prefix.
@@ -143,7 +143,7 @@ final class CoverageCheckCommand extends Command
         #[Argument(description: self::INPUT_ARGUMENT_CLOVERFILE)]
         string $cloverfile,
         #[Argument(description: self::INPUT_ARGUMENT_THRESHOLD)]
-        int $threshold,
+        string $threshold,
         #[Option(description: self::INPUT_ARGUMENT_TABLEWIDTH, name: 'table-width', shortcut: 'W')]
         int $tablewidth = 70,
         #[Option(description: self::INPUT_OPTION_ONLY_PERCENTAGE, name: 'only-percentage', shortcut: 'O')]
@@ -157,8 +157,9 @@ final class CoverageCheckCommand extends Command
 
         $this->coverageCheckStyle = new CoverageCheckStyle($input, $output, $tablewidth);
 
-        $this->coverageCheck->setCloverFile($cloverfile)
-            ->setThreshold($threshold)
+        $this->coverageCheck
+            ->setCloverFile($cloverfile)
+            ->setThreshold(Utils::convertThresholdToFloat($threshold))
             ->setOnlyPercentage($onlypercentage);
 
         try {

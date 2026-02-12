@@ -40,7 +40,7 @@ final class CoverageCheck
      * @see Command\CoverageCheckCommand::ERROR_COVERAGE_BELOW_THRESHOLD
      * @since 3.0.0
      */
-    public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s%% which is below the accepted %d%%';
+    public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s%% which is below the accepted %s%%';
 
     /**
      * Message returned if there is not enough data to calculate coverage.
@@ -85,7 +85,7 @@ final class CoverageCheck
 
     private bool $onlyPercentage = false;
 
-    private int $threshold = 100;
+    private float $threshold = 100;
 
     /**
      * Simple getters.
@@ -101,7 +101,7 @@ final class CoverageCheck
         return $this->onlyPercentage;
     }
 
-    public function getThreshold(): int
+    public function getThreshold(): float
     {
         return $this->threshold;
     }
@@ -115,7 +115,7 @@ final class CoverageCheck
      * @throws InvalidArgumentException If the clover file does not exist, or the threshold is not within
      *                                  defined range (>= 1 <= 100).
      */
-    public function nonConsoleCall(string $cloverFile, int $threshold = 100, bool $onlyPercentage = false): string
+    public function nonConsoleCall(string $cloverFile, float $threshold = 100, bool $onlyPercentage = false): string
     {
         $this->setCloverFile($cloverFile)
             ->setThreshold($threshold)
@@ -292,7 +292,7 @@ final class CoverageCheck
     /**
      * @throws ThresholdOutOfBoundsException If the threshold is less than 1 or greater than 100.
      */
-    public function setThreshold(int $threshold): CoverageCheck
+    public function setThreshold(float $threshold): CoverageCheck
     {
         if (!Utils::validateThreshold($threshold)) {
             throw ThresholdOutOfBoundsException::create($threshold);

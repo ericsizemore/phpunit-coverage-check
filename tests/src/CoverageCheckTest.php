@@ -17,6 +17,7 @@ namespace Esi\CoverageCheck\Tests;
 
 use Esi\CoverageCheck\CoverageCheck;
 use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
+use Esi\CoverageCheck\Exceptions\InvalidThresholdException;
 use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
 use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use Esi\CoverageCheck\Utils;
@@ -31,6 +32,7 @@ use RuntimeException;
 #[CoversClass(CoverageCheck::class)]
 #[CoversClass(Utils::class)]
 #[CoversClass(InvalidInputFileException::class)]
+#[CoversClass(InvalidThresholdException::class)]
 #[CoversClass(ThresholdOutOfBoundsException::class)]
 #[CoversClass(NotAValidCloverFileException::class)]
 final class CoverageCheckTest extends TestCase
@@ -75,7 +77,7 @@ final class CoverageCheckTest extends TestCase
     public function testGetSetThreshold(): void
     {
         $this->coverageCheck->setThreshold(100);
-        self::assertSame(100, $this->coverageCheck->getThreshold());
+        self::assertSame(100.0, $this->coverageCheck->getThreshold());
     }
 
     public function testGetSetThresholdInvalidMax(): void
