@@ -50,12 +50,6 @@ use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
 
 $console = new Application();
-
-if (method_exists($console, 'addCommand')) {
-    $console->addCommand(new CoverageCheckCommand(new CoverageCheck()));
-} else {
-    $console->add(new CoverageCheckCommand(new CoverageCheck()));
-}
-
+$console->addCommand(new CoverageCheckCommand(new CoverageCheck()));
 $console->setDefaultCommand(Application::COMMAND_NAME, true);
 $console->run();
