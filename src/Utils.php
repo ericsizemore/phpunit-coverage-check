@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
+use Esi\CoverageCheck\Exceptions\InvalidThresholdException;
 use Exception;
 use RuntimeException;
 use SimpleXMLElement;
@@ -126,10 +127,19 @@ abstract class Utils
         return ($cloverFile !== '' && file_exists($cloverFile));
     }
 
+    public static function convertThresholdToFloat(string $threshold): float
+    {
+        if (!\is_numeric($threshold)) {
+            throw InvalidThresholdException::create($threshold);
+        }
+
+        return (float) $threshold;
+    }
+
     /**
      * A simple check to determine if threshold is within accepted range (Min. 1, Max. 100).
      */
-    public static function validateThreshold(int $threshold): bool
+    public static function validateThreshold(float $threshold): bool
     {
         return ($threshold > 0 && $threshold <= 100);
     }
