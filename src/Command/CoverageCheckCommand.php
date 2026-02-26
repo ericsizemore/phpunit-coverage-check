@@ -17,6 +17,7 @@ namespace Esi\CoverageCheck\Command;
 
 use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\CoverageCheck;
+use Esi\CoverageCheck\Data\Threshold;
 use Esi\CoverageCheck\Style\CoverageCheckStyle;
 use Esi\CoverageCheck\Utils;
 use Symfony\Component\Console\Attribute\Argument;
@@ -71,7 +72,7 @@ final class CoverageCheckCommand extends Command
      *
      * @since 3.0.0
      */
-    public const string ERROR_COVERAGE_BELOW_THRESHOLD = 'Total code coverage is %s which is below the accepted %s%%';
+    public const string ERROR_COVERAGE_BELOW_THRESHOLD = 'Total code coverage is %s which is below the accepted %s';
 
     /**
      * Matches CoverageCheck::ERROR_INSUFFICIENT_DATA, except for '[ERROR]' prefix.
@@ -159,7 +160,7 @@ final class CoverageCheckCommand extends Command
 
         $this->coverageCheck
             ->setCloverFile($cloverfile)
-            ->setThreshold(Utils::convertThresholdToFloat($threshold))
+            ->setThreshold(Threshold::from($threshold))
             ->setOnlyPercentage($onlypercentage);
 
         try {
@@ -194,10 +195,11 @@ final class CoverageCheckCommand extends Command
      */
     private function getFileTable(array $result): int
     {
-        $threshold     = $this->coverageCheck->getThreshold();
-        $tableRows     = [];
+        $threshold = $this->coverageCheck->getThreshold();
+        $tableRows = [];
+        // @todo: Convert to ValueObject?
         $totalElements = ['coveredMetrics' => 0, 'totalMetrics' => 0];
-        $metrics       = $result['fileMetrics'];
+        $metrics = $result['fileMetrics'];
         $totalCoverage = $result['totalCoverage'];
 
         unset($result);
@@ -211,7 +213,7 @@ final class CoverageCheckCommand extends Command
                     [
                         'style' => new TableCellStyle(
                             [
-                                'cellFormat' => ($file['percentage'] < $threshold) ? '<error>%s</error>' : '<info>%s</info>',
+                                'cellFormat' => ($file['percentage'] < $threshold->value) ? '<error>%s</error>' : '<info>%s</info>',
                             ]
                         ),
                     ]
@@ -219,7 +221,7 @@ final class CoverageCheckCommand extends Command
             ];
 
             $totalElements['coveredMetrics'] += $file['coveredMetrics'];
-            $totalElements['totalMetrics']   += $file['totalMetrics'];
+            $totalElements['totalMetrics'] += $file['totalMetrics'];
         }
 
         unset($metrics);
@@ -230,7 +232,7 @@ final class CoverageCheckCommand extends Command
             \sprintf('%d/%d', $totalElements['coveredMetrics'], $totalElements['totalMetrics']),
             new TableCell(
                 Utils::formatCoverage($totalCoverage),
-                ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold) ? '<error>%s</error>' : '<info>%s</info>', ])]
+                ['style' => new TableCellStyle(['cellFormat' => ($totalCoverage < $threshold->value) ? '<error>%s</error>' : '<info>%s</info>',])]
             ),
         ];
 
@@ -241,7 +243,7 @@ final class CoverageCheckCommand extends Command
 
         unset($tableRows);
 
-        if ($totalCoverage < $threshold) {
+        if ($totalCoverage < $threshold->value) {
             return Command::FAILURE;
         }
 
@@ -250,10 +252,10 @@ final class CoverageCheckCommand extends Command
 
     private function getResultOutput(float $result): int
     {
-        $threshold         = $this->coverageCheck->getThreshold();
-        $onlyPercentage    = $this->coverageCheck->getOnlyPercentage();
+        $threshold = $this->coverageCheck->getThreshold();
+        $onlyPercentage = $this->coverageCheck->getOnlyPercentage();
         $formattedCoverage = Utils::formatCoverage($result);
-        $belowThreshold    = $result < $threshold;
+        $belowThreshold = $result < $threshold->value;
 
         // Only display the percentage?
         if ($onlyPercentage) {

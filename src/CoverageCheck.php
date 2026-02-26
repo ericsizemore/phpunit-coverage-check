@@ -15,10 +15,10 @@ declare(strict_types=1);
 
 namespace Esi\CoverageCheck;
 
+use Esi\CoverageCheck\Data\Threshold;
 use Esi\CoverageCheck\Exceptions\FailedToGetFileContentsException;
 use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
 use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
-use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use InvalidArgumentException;
 use RuntimeException;
 use SimpleXMLElement;
@@ -40,7 +40,7 @@ final class CoverageCheck
      * @see Command\CoverageCheckCommand::ERROR_COVERAGE_BELOW_THRESHOLD
      * @since 3.0.0
      */
-    public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s%% which is below the accepted %s%%';
+    public const string ERROR_COVERAGE_BELOW_THRESHOLD = '[ERROR] Total code coverage is %s which is below the accepted %s';
 
     /**
      * Message returned if there is not enough data to calculate coverage.
@@ -85,7 +85,12 @@ final class CoverageCheck
 
     private bool $onlyPercentage = false;
 
-    private float $threshold = 100;
+    private Threshold $threshold;
+
+    public function __construct()
+    {
+        $this->threshold = Threshold::from(100);
+    }
 
     /**
      * Simple getters.
@@ -101,7 +106,7 @@ final class CoverageCheck
         return $this->onlyPercentage;
     }
 
-    public function getThreshold(): float
+    public function getThreshold(): Threshold
     {
         return $this->threshold;
     }
@@ -115,8 +120,12 @@ final class CoverageCheck
      * @throws InvalidArgumentException If the clover file does not exist, or the threshold is not within
      *                                  defined range (>= 1 <= 100).
      */
-    public function nonConsoleCall(string $cloverFile, float $threshold = 100, bool $onlyPercentage = false): string
+    public function nonConsoleCall(string $cloverFile, float|Threshold $threshold = 100, bool $onlyPercentage = false): string
     {
+        if (\is_float($threshold)) {
+            $threshold = Threshold::from($threshold);
+        }
+
         $this->setCloverFile($cloverFile)
             ->setThreshold($threshold)
             ->setOnlyPercentage($onlyPercentage);
@@ -127,11 +136,11 @@ final class CoverageCheck
             return self::ERROR_INSUFFICIENT_DATA;
         }
 
-        if ($results < $threshold && !$onlyPercentage) {
+        if ($results < $threshold->value && !$onlyPercentage) {
             return \sprintf(
                 self::ERROR_COVERAGE_BELOW_THRESHOLD,
                 Utils::formatCoverage($results),
-                $threshold
+                (string) $threshold,
             );
         }
 
@@ -177,7 +186,7 @@ final class CoverageCheck
         unset($rawMetrics);
 
         $coveredMetrics = $metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods'];
-        $totalMetrics   = $metrics['conditionals'] + $metrics['statements'] + $metrics['methods'];
+        $totalMetrics = $metrics['conditionals'] + $metrics['statements'] + $metrics['methods'];
 
         unset($metrics);
 
@@ -191,22 +200,22 @@ final class CoverageCheck
     /**
      * Parses the clover xml file for coverage metrics by file.
      *
-     * @see self::process()
+     * @return array{
+     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
+     *     totalCoverage: float|int
+     * }|false
      * @see self::loadMetrics()
      * @see https://confluence.atlassian.com/pages/viewpage.action?pageId=79986990
      * @see https://ocramius.github.io/blog/automated-code-coverage-check-for-github-pull-requests-with-travis/
      * @since 2.0.0
      *
-     * @return array{
-     *     fileMetrics: array<string, array{coveredMetrics: int, totalMetrics: int, percentage: float|int}>,
-     *     totalCoverage: float|int
-     * }|false
+     * @see self::process()
      */
     public function processByFile(): array|false
     {
-        $fileMetrics          = [];
+        $fileMetrics = [];
         $totalElementsCovered = 0;
-        $totalElements        = 0;
+        $totalElements = 0;
 
         $rawMetrics = $this->loadMetrics(self::XPATH_FILES) ?? false;
 
@@ -227,7 +236,7 @@ final class CoverageCheck
             $metrics = array_map(\intval(...), $metrics);
 
             $coveredMetrics = ($metrics['coveredconditionals'] + $metrics['coveredstatements'] + $metrics['coveredmethods']);
-            $totalMetrics   = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
+            $totalMetrics = ($metrics['conditionals'] + $metrics['statements'] + $metrics['methods']);
 
             if ($totalMetrics === 0) {
                 continue;
@@ -235,7 +244,7 @@ final class CoverageCheck
 
             $coveragePercentage = (float) ($coveredMetrics / $totalMetrics) * 100.0;
             $totalElementsCovered += $coveredMetrics;
-            $totalElements        += $totalMetrics;
+            $totalElements += $totalMetrics;
 
             // As far as we are concerned, path will only be set in the openclover output of PHPUnit.
             // We like having the full path, so in this case, set name to path.
@@ -245,8 +254,8 @@ final class CoverageCheck
 
             $fileMetrics[(string) $rawMetric['name']] = [
                 'coveredMetrics' => $coveredMetrics,
-                'totalMetrics'   => $totalMetrics,
-                'percentage'     => $coveragePercentage,
+                'totalMetrics' => $totalMetrics,
+                'percentage' => $coveragePercentage,
             ];
         }
 
@@ -259,7 +268,7 @@ final class CoverageCheck
         $totalCoverage = (float) ($totalElementsCovered / $totalElements) * 100.0;
 
         return [
-            'fileMetrics'   => $fileMetrics,
+            'fileMetrics' => $fileMetrics,
             'totalCoverage' => $totalCoverage,
         ];
     }
@@ -289,15 +298,8 @@ final class CoverageCheck
         return $this;
     }
 
-    /**
-     * @throws ThresholdOutOfBoundsException If the threshold is less than 1 or greater than 100.
-     */
-    public function setThreshold(float $threshold): CoverageCheck
+    public function setThreshold(Threshold $threshold): CoverageCheck
     {
-        if (!Utils::validateThreshold($threshold)) {
-            throw ThresholdOutOfBoundsException::create($threshold);
-        }
-
         $this->threshold = $threshold;
 
         return $this;
@@ -306,14 +308,14 @@ final class CoverageCheck
     /**
      * Loads the clover xml data and runs an XML Xpath query.
      *
-     * @internal
-     *
      * @param self::XPATH_* $xpath
      *
+     * @return null|array<SimpleXMLElement>|false
      * @throws RuntimeException If file_get_contents fails or if XML data cannot be parsed, or
      *                          if the given file does not appear to be a valid clover file.
      *
-     * @return null|array<SimpleXMLElement>|false
+     * @internal
+     *
      */
     private function loadMetrics(string $xpath = self::XPATH_METRICS): null|array|false
     {

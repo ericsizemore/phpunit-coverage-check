@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Esi\CoverageCheck\Tests;
 
 use Esi\CoverageCheck\CoverageCheck;
+use Esi\CoverageCheck\Data\Threshold;
 use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
 use Esi\CoverageCheck\Exceptions\InvalidThresholdException;
 use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
@@ -23,6 +24,7 @@ use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use Esi\CoverageCheck\Utils;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -35,6 +37,7 @@ use RuntimeException;
 #[CoversClass(InvalidThresholdException::class)]
 #[CoversClass(ThresholdOutOfBoundsException::class)]
 #[CoversClass(NotAValidCloverFileException::class)]
+#[UsesClass(Threshold::class)]
 final class CoverageCheckTest extends TestCase
 {
     private CoverageCheck $coverageCheck;
@@ -48,14 +51,14 @@ final class CoverageCheckTest extends TestCase
     protected function setUp(): void
     {
         $this->coverageCheck = new CoverageCheck();
-        self::$fixtures      = [
-            'valid'        => \dirname(__FILE__, 2) . '/fixtures/clover.xml',
-            'notexist'     => \dirname(__FILE__, 2) . '/fixtures/clovr.xml',
-            'empty'        => \dirname(__FILE__, 2) . '/fixtures/empty.xml',
+        self::$fixtures = [
+            'valid' => \dirname(__FILE__, 2) . '/fixtures/clover.xml',
+            'notexist' => \dirname(__FILE__, 2) . '/fixtures/clovr.xml',
+            'empty' => \dirname(__FILE__, 2) . '/fixtures/empty.xml',
             'invalid_root' => \dirname(__FILE__, 2) . '/fixtures/invalid_root_element.xml',
-            'invalid_xml'  => \dirname(__FILE__, 2) . '/fixtures/invalid_xml.xml',
-            'no_children'  => \dirname(__FILE__, 2) . '/fixtures/no_children.xml',
-            'no_metrics'   => \dirname(__FILE__, 2) . '/fixtures/no_project_metrics.xml',
+            'invalid_xml' => \dirname(__FILE__, 2) . '/fixtures/invalid_xml.xml',
+            'no_children' => \dirname(__FILE__, 2) . '/fixtures/no_children.xml',
+            'no_metrics' => \dirname(__FILE__, 2) . '/fixtures/no_project_metrics.xml',
         ];
     }
 
@@ -76,20 +79,33 @@ final class CoverageCheckTest extends TestCase
 
     public function testGetSetThreshold(): void
     {
-        $this->coverageCheck->setThreshold(100);
-        self::assertSame(100.0, $this->coverageCheck->getThreshold());
+        $threshold = Threshold::fromInt(100);
+        $this->coverageCheck->setThreshold($threshold);
+        self::assertSame($threshold, $this->coverageCheck->getThreshold());
+        self::assertSame(100.0, $this->coverageCheck->getThreshold()->value);
+    }
+
+    public function testGetSetThresholdWithDifferentValues(): void
+    {
+        $threshold50 = Threshold::fromInt(50);
+        $this->coverageCheck->setThreshold($threshold50);
+        self::assertSame(50.0, $this->coverageCheck->getThreshold()->value);
+
+        $threshold90 = Threshold::fromFloat(90.5);
+        $this->coverageCheck->setThreshold($threshold90);
+        self::assertSame(90.5, $this->coverageCheck->getThreshold()->value);
     }
 
     public function testGetSetThresholdInvalidMax(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->coverageCheck->setThreshold(101);
+        Threshold::fromInt(101);
     }
 
     public function testGetSetThresholdInvalidMin(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->coverageCheck->setThreshold(0);
+        Threshold::fromInt(0);
     }
 
     public function testNonConsoleCallInvalid(): void
@@ -114,6 +130,13 @@ final class CoverageCheckTest extends TestCase
     {
         $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], 90, true);
         self::assertSame('90.32%', $results);
+    }
+
+    public function testNonConsoleCallWithThresholdObject(): void
+    {
+        $threshold = Threshold::fromFloat(90.0);
+        $results = $this->coverageCheck->nonConsoleCall(self::$fixtures['valid'], $threshold);
+        self::assertStringMatchesFormat(CoverageCheck::OK_TOTAL_CODE_COVERAGE, $results);
     }
 
     public function testNonConsoleInvalidCloverNoChildren(): void
@@ -144,7 +167,7 @@ final class CoverageCheckTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $xml = (string) file_get_contents(self::$fixtures['invalid_xml']);
+        $xml = (string) \file_get_contents(self::$fixtures['invalid_xml']);
         Utils::parseXml($xml);
     }
 

@@ -126,21 +126,4 @@ abstract class Utils
     {
         return ($cloverFile !== '' && file_exists($cloverFile));
     }
-
-    public static function convertThresholdToFloat(string $threshold): float
-    {
-        if (!\is_numeric($threshold)) {
-            throw InvalidThresholdException::create($threshold);
-        }
-
-        return (float) $threshold;
-    }
-
-    /**
-     * A simple check to determine if threshold is within accepted range (Min. 1, Max. 100).
-     */
-    public static function validateThreshold(float $threshold): bool
-    {
-        return ($threshold > 0 && $threshold <= 100);
-    }
 }
