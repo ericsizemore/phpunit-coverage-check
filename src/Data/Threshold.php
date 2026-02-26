@@ -31,9 +31,7 @@ final readonly class Threshold
 
         $floatValue = (float) $threshold;
 
-        if ($floatValue <= 0 || $floatValue > 100) {
-            throw ThresholdOutOfBoundsException::create($floatValue);
-        }
+        self::validate($floatValue);
 
         return new self($floatValue);
     }
@@ -45,11 +43,16 @@ final readonly class Threshold
 
     public static function fromFloat(float $threshold): self
     {
+        self::validate($threshold);
+
+        return new self($threshold);
+    }
+
+    private static function validate(float $threshold): void
+    {
         if ($threshold <= 0 || $threshold > 100) {
             throw ThresholdOutOfBoundsException::create($threshold);
         }
-
-        return new self($threshold);
     }
 
     public function formatted(): string
