@@ -17,10 +17,10 @@ namespace Esi\CoverageCheck\Exceptions;
 
 use InvalidArgumentException;
 
-final class ThresholdOutOfBoundsException extends InvalidArgumentException
+final class InvalidThresholdException extends InvalidArgumentException
 {
-    public static function create(float $threshold): self
+    public static function create(string $threshold): self
     {
-        return new self(\sprintf('The threshold must be a minimum of 1 and a maximum of 100, %s given', $threshold));
+        return new self(\sprintf('Invalid threshold provided. Was given: %s, but should be numeric.', $threshold));
     }
 }
