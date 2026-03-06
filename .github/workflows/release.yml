@@ -50,7 +50,7 @@ jobs:
 
       - name: "Import GPG key"
         if: github.event_name == 'release'
-        uses: crazy-max/ghaction-import-gpg@v6
+        uses: crazy-max/ghaction-import-gpg@v7
         with:
           gpg_private_key: ${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696 }}
           passphrase: ${{ secrets.GPG_KEY_F8367C6E9D7A7028292144AAC9D8B66FF3C06696_PASSPHRASE }}
@@ -67,7 +67,7 @@ jobs:
             dist/phpunit-coverage-check.phar
 
       - name: "Upload the PHAR artifact"
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: phpunit-coverage-check-phar
           path: |
@@ -83,7 +83,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: phpunit-coverage-check-phar
           path: .
