@@ -1,31 +1,37 @@
 parameters:
-	ignoreErrors:
-		-
-			rawMessage: 'Method Esi\CoverageCheck\CoverageCheck::loadMetrics() never returns false so it can be removed from the return type.'
-			identifier: return.unusedType
-			count: 1
-			path: src/CoverageCheck.php
+    ignoreErrors:
+        -
+            rawMessage: 'Method Esi\CoverageCheck\CoverageCheck::loadMetrics() never returns false so it can be removed from the return type.'
+            identifier: return.unusedType
+            count: 1
+            path: src/CoverageCheck.php
 
-		-
-			rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::error() has parameter $message with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Style/CoverageCheckStyle.php
+        -
+            rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::error() has parameter $message with no value type specified in iterable type array.'
+            identifier: missingType.iterableValue
+            count: 1
+            path: src/Style/CoverageCheckStyle.php
 
-		-
-			rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::success() has parameter $message with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Style/CoverageCheckStyle.php
+        -
+            rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::success() has parameter $message with no value type specified in iterable type array.'
+            identifier: missingType.iterableValue
+            count: 1
+            path: src/Style/CoverageCheckStyle.php
 
-		-
-			rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::table() has parameter $headers with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Style/CoverageCheckStyle.php
+        -
+            rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::table() has parameter $headers with no value type specified in iterable type array.'
+            identifier: missingType.iterableValue
+            count: 1
+            path: src/Style/CoverageCheckStyle.php
 
-		-
-			rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::table() has parameter $rows with no value type specified in iterable type array.'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Style/CoverageCheckStyle.php
+        -
+            rawMessage: 'Method Esi\CoverageCheck\Style\CoverageCheckStyle::table() has parameter $rows with no value type specified in iterable type array.'
+            identifier: missingType.iterableValue
+            count: 1
+            path: src/Style/CoverageCheckStyle.php
+
+        -
+            rawMessage: 'Readonly property Esi\CoverageCheck\Data\Threshold::$value is assigned outside of its declaring class.'
+            identifier: property.readOnlyAssignOutOfClass
+            count: 1
+            path: tests/src/Data/ThresholdTest.php
