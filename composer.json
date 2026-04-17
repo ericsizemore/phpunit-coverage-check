@@ -105,7 +105,6 @@
             "@code-coverage",
             "@phpstan",
             "@psalm",
-            "@psalm:security",
             "@psalm:shepherd"
         ],
         "clear-build": "rm -rf ./build/*",

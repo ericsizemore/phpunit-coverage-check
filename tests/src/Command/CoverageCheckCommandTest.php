@@ -18,7 +18,9 @@ namespace Esi\CoverageCheck\Tests\Command;
 use Esi\CoverageCheck\Application;
 use Esi\CoverageCheck\Command\CoverageCheckCommand;
 use Esi\CoverageCheck\CoverageCheck;
+use Esi\CoverageCheck\Data\Threshold;
 use Esi\CoverageCheck\Exceptions\InvalidInputFileException;
+use Esi\CoverageCheck\Exceptions\InvalidThresholdException;
 use Esi\CoverageCheck\Exceptions\NotAValidCloverFileException;
 use Esi\CoverageCheck\Exceptions\ThresholdOutOfBoundsException;
 use Esi\CoverageCheck\Style\CoverageCheckStyle;
@@ -30,7 +32,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
-
 use function preg_replace;
 use function str_replace;
 use function trim;
@@ -44,7 +45,9 @@ use const PHP_EOL;
 #[CoversClass(Application::class)]
 #[CoversClass(CoverageCheckStyle::class)]
 #[CoversClass(CoverageCheck::class)]
+#[Coversclass(InvalidThresholdException::class)]
 #[CoversClass(Utils::class)]
+#[UsesClass(Threshold::class)]
 #[UsesClass(InvalidInputFileException::class)]
 #[UsesClass(ThresholdOutOfBoundsException::class)]
 #[UsesClass(NotAValidCloverFileException::class)]
@@ -63,14 +66,14 @@ final class CoverageCheckCommandTest extends TestCase
     protected function setUp(): void
     {
         self::$fixtures = [
-            'valid'        => \dirname(__FILE__, 3) . '/fixtures/clover.xml',
-            'notexist'     => \dirname(__FILE__, 3) . '/fixtures/clovr.xml',
-            'empty'        => \dirname(__FILE__, 3) . '/fixtures/empty.xml',
+            'valid' => \dirname(__FILE__, 3) . '/fixtures/clover.xml',
+            'notexist' => \dirname(__FILE__, 3) . '/fixtures/clovr.xml',
+            'empty' => \dirname(__FILE__, 3) . '/fixtures/empty.xml',
             'invalid_root' => \dirname(__FILE__, 3) . '/fixtures/invalid_root_element.xml',
-            'no_children'  => \dirname(__FILE__, 3) . '/fixtures/no_children.xml',
-            'no_metrics'   => \dirname(__FILE__, 3) . '/fixtures/no_project_metrics.xml',
-            'thisLibrary'  => \dirname(__FILE__, 3) . '/fixtures/self_clover.xml',
-            'openClover'   => \dirname(__FILE__, 3) . '/fixtures/open_clover.xml',
+            'no_children' => \dirname(__FILE__, 3) . '/fixtures/no_children.xml',
+            'no_metrics' => \dirname(__FILE__, 3) . '/fixtures/no_project_metrics.xml',
+            'thisLibrary' => \dirname(__FILE__, 3) . '/fixtures/self_clover.xml',
+            'openClover' => \dirname(__FILE__, 3) . '/fixtures/open_clover.xml',
         ];
 
         $coverageCheckCommand = new CoverageCheckCommand(new CoverageCheck());
@@ -87,11 +90,11 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['invalid_root'],
-            'threshold'  => 90,
+            'threshold' => '90',
         ]);
 
         self::assertSame(self::$fixtures['invalid_root'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
@@ -104,11 +107,11 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['no_children'],
-            'threshold'  => 90,
+            'threshold' => '90',
         ]);
 
         self::assertSame(self::$fixtures['no_children'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
@@ -121,11 +124,11 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['no_metrics'],
-            'threshold'  => 90,
+            'threshold' => '90',
         ]);
 
         self::assertSame(self::$fixtures['no_metrics'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
             '[ERROR] Clover file appears to be invalid. Are you sure this is a PHPUnit generated clover report?',
@@ -141,7 +144,18 @@ final class CoverageCheckCommandTest extends TestCase
         $commandTester = new CommandTester($this->application->find('coverage:check'));
         $commandTester->execute([
             'cloverfile' => self::$fixtures['notexist'],
-            'threshold'  => 90,
+            'threshold' => '90',
+        ]);
+    }
+
+    public function testRunInvalidThresholdNonNumeric(): void
+    {
+        $this->expectException(InvalidThresholdException::class);
+        $this->expectExceptionMessage('Invalid threshold provided. Was given: foo-bar, but should be numeric.');
+        $commandTester = new CommandTester($this->application->find('coverage:check'));
+        $commandTester->execute([
+            'cloverfile' => self::$fixtures['valid'],
+            'threshold' => 'foo-bar',
         ]);
     }
 
@@ -152,7 +166,7 @@ final class CoverageCheckCommandTest extends TestCase
         $commandTester = new CommandTester($this->application->find('coverage:check'));
         $commandTester->execute([
             'cloverfile' => self::$fixtures['valid'],
-            'threshold'  => 101,
+            'threshold' => '101',
         ]);
     }
 
@@ -163,7 +177,7 @@ final class CoverageCheckCommandTest extends TestCase
         $commandTester = new CommandTester($this->application->find('coverage:check'));
         $commandTester->execute([
             'cloverfile' => self::$fixtures['valid'],
-            'threshold'  => 0,
+            'threshold' => '0',
         ]);
     }
 
@@ -171,11 +185,11 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['empty'],
-            'threshold'  => 90,
+            'threshold' => '90',
         ]);
 
         self::assertSame(self::$fixtures['empty'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
             CoverageCheck::ERROR_INSUFFICIENT_DATA,
@@ -187,18 +201,18 @@ final class CoverageCheckCommandTest extends TestCase
     public function testRunNotEnoughCodePercentageOnly(): void
     {
         $this->applicationTester->run([
-            'cloverfile'        => self::$fixtures['empty'],
-            'threshold'         => 90,
+            'cloverfile' => self::$fixtures['empty'],
+            'threshold' => '90',
             '--only-percentage' => true,
         ]);
 
         self::assertSame(self::$fixtures['empty'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
         self::assertTrue($this->applicationTester->getInput()->getOption('only-percentage'));
 
         self::assertSame(
             CoverageCheck::ERROR_INSUFFICIENT_DATA,
-            trim($this->applicationTester->getDisplay())
+            \trim($this->applicationTester->getDisplay()),
         );
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
     }
@@ -207,15 +221,15 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['valid'],
-            'threshold'  => 100,
+            'threshold' => '100',
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(100, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('100', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
-            \sprintf(CoverageCheck::ERROR_COVERAGE_BELOW_THRESHOLD, 90.32, 100),
-            trim($this->applicationTester->getDisplay())
+            \sprintf(CoverageCheck::ERROR_COVERAGE_BELOW_THRESHOLD, '90.32%', '100.00%'),
+            \trim($this->applicationTester->getDisplay()),
         );
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
     }
@@ -223,13 +237,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testRunValidOptionsNonPassingPercentageOnly(): void
     {
         $this->applicationTester->run([
-            'cloverfile'        => self::$fixtures['valid'],
-            'threshold'         => 100,
+            'cloverfile' => self::$fixtures['valid'],
+            'threshold' => '100',
             '--only-percentage' => true,
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(100, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('100', $this->applicationTester->getInput()->getArgument('threshold'));
         self::assertTrue($this->applicationTester->getInput()->getOption('only-percentage'));
 
         self::assertSame(
@@ -243,11 +257,11 @@ final class CoverageCheckCommandTest extends TestCase
     {
         $this->applicationTester->run([
             'cloverfile' => self::$fixtures['valid'],
-            'threshold'  => 90,
+            'threshold' => '90',
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(
             \sprintf(CoverageCheck::OK_TOTAL_CODE_COVERAGE, 90.32),
@@ -259,13 +273,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testRunValidOptionsPassingPercentageOnly(): void
     {
         $this->applicationTester->run([
-            'cloverfile'        => self::$fixtures['valid'],
-            'threshold'         => 90,
+            'cloverfile' => self::$fixtures['valid'],
+            'threshold' => '90',
             '--only-percentage' => true,
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
         self::assertTrue($this->applicationTester->getInput()->getOption('only-percentage'));
 
         self::assertSame(
@@ -278,13 +292,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputAboveThreshold(): void
     {
         $this->applicationTester->run([
-            'cloverfile'   => self::$fixtures['thisLibrary'],
-            'threshold'    => 90,
+            'cloverfile' => self::$fixtures['thisLibrary'],
+            'threshold' => '90',
             '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
@@ -313,13 +327,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputBelowThreshold(): void
     {
         $this->applicationTester->run([
-            'cloverfile'   => self::$fixtures['valid'],
-            'threshold'    => 91,
+            'cloverfile' => self::$fixtures['valid'],
+            'threshold' => '91',
             '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['valid'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(91, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('91', $this->applicationTester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
@@ -339,13 +353,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputCloverAndOpenCloverTheSame(): void
     {
         $this->applicationTester->run([
-            'cloverfile'   => self::$fixtures['thisLibrary'],
-            'threshold'    => 90,
+            'cloverfile' => self::$fixtures['thisLibrary'],
+            'threshold' => '90',
             '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
@@ -371,8 +385,8 @@ final class CoverageCheckCommandTest extends TestCase
         self::assertSame(Command::SUCCESS, $this->applicationTester->getStatusCode());
 
         $this->applicationTester->run([
-            'cloverfile'   => self::$fixtures['openClover'],
-            'threshold'    => 90,
+            'cloverfile' => self::$fixtures['openClover'],
+            'threshold' => '90',
             '--show-files' => true,
         ]);
 
@@ -382,13 +396,13 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputEmpty(): void
     {
         $this->applicationTester->run([
-            'cloverfile'   => self::$fixtures['empty'],
-            'threshold'    => 90,
+            'cloverfile' => self::$fixtures['empty'],
+            'threshold' => '90',
             '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['empty'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         self::assertSame(CoverageCheck::ERROR_INSUFFICIENT_DATA, trim($this->applicationTester->getDisplay()));
         self::assertSame(Command::FAILURE, $this->applicationTester->getStatusCode());
@@ -400,14 +414,14 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputWithDifferentTableWidth(): void
     {
         $this->applicationTester->run([
-            'cloverfile'    => self::$fixtures['thisLibrary'],
-            'threshold'     => 90,
+            'cloverfile' => self::$fixtures['thisLibrary'],
+            'threshold' => '90',
             '--table-width' => 100,
-            '--show-files'  => true,
+            '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
@@ -433,14 +447,14 @@ final class CoverageCheckCommandTest extends TestCase
     public function testShowFilesTableOutputWithDifferentTableWidthLessThanMin(): void
     {
         $this->applicationTester->run([
-            'cloverfile'    => self::$fixtures['thisLibrary'],
-            'threshold'     => 90,
+            'cloverfile' => self::$fixtures['thisLibrary'],
+            'threshold' => '90',
             '--table-width' => 60,
-            '--show-files'  => true,
+            '--show-files' => true,
         ]);
 
         self::assertSame(self::$fixtures['thisLibrary'], $this->applicationTester->getInput()->getArgument('cloverfile'));
-        self::assertSame(90, $this->applicationTester->getInput()->getArgument('threshold'));
+        self::assertSame('90', $this->applicationTester->getInput()->getArgument('threshold'));
 
         $eol = PHP_EOL;
 
