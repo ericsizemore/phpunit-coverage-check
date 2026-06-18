@@ -31,6 +31,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\ApplicationTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
+use function method_exists;
 use function preg_replace;
 use function str_replace;
 use function trim;
@@ -148,7 +149,11 @@ final class CoverageCheckCommandTest extends TestCase
     public function testRunInvalidThresholdHigh(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->expectExceptionMessage('The threshold must be a minimum of 1 and a maximum of 100, 101 given');
+        if (method_exists($this, 'expectExceptionMessageIsOrContains')) {
+            $this->expectExceptionMessageIsOrContains('The threshold must be a minimum of 1 and a maximum of 100, 101 given');
+        } else {
+            $this->expectExceptionMessage('The threshold must be a minimum of 1 and a maximum of 100, 101 given');
+        }
         $commandTester = new CommandTester($this->application->find('coverage:check'));
         $commandTester->execute([
             'cloverfile' => self::$fixtures['valid'],
@@ -159,7 +164,11 @@ final class CoverageCheckCommandTest extends TestCase
     public function testRunInvalidThresholdLow(): void
     {
         $this->expectException(ThresholdOutOfBoundsException::class);
-        $this->expectExceptionMessage('The threshold must be a minimum of 1 and a maximum of 100, 0 given');
+        if (method_exists($this, 'expectExceptionMessageIsOrContains')) {
+            $this->expectExceptionMessageIsOrContains('The threshold must be a minimum of 1 and a maximum of 100, 0 given');
+        } else {
+            $this->expectExceptionMessage('The threshold must be a minimum of 1 and a maximum of 100, 0 given');
+        }
         $commandTester = new CommandTester($this->application->find('coverage:check'));
         $commandTester->execute([
             'cloverfile' => self::$fixtures['valid'],
