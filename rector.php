@@ -54,8 +54,6 @@ return RectorConfig::configure()
     )
     ->withRootFiles()
     ->withSets([
-        PHPUnitSetList::PHPUNIT_100,
-        PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
     ])

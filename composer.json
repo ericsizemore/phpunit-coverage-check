@@ -66,11 +66,11 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^12.5 || ^13.2",
+        "phpunit/phpunit": "^12.5 || ^13.3",
         "psalm/plugin-phpunit": "^0.19",
         "psalm/plugin-symfony": "^5.3",
-        "rector/rector": "^2.4",
-        "vimeo/psalm": "^6.16 || ^7.0"
+        "rector/rector": "^2.6",
+        "vimeo/psalm": "^6.17 || ^7.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
