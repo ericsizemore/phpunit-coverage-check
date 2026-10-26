@@ -8209,16 +8209,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "dev-master",
+            "version": "7.0.0-rc10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "d8f4386a53514d98a4523a37a7a0f4cc3ced0309"
+                "reference": "f39760fd9e3f207446c9a41e066f109baab98714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/d8f4386a53514d98a4523a37a7a0f4cc3ced0309",
-                "reference": "d8f4386a53514d98a4523a37a7a0f4cc3ced0309",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/f39760fd9e3f207446c9a41e066f109baab98714",
+                "reference": "f39760fd9e3f207446c9a41e066f109baab98714",
                 "shasum": ""
             },
             "require": {
@@ -8273,7 +8273,6 @@
                 "ext-curl": "In order to send data to shepherd",
                 "ext-igbinary": "^2.0.5 is required, used to serialize caching data"
             },
-            "default-branch": true,
             "bin": [
                 "psalm",
                 "psalm-language-server",
@@ -8324,7 +8323,7 @@
                 "issues": "https://github.com/vimeo/psalm/issues",
                 "source": "https://github.com/vimeo/psalm"
             },
-            "time": "2026-10-23T16:33:49+00:00"
+            "time": "2026-10-23T13:45:09+00:00"
         },
         {
             "name": "webmozart/assert",
