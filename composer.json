@@ -62,15 +62,15 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
         "phpstan/extension-installer": "^1.4",
-        "phpstan/phpstan": "^2.2",
+        "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-deprecation-rules": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0",
-        "phpstan/phpstan-strict-rules": "^2.0",
-        "phpunit/phpunit": "^12.5 || ^13.3",
-        "psalm/plugin-phpunit": "^0.21",
-        "psalm/plugin-symfony": "^5.3",
-        "rector/rector": "^2.6",
-        "vimeo/psalm": "^6.17 || ^7.0"
+        "phpstan/phpstan-phpunit": "^2.1",
+        "phpstan/phpstan-strict-rules": "^2.1",
+        "phpunit/phpunit": "^12.5 || ^13.4",
+        "psalm/plugin-phpunit": "^1.0",
+        "psalm/plugin-symfony": "^5.10",
+        "rector/rector": "^2.8",
+        "vimeo/psalm": "^6.17 || ^7.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

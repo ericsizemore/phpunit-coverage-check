@@ -32,6 +32,16 @@
                 <directory name="src"/>
             </errorLevel>
         </UnusedClass>
+        <UnusedMethod>
+            <errorLevel type="suppress">
+                <file name="src/CoverageCheck.php"/>
+            </errorLevel>
+        </UnusedMethod>
+        <UnusedProperty>
+            <errorLevel type="suppress">
+                <file name="src/CoverageCheck.php"/>
+            </errorLevel>
+        </UnusedProperty>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
