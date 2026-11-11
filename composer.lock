@@ -4097,21 +4097,22 @@
         },
         {
             "name": "psalm/plugin-phpunit",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-phpunit.git",
-                "reference": "e6cea62e9d454b204a0cca034a56744b304c6ecd"
+                "reference": "02622ac27c733402886a6d6aaea8a69b14e94f7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/e6cea62e9d454b204a0cca034a56744b304c6ecd",
-                "reference": "e6cea62e9d454b204a0cca034a56744b304c6ecd",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/02622ac27c733402886a6d6aaea8a69b14e94f7b",
+                "reference": "02622ac27c733402886a6d6aaea8a69b14e94f7b",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": ">=8.2",
+                "psalm/psalm-plugin-api": "^0.4.2",
                 "vimeo/psalm": "^7.2 || dev-master"
             },
             "conflict": {
@@ -4151,9 +4152,10 @@
             "description": "Psalm plugin for PHPUnit",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-phpunit/issues",
-                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/1.0.0"
+                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/1.1.0"
             },
-            "time": "2026-11-10T13:14:47+00:00"
+            "time": "2026-11-11T10:38:01+00:00",
+            "published-time": "2026-11-11T10:46:40+00:00"
         },
         {
             "name": "psalm/plugin-symfony",
@@ -4261,7 +4263,8 @@
                 "issues": "https://github.com/psalm/psalm-plugin-api/issues",
                 "source": "https://github.com/psalm/psalm-plugin-api/tree/0.4.2"
             },
-            "time": "2026-11-10T21:10:59+00:00"
+            "time": "2026-11-10T21:10:59+00:00",
+            "published-time": "2026-11-10T21:11:04+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -7302,5 +7305,5 @@
         "ext-simplexml": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
