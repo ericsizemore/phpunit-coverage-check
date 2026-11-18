@@ -4218,28 +4218,29 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.11.0",
+            "version": "v5.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "1fef73d616f0e187ffc05d13dd98f10ade6bc9e0"
+                "reference": "ac41b887741f19824231a982b5ee094d2019ad7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/1fef73d616f0e187ffc05d13dd98f10ade6bc9e0",
-                "reference": "1fef73d616f0e187ffc05d13dd98f10ade6bc9e0",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/ac41b887741f19824231a982b5ee094d2019ad7d",
+                "reference": "ac41b887741f19824231a982b5ee094d2019ad7d",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": ">=8.2",
                 "psalm/psalm-plugin-api": "^0.4.2",
-                "vimeo/psalm": "^7.0@stable|dev-master"
+                "vimeo/psalm": "^7.4@stable|dev-master"
             },
             "conflict": {
                 "fidry/cpu-core-counter": "<1.2",
                 "symfony/expression-language": "<5.0",
-                "symfony/framework-bundle": "<5.0"
+                "symfony/framework-bundle": "<5.0",
+                "twig/twig": "<3.12"
             },
             "require-dev": {
                 "doctrine/annotations": "^1.8|^2",
@@ -4285,10 +4286,10 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.11.0"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.12.1"
             },
-            "time": "2026-11-11T11:34:54+00:00",
-            "published-time": "2026-11-11T11:44:10+00:00"
+            "time": "2026-11-18T15:07:45+00:00",
+            "published-time": "2026-11-18T15:08:02+00:00"
         },
         {
             "name": "psalm/psalm-plugin-api",
