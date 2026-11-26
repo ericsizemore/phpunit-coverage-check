@@ -4181,16 +4181,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.15.1",
+            "version": "v5.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "68d16eb3584700fb555607a3c3bb885a2902fab3"
+                "reference": "4e8cf0c6f31bd2a823e8a6b2f08a7e168851cc34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/68d16eb3584700fb555607a3c3bb885a2902fab3",
-                "reference": "68d16eb3584700fb555607a3c3bb885a2902fab3",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/4e8cf0c6f31bd2a823e8a6b2f08a7e168851cc34",
+                "reference": "4e8cf0c6f31bd2a823e8a6b2f08a7e168851cc34",
                 "shasum": ""
             },
             "require": {
@@ -4249,10 +4249,10 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.15.1"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.15.2"
             },
-            "time": "2026-11-25T15:53:30+00:00",
-            "published-time": "2026-11-25T16:26:04+00:00"
+            "time": "2026-11-26T14:08:21+00:00",
+            "published-time": "2026-11-26T14:08:36+00:00"
         },
         {
             "name": "psalm/psalm-plugin-api",
